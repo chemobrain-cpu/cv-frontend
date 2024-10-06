@@ -8,7 +8,7 @@ const Template = () => {
   let navigate = useNavigate()
 
   const navigateHandler = (id)=>{
-    navigate('form')
+    navigate('/form')
   }
   
 

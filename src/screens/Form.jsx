@@ -1,214 +1,211 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Loader from "../components/loader";
-import { useDispatch } from 'react-redux';
+import { TextField, Button, Grid, Typography, Box, Paper, Avatar } from '@mui/material';
+import { AddCircleOutline, PhotoCamera } from '@mui/icons-material';
 import { makeCv } from '../store/action/userAppStorage';
+import { useDispatch } from 'react-redux';
 
 
-const Form = () => {
-  let [isLoading, setIsLoading] = useState(false)
-  let [isData, setIsData] = useState({})
-  let navigate = useNavigate()
+
+
+const CVForm = () => {
+  const [education, setEducation] = useState([{ degree: '', institution: '', year: '' }]);
+  const [workExperience, setWorkExperience] = useState([{ title: '', company: '', duration: '', responsibilities: '' }]);
   let dispatch = useDispatch()
 
-  let handleChange = (e) => {
-    let val = e.target.value
-    setIsData(prev => {
-      prev[`${e.target.id}`] = val
-      let newData = { ...prev }
-      return newData
-    })
+  const handleEducationChange = (index, field, value) => {
+    const updatedEducation = [...education];
+    updatedEducation[index][field] = value;
+    setEducation(updatedEducation);
+  };
+
+  const handleAddEducation = () => {
+    setEducation([...education, { degree: '', institution: '', year: '' }]);
+  };
+
+  const handleWorkExperienceChange = (index, field, value) => {
+    const updatedWorkExperience = [...workExperience];
+    updatedWorkExperience[index][field] = value;
+    setWorkExperience(updatedWorkExperience);
+  };
+
+  const handleAddWorkExperience = () => {
+    setWorkExperience([...workExperience, { title: '', company: '', duration: '', responsibilities: '' }]);
+  };
+
+
+  let generateHandler = ()=>{
+    let data = {
+      workExperience:workExperience,
+      education:education
+    }
+    console.log(data)
+
+    dispatch(makeCv(data))
   }
 
-  let submitHandler = (e)=>{
-    e.preventDefault()
-    setIsLoading(true)
-
-    setTimeout(()=>{
-      dispatch(makeCv(isData))
-      navigate('/preview')
-    },5000)
-    
-
-  }
 
 
 
 
   return (
-    <>
-      {isLoading && <Loader />}
-      <header className="headere">
-        <nav className="navbar navbar-expand-lg navbar-light bg-secondary">
-          <div className="container">
-            <a className="navbar-brand fw-bold fs-2" href="index.html">
-              <span>
-                <i className="fa-solid fa-file-invoice"></i>
-              </span>
-              <span className="navbar-brand-text">Crea8</span> CV
-            </a>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarContent"
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
+    <Paper elevation={3} style={{ padding: '20px', maxWidth: '900px', margin: 'auto', marginTop: '20px' }}>
+      <Box display="flex" justifyContent="center" marginBottom="20px">
+        <Avatar
+          style={{
+            width: '100px',
+            height: '100px',
+            marginBottom: '10px',
+          }}
+        >
+          <PhotoCamera />
+        </Avatar>
+      </Box>
+      <Typography variant="h4" align="center" gutterBottom>
+        CV Builder
+      </Typography>
 
-            <div className="collapse navbar-collapse" id="navbarContent">
-              <ul className="navbar-nav ms-auto">
-                <li className="nav-item dropdown">
-                  <a
-                    className="nav-link dropdown-toggle text-blue fs-18"
-                    href="#"
-                    id="navbarDropdown"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Resume Templates
-                  </a>
-                  <ul className="dropdown-menu bg-white" aria-labelledby="navbarDropdown">
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Job CV
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Academic CV
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-              <button
-                type="button"
-                className="btn btn-login btn-primary ms-lg-4 px-4 fs-16 mt-1 mt-lg-0"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </nav>
-      </header>
+      {/* Personal Information */}
+      <Typography variant="h6" gutterBottom>
+        Personal Information
+      </Typography>
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={6}>
+          <TextField label="Full Name" variant="outlined" fullWidth required />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField label="Job Title" variant="outlined" fullWidth required />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField label="Phone Number" variant="outlined" fullWidth required />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField label="Email" variant="outlined" fullWidth required />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField label="Address" variant="outlined" fullWidth required />
+        </Grid>
+      </Grid>
 
-      <main>
-        <section id="cv-generator" className="py-5">
-          <div className="container cv-generator">
-            <h2 className="text-center mb-4">Generate Your CV</h2>
-            <form id="cvForm" onSubmit={submitHandler}>
-              <div className="form-group row">
-                <label htmlFor="fullName" className="col-sm-3 col-form-label form-label">
-                  Full Name
-                </label>
-                <div className="col-sm-9">
-                  <input type="text" className="form-control" id="fullName" required onChange={handleChange} />
-                </div>
-              </div>
-              <div className="form-group row">
-                <label htmlFor="email" className="col-sm-3 col-form-label form-label">
-                  Email Address
-                </label>
-                <div className="col-sm-9">
-                  <input type="email" className="form-control" id="email" required onChange={handleChange} />
-                </div>
-              </div>
-              <div className="form-group row">
-                <label htmlFor="phone" className="col-sm-3 col-form-label form-label">
-                  Phone Number
-                </label>
-                <div className="col-sm-9">
-                  <input type="text" className="form-control" id="phone" required onChange={handleChange} />
-                </div>
-              </div>
+      {/* Summary */}
+      <Typography variant="h6" gutterBottom style={{ marginTop: '20px' }}>
+        Summary
+      </Typography>
+      <TextField
+        label="Write a short summary about yourself"
+        variant="outlined"
+        multiline
+        rows={4}
+        fullWidth
+        required
+      />
 
+      {/* Education Section */}
+      <Typography variant="h6" gutterBottom style={{ marginTop: '20px' }}>
+        Education
+      </Typography>
+      {education.map((edu, index) => (
+        <Grid container spacing={2} key={index}>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Degree"
+              variant="outlined"
+              fullWidth
+              value={edu.degree}
+              onChange={(e) => handleEducationChange(index, 'degree', e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Institution"
+              variant="outlined"
+              fullWidth
+              value={edu.institution}
+              onChange={(e) => handleEducationChange(index, 'institution', e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Year"
+              variant="outlined"
+              fullWidth
+              value={edu.year}
+              onChange={(e) => handleEducationChange(index, 'year', e.target.value)}
+            />
+          </Grid>
+        </Grid>
+      ))}
+      <Box display="flex" justifyContent="center" marginTop="10px">
+        <Button onClick={handleAddEducation} startIcon={<AddCircleOutline />} color="primary">
+          Add More Education
+        </Button>
+      </Box>
 
-              <div className="form-group row">
-                <label htmlFor="address" className="col-sm-3 col-form-label form-label">
-                  Address
-                </label>
-                <div className="col-sm-9">
-                  <input type="text" className="form-control" id="address" required onChange={handleChange} />
-                </div>
-              </div>
-              <div className="form-group row">
-                <label htmlFor="summary" className="col-sm-3 col-form-label form-label">
-                  Professional Summary
-                </label>
-                <div className="col-sm-9">
-                  <textarea className="form-control" id="summary" rows="3" required onChange={handleChange}></textarea>
-                </div>
-              </div>
-              <div className="form-group row">
-                <label htmlFor="skills" className="col-sm-3 col-form-label form-label">
-                  Skills
-                </label>
-                <div className="col-sm-9">
-                  <textarea className="form-control" id="skills" rows="3" required onChange={handleChange}></textarea>
-                </div>
-              </div>
-              <div className="form-group row">
-                <label htmlFor="certifications" className="col-sm-3 col-form-label form-label">
-                  Certifications
-                </label>
-                <div className="col-sm-9">
-                  <textarea className="form-control" id="certifications" rows="3" onChange={handleChange}></textarea>
-                </div>
-              </div>
-              <div className="form-group row">
-                <label htmlFor="experience" className="col-sm-3 col-form-label form-label">
-                  Work Experience
-                </label>
-                <div className="col-sm-9">
-                  <textarea className="form-control" id="experience" rows="4" required onChange={handleChange}></textarea>
-                </div>
-              </div>
-              <div className="form-group row">
-                <label htmlFor="education" className="col-sm-3 col-form-label form-label">
-                  Education
-                </label>
-                <div className="col-sm-9">
-                  <textarea className="form-control" id="education" rows="4" required onChange={handleChange}></textarea>
-                </div>
-              </div>
-              <div className="form-group row">
-                <label htmlFor="linkedin" className="col-sm-3 col-form-label form-label">
-                  LinkedIn Profile
-                </label>
-                <div className="col-sm-9">
-                  <input type="url" className="form-control" id="linkedin" onChange={handleChange} />
-                </div>
-              </div>
-              <div className="form-group row">
-                <label htmlFor="portfolio" className="col-sm-3 col-form-label form-label">
-                  Portfolio URL
-                </label>
-                <div className="col-sm-9">
-                  <input type="url" className="form-control" id="portfolio" onChange={handleChange} />
-                </div>
-              </div>
+      {/* Work Experience Section */}
+      <Typography variant="h6" gutterBottom style={{ marginTop: '20px' }}>
+        Work Experience
+      </Typography>
+      {workExperience.map((work, index) => (
+        <Grid container spacing={2} key={index}>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Job Title"
+              variant="outlined"
+              fullWidth
+              value={work.title}
+              onChange={(e) => handleWorkExperienceChange(index, 'title', e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Company"
+              variant="outlined"
+              fullWidth
+              value={work.company}
+              onChange={(e) => handleWorkExperienceChange(index, 'company', e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Duration"
+              variant="outlined"
+              fullWidth
+              value={work.duration}
+              onChange={(e) => handleWorkExperienceChange(index, 'duration', e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Responsibilities"
+              variant="outlined"
+              multiline
+              rows={3}
+              fullWidth
+              value={work.responsibilities}
+              onChange={(e) => handleWorkExperienceChange(index, 'responsibilities', e.target.value)}
+            />
+          </Grid>
+        </Grid>
+      ))}
+      <Box display="flex" justifyContent="center" marginTop="10px">
+        <Button onClick={handleAddWorkExperience} startIcon={<AddCircleOutline />} color="primary">
+          Add More Experience
+        </Button>
+      </Box>
 
+      {/* Skills */}
+      <Typography variant="h6" gutterBottom style={{ marginTop: '20px' }}>
+        Skills
+      </Typography>
+      <TextField label="List your skills (e.g. Design, JavaScript)" variant="outlined" fullWidth required />
 
-
-              {/* Add the other fields similarly */}
-              <div className="text-center">
-                <button type="submit" className="btn btn-primary">
-                  Generate CV
-                </button>
-              </div>
-            </form>
-          </div>
-        </section>
-
-      </main>
-
-
-    </>
+      {/* Submit Button */}
+      <Box display="flex" justifyContent="center" marginTop="20px">
+        <Button variant="contained" color="primary" size="large" onClick={generateHandler}>
+          Generate CV
+        </Button>
+      </Box>
+    </Paper>
   );
+};
 
-}
-
-export default Form
+export default CVForm;

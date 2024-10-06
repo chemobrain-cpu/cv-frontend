@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import FallBackComponent from './screens/Fallback';
+import FallBackComponent from './components/Fallback';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 
