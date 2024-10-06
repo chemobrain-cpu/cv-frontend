@@ -1,41 +1,62 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import './preview.css';  // Import the CSS file
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-const CVTemplate = () => {
-  return (
-    <div className="cv-container">
+
+const CVTemplate = () => { 
+  let [isLoading,setIsLoading] = useState(false)
+let { cvJobData:formData,isCvAvailable} = useSelector(state => state.userAuth)
+let navigate = useNavigate()
+
+
+useEffect(() => {
+  if (!isCvAvailable) {
+    navigate('/template'); // Replace with your template page route
+  }
+}, [isCvAvailable, navigate]);
+
+// Render nothing if isCvAvailable is true, JSX will not show the component body.
+if (!isCvAvailable) {
+  return null; // Or a loading spinner, or nothing at all
+}
+
+
+  return (<>
+  <div className="cv-container">
       {/* Left Column */}
       <div className="left-column">
         <div className="profile-picture">
           <img src="profile.jpg" alt="Profile Picture" />
         </div>
-        <h1 className="name">Sujan Kaystha</h1>
-        <h2 className="job-title">Interface Designer</h2>
+        <h1 className="name">{formData.name}</h1>
+        <h2 className="job-title">{formData.jobTitle}</h2>
 
         <section className="section summary-section">
           <h3>SUMMARY</h3>
           <ul>
-            <li><i className="fas fa-phone"></i> +977 1 9856 444 888</li>
-            <li><i className="fas fa-envelope"></i> youremail@domain.com</li>
-            <li><i className="fas fa-map-marker-alt"></i> Dillibazar 13, Kathmandu</li>
-            <li><i className="fas fa-globe"></i> Facebook.com/archana.56</li>
+            <li><i className="fas fa-phone"></i> {formData.phone}</li>
+            <li><i className="fas fa-envelope"></i> {formData.email}</li>
+            <li><i className="fas fa-map-marker-alt"></i> {formData.location}</li>
+            <li><i className="fas fa-globe"></i> {formData.socialMedia}</li>
           </ul>
         </section>
 
         <section className="section awards-section">
           <h3>AWARDS</h3>
-          <p><strong>Best Travel App</strong><br />
-            Vue Intacts / 2020 / Kathmandu</p>
-          <p><strong>UI Design 2018</strong><br />
-            Sunsex Global / 2018 / Nairobi</p>
+          {formData.awards.map((award, index) => (
+            <p key={index}>
+              <strong>{award.title}</strong><br />
+              {award.organization} / {award.year} / {award.location}
+            </p>
+          ))}
         </section>
 
         <section className="section achievements-section">
           <h3>ACHIEVEMENTS</h3>
-          <p>Designed Nepal Wallet App<br />
-            Partnered with UX/UI designers</p>
-          <p>User Research Web Presence<br />
-            Completed study to improve XYZ's.</p>
+          {formData.achievements.map((achievement, index) => (
+            <p key={index}>{achievement.description}</p>
+          ))}
         </section>
       </div>
 
@@ -43,54 +64,97 @@ const CVTemplate = () => {
       <div className="right-column">
         <section className="section summary">
           <h3>SUMMARY</h3>
-          <p>Consistently ranked in the top ten country managers... and more.</p>
+          <p>{formData.summary}</p>
         </section>
 
         <section className="section education">
           <h3>EDUCATION</h3>
-          <div className="education-item">
-            <h4>Master in Interface Design</h4>
-            <p>Pulchok Engineering College / Mar 2018 - Apr 2021</p>
-            <p>Managed a portfolio of customers with a value of $35 million.</p>
-          </div>
-          <div className="education-item">
-            <h4>Bachelor in Computer Application</h4>
-            <p>CSE College / Mar 2015 - Apr 2018</p>
-            <p>Conducted research to identify opportunities for improvements.</p>
-          </div>
+          {formData.education.map((edu, index) => (
+            <div className="education-item" key={index}>
+              <h4>{edu.degree}</h4>
+              <p>{edu.institution} / {edu.year}</p>
+              <p>{edu.details}</p>
+            </div>
+          ))}
         </section>
 
         <section className="section work-experience">
           <h3>WORK EXPERIENCE</h3>
-          <div className="work-item">
-            <h4>Product Manager</h4>
-            <p>Brain Workshop / Mar 2018 - Apr 2021</p>
-            <ul>
-              <li>Improvement of core Web site functionality.</li>
-              <li>Lowered XYZ's page abandonment rate by 35%.</li>
-            </ul>
-          </div>
-          <div className="work-item">
-            <h4>UI Designer</h4>
-            <p>Karkhana Inc / Mar 2015 - Apr 2018</p>
-            <ul>
-              <li>Replaced vague objectives with clear calls to action.</li>
-              <li>Increased XYZ's sales pipeline by 15%.</li>
-            </ul>
-          </div>
-          <div className="work-item">
-            <h4>Graphics Designer</h4>
-            <p>Thompson Advertising / Mar 2014 - Apr 2015</p>
-            <ul>
-              <li>Improvement of core Web site functionality.</li>
-              <li>Helped with card sorting and affinity diagramming.</li>
-            </ul>
-          </div>
+          {formData.workExperience.map((work, index) => (
+            <div className="work-item" key={index}>
+              <h4>{work.title}</h4>
+              <p>{work.company} / {work.duration}</p>
+              <ul>
+                {work.responsibilities.map((responsibility, i) => (
+                  <li key={i}>{responsibility}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </section>
       </div>
     </div>
+    <div className="cv-button-con">
+      <button>download pdf</button>
+      <button>Edit Cv</button>
+    </div>
+    </>
+    
   );
 };
 
 export default CVTemplate;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

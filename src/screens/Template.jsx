@@ -8,7 +8,12 @@ const Template = () => {
   let navigate = useNavigate()
 
   const navigateHandler = (id)=>{
-    navigate('/form')
+    if(id === 'template_1'){
+      navigate('/form_job')
+    }else{
+      navigate('/form_education')
+
+    }
   }
   
 
@@ -130,122 +135,10 @@ const Template = () => {
             </div>
           </div>
         </section>
-  
-        <section id="user-reviews" className="py-5 bg-light">
-          <div className="container">
-            <h2 className="text-center mb-4">What Our Users Say</h2>
-            <div className="row">
-              <div className="col-md-4">
-                <div className="card mb-4 shadow-sm">
-                  <div className="card-body">
-                    <blockquote className="blockquote mb-0">
-                      <p>"This resume builder saved me so much time! Highly recommended."</p>
-                      <footer className="blockquote-footer">John Doe</footer>
-                    </blockquote>
-                  </div>
-                </div>
-              </div>
-  
-              <div className="col-md-4">
-                <div className="card mb-4 shadow-sm">
-                  <div className="card-body">
-                    <blockquote className="blockquote mb-0">
-                      <p>"A simple and easy-to-use tool for creating a professional CV."</p>
-                      <footer className="blockquote-footer">Jane Smith</footer>
-                    </blockquote>
-                  </div>
-                </div>
-              </div>
-  
-              <div className="col-md-4">
-                <div className="card mb-4 shadow-sm">
-                  <div className="card-body">
-                    <blockquote className="blockquote mb-0">
-                      <p>"I loved the user interface. It made the process quick and efficient."</p>
-                      <footer className="blockquote-footer">Michael Brown</footer>
-                    </blockquote>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+
       </main>
   
-      <footer className="pt-5">
-        <div className="container my-4">
-          <div className="row gy-5 gx-md-5 text-center text-md-start">
-            <div className="col-md-6 col-xl-4">
-              <a className="site-logo text-decoration-none fw-bold fs-2" href="#">
-                <span>
-                  <i className="fa-solid fa-file-invoice"></i>
-                </span>
-                <span className="site-logo-text">Crea8</span> CV
-              </a>
-              <p className="text-grey fs-18 mt-4">
-                Crea8 CV is a CV builder that helps users like you to create stunning CVs within 4
-                minutes.
-              </p>
-            </div>
-  
-            <div className="col-md-6 col-xl-2">
-              <h3 className="text-blue">Crea8CV</h3>
-              <ul className="list-unstyled mt-4">
-                <li className="my-2">
-                  <a href="#" className="text-decoration-none fs-17 text-dark">
-                    Homepage
-                  </a>
-                </li>
-                <li className="my-2">
-                  <a href="#" className="text-decoration-none fs-17 text-dark">
-                    CV Builder
-                  </a>
-                </li>
-                <li className="my-2">
-                  <a href="#" className="text-decoration-none fs-17 text-dark">
-                    CV Templates
-                  </a>
-                </li>
-                <li className="my-2">
-                  <a href="#" className="text-decoration-none fs-17 text-dark">
-                    Login
-                  </a>
-                </li>
-              </ul>
-            </div>
-  
-            <div className="col-md-6 col-xl-2">
-              <h3 className="text-blue">Legal</h3>
-              <ul className="list-unstyled mt-4">
-                <li className="my-2">
-                  <a href="#" className="text-decoration-none fs-17 text-dark">
-                    Privacy Policy
-                  </a>
-                </li>
-                <li className="my-2">
-                  <a href="#" className="text-decoration-none fs-17 text-dark">
-                    Use of Terms
-                  </a>
-                </li>
-              </ul>
-            </div>
-  
-            <div className="col-md-6 col-xl-4">
-              <h3 className="text-blue">Help Center</h3>
-              <p className="fs-17 mt-3">
-                Contact:{' '}
-                <a href="mailto:support@buildcv.com" className="text-decoration-none text-blue">
-                  support@buildcv.com
-                </a>
-              </p>
-            </div>
-          </div>
-        </div>
-  
-        <div className="container-fluid copyright-text pt-4 pb-3">
-          <p className="text-center fw-3">&copy; 2022 Crea8Cv. All rights reserved</p>
-        </div>
-      </footer>
+       
     </>
   );
 }

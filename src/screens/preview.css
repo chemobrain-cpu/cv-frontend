@@ -115,6 +115,14 @@ body {
     font-size: 15px;
     line-height: 1.6;
   }
+
+
+  .cv-button-con{
+    display: flex;
+    justify-content: center;
+    gap:10px;
+
+  }
   
   /* Mobile responsiveness */
   @media screen and (max-width: 768px) {
@@ -183,6 +191,73 @@ body {
   
     .section p, .section ul {
       font-size: 12px;
+    }
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  .cv-container {
+    max-width: 800px; /* Max width for larger screens */
+    margin: 0 auto; /* Center align */
+    padding: 20px; /* Padding for all around */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+    font-family: Arial, sans-serif; /* Set a font */
+  }
+  
+  .cv-header {
+    text-align: center; /* Center title and contact info */
+  }
+  
+  .contact-info p {
+    margin: 5px 0; /* Space between contact info lines */
+  }
+  
+  .section {
+    margin: 20px 0; /* Space between sections */
+  }
+  
+  .education-item, .research-item {
+    background-color: #f9f9f9; /* Light background for items */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px; /* Padding inside items */
+    margin-bottom: 10px; /* Space below each item */
+  }
+  
+  h3 {
+    border-bottom: 2px solid #007BFF; /* Underline sections */
+    padding-bottom: 5px; /* Space below the underline */
+  }
+  
+  @media (max-width: 600px) {
+    .cv-container {
+      padding: 10px; /* Less padding on smaller screens */
+    }
+  
+    h1 {
+      font-size: 24px; /* Responsive title size */
+    }
+  
+    h3 {
+      font-size: 20px; /* Responsive section title size */
+    }
+  
+    p, li {
+      font-size: 14px; /* Smaller text size for better readability */
     }
   }
   

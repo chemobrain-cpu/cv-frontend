@@ -1,210 +1,312 @@
 import React, { useState } from 'react';
-import { TextField, Button, Grid, Typography, Box, Paper, Avatar } from '@mui/material';
-import { AddCircleOutline, PhotoCamera } from '@mui/icons-material';
-import { makeCv } from '../store/action/userAppStorage';
+import './form.css'
+import { makeJobCv } from '../store/action/userAppStorage';
 import { useDispatch } from 'react-redux';
-
-
-
+import { useNavigate } from 'react-router-dom';
 
 const CVForm = () => {
-  const [education, setEducation] = useState([{ degree: '', institution: '', year: '' }]);
-  const [workExperience, setWorkExperience] = useState([{ title: '', company: '', duration: '', responsibilities: '' }]);
+  const [formData, setFormData] = useState({
+    name: '',
+    jobTitle: '',
+    phone: '',
+    email: '',
+    location: '',
+    socialMedia: '',
+    summary: '',
+    awards: [{ title: '', organization: '', year: '', location: '' }],
+    achievements: [{ description: '' }],
+    education: [{ degree: '', institution: '', year: '', details: '' }],
+    workExperience: [{ title: '', company: '', duration: '', responsibilities: [''] }],
+  });
+
   let dispatch = useDispatch()
 
-  const handleEducationChange = (index, field, value) => {
-    const updatedEducation = [...education];
-    updatedEducation[index][field] = value;
-    setEducation(updatedEducation);
+  let navigate = useNavigate()
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleAddAward = () => {
+    setFormData({
+      ...formData,
+      awards: [...formData.awards, { title: '', organization: '', year: '', location: '' }],
+    });
+  };
+
+  const handleAddAchievement = () => {
+    setFormData({
+      ...formData,
+      achievements: [...formData.achievements, { description: '' }],
+    });
   };
 
   const handleAddEducation = () => {
-    setEducation([...education, { degree: '', institution: '', year: '' }]);
-  };
-
-  const handleWorkExperienceChange = (index, field, value) => {
-    const updatedWorkExperience = [...workExperience];
-    updatedWorkExperience[index][field] = value;
-    setWorkExperience(updatedWorkExperience);
+    setFormData({
+      ...formData,
+      education: [...formData.education, { degree: '', institution: '', year: '', details: '' }],
+    });
   };
 
   const handleAddWorkExperience = () => {
-    setWorkExperience([...workExperience, { title: '', company: '', duration: '', responsibilities: '' }]);
+    setFormData({
+      ...formData,
+      workExperience: [...formData.workExperience, { title: '', company: '', duration: '', responsibilities: [''] }],
+    });
   };
 
 
-  let generateHandler = ()=>{
-    let data = {
-      workExperience:workExperience,
-      education:education
-    }
-    console.log(data)
-
-    dispatch(makeCv(data))
+  let handleSubmitHandler = (e)=>{
+    e.preventDefault()
+    dispatch(makeJobCv(formData))
+    navigate('/jobcvpreview')
   }
 
-
-
-
-
   return (
-    <Paper elevation={3} style={{ padding: '20px', maxWidth: '900px', margin: 'auto', marginTop: '20px' }}>
-      <Box display="flex" justifyContent="center" marginBottom="20px">
-        <Avatar
-          style={{
-            width: '100px',
-            height: '100px',
-            marginBottom: '10px',
-          }}
-        >
-          <PhotoCamera />
-        </Avatar>
-      </Box>
-      <Typography variant="h4" align="center" gutterBottom>
-        CV Builder
-      </Typography>
+    <form onSubmit={handleSubmitHandler}>
+  <h2>CV Information</h2>
+  <div>
+    <label>Name:</label>
+    <input
+      type="text"
+      name="name"
+      value={formData.name}
+      onChange={handleChange}
+      required // Make this field required
+    />
+  </div>
+  <div>
+    <label>Job Title:</label>
+    <input
+      type="text"
+      name="jobTitle"
+      value={formData.jobTitle}
+      onChange={handleChange}
+      required // Make this field required
+    />
+  </div>
+  <div>
+    <label>Phone:</label>
+    <input
+      type="text"
+      name="phone"
+      value={formData.phone}
+      onChange={handleChange}
+      required // Make this field required
+    />
+  </div>
+  <div>
+    <label>Email:</label>
+    <input
+      type="email"
+      name="email"
+      value={formData.email}
+      onChange={handleChange}
+      required // Make this field required
+    />
+  </div>
+  <div>
+    <label>Location:</label>
+    <input
+      type="text"
+      name="location"
+      value={formData.location}
+      onChange={handleChange}
+      required // Make this field required
+    />
+  </div>
+  <div>
+    <label>Social Media/Website:</label>
+    <input
+      type="text"
+      name="socialMedia"
+      value={formData.socialMedia}
+      onChange={handleChange}
+      required // Make this field required
+    />
+  </div>
+  <div>
+    <label>Summary:</label>
+    <textarea
+      name="summary"
+      value={formData.summary}
+      onChange={handleChange}
+      required // Make this field required
+    />
+  </div>
 
-      {/* Personal Information */}
-      <Typography variant="h6" gutterBottom>
-        Personal Information
-      </Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
-          <TextField label="Full Name" variant="outlined" fullWidth required />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField label="Job Title" variant="outlined" fullWidth required />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField label="Phone Number" variant="outlined" fullWidth required />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField label="Email" variant="outlined" fullWidth required />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField label="Address" variant="outlined" fullWidth required />
-        </Grid>
-      </Grid>
-
-      {/* Summary */}
-      <Typography variant="h6" gutterBottom style={{ marginTop: '20px' }}>
-        Summary
-      </Typography>
-      <TextField
-        label="Write a short summary about yourself"
-        variant="outlined"
-        multiline
-        rows={4}
-        fullWidth
-        required
+  <h3>Awards</h3>
+  {formData.awards.map((award, index) => (
+    <div key={index}>
+      <input
+        type="text"
+        placeholder="Award Title"
+        value={award.title}
+        onChange={(e) => {
+          const awards = [...formData.awards];
+          awards[index].title = e.target.value;
+          setFormData({ ...formData, awards });
+        }}
+        required // Make this field required
       />
+      <input
+        type="text"
+        placeholder="Organization"
+        value={award.organization}
+        onChange={(e) => {
+          const awards = [...formData.awards];
+          awards[index].organization = e.target.value;
+          setFormData({ ...formData, awards });
+        }}
+        required // Make this field required
+      />
+      <input
+        type="text"
+        placeholder="Year"
+        value={award.year}
+        onChange={(e) => {
+          const awards = [...formData.awards];
+          awards[index].year = e.target.value;
+          setFormData({ ...formData, awards });
+        }}
+        required // Make this field required
+      />
+      <input
+        type="text"
+        placeholder="Location"
+        value={award.location}
+        onChange={(e) => {
+          const awards = [...formData.awards];
+          awards[index].location = e.target.value;
+          setFormData({ ...formData, awards });
+        }}
+        required // Make this field required
+      />
+    </div>
+  ))}
+  <button type="button" onClick={handleAddAward}>Add Another Award</button>
 
-      {/* Education Section */}
-      <Typography variant="h6" gutterBottom style={{ marginTop: '20px' }}>
-        Education
-      </Typography>
-      {education.map((edu, index) => (
-        <Grid container spacing={2} key={index}>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              label="Degree"
-              variant="outlined"
-              fullWidth
-              value={edu.degree}
-              onChange={(e) => handleEducationChange(index, 'degree', e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              label="Institution"
-              variant="outlined"
-              fullWidth
-              value={edu.institution}
-              onChange={(e) => handleEducationChange(index, 'institution', e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              label="Year"
-              variant="outlined"
-              fullWidth
-              value={edu.year}
-              onChange={(e) => handleEducationChange(index, 'year', e.target.value)}
-            />
-          </Grid>
-        </Grid>
-      ))}
-      <Box display="flex" justifyContent="center" marginTop="10px">
-        <Button onClick={handleAddEducation} startIcon={<AddCircleOutline />} color="primary">
-          Add More Education
-        </Button>
-      </Box>
+  <h3>Achievements</h3>
+  {formData.achievements.map((achievement, index) => (
+    <div key={index}>
+      <textarea
+        placeholder="Achievement Description"
+        value={achievement.description}
+        onChange={(e) => {
+          const achievements = [...formData.achievements];
+          achievements[index].description = e.target.value;
+          setFormData({ ...formData, achievements });
+        }}
+        required // Make this field required
+      />
+    </div>
+  ))}
+  <button type="button" onClick={handleAddAchievement}>Add Another Achievement</button>
 
-      {/* Work Experience Section */}
-      <Typography variant="h6" gutterBottom style={{ marginTop: '20px' }}>
-        Work Experience
-      </Typography>
-      {workExperience.map((work, index) => (
-        <Grid container spacing={2} key={index}>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              label="Job Title"
-              variant="outlined"
-              fullWidth
-              value={work.title}
-              onChange={(e) => handleWorkExperienceChange(index, 'title', e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              label="Company"
-              variant="outlined"
-              fullWidth
-              value={work.company}
-              onChange={(e) => handleWorkExperienceChange(index, 'company', e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              label="Duration"
-              variant="outlined"
-              fullWidth
-              value={work.duration}
-              onChange={(e) => handleWorkExperienceChange(index, 'duration', e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="Responsibilities"
-              variant="outlined"
-              multiline
-              rows={3}
-              fullWidth
-              value={work.responsibilities}
-              onChange={(e) => handleWorkExperienceChange(index, 'responsibilities', e.target.value)}
-            />
-          </Grid>
-        </Grid>
-      ))}
-      <Box display="flex" justifyContent="center" marginTop="10px">
-        <Button onClick={handleAddWorkExperience} startIcon={<AddCircleOutline />} color="primary">
-          Add More Experience
-        </Button>
-      </Box>
+  <h3>Education</h3>
+  {formData.education.map((edu, index) => (
+    <div key={index}>
+      <input
+        type="text"
+        placeholder="Degree"
+        value={edu.degree}
+        onChange={(e) => {
+          const education = [...formData.education];
+          education[index].degree = e.target.value;
+          setFormData({ ...formData, education });
+        }}
+        required // Make this field required
+      />
+      <input
+        type="text"
+        placeholder="Institution"
+        value={edu.institution}
+        onChange={(e) => {
+          const education = [...formData.education];
+          education[index].institution = e.target.value;
+          setFormData({ ...formData, education });
+        }}
+        required // Make this field required
+      />
+      <input
+        type="text"
+        placeholder="Year"
+        value={edu.year}
+        onChange={(e) => {
+          const education = [...formData.education];
+          education[index].year = e.target.value;
+          setFormData({ ...formData, education });
+        }}
+        required // Make this field required
+      />
+      <textarea
+        placeholder="Details (optional)"
+        value={edu.details}
+        onChange={(e) => {
+          const education = [...formData.education];
+          education[index].details = e.target.value;
+          setFormData({ ...formData, education });
+        }}
+      />
+    </div>
+  ))}
+  <button type="button" onClick={handleAddEducation}>Add Another Education</button>
 
-      {/* Skills */}
-      <Typography variant="h6" gutterBottom style={{ marginTop: '20px' }}>
-        Skills
-      </Typography>
-      <TextField label="List your skills (e.g. Design, JavaScript)" variant="outlined" fullWidth required />
+  <h3>Work Experience</h3>
+  {formData.workExperience.map((work, index) => (
+    <div key={index}>
+      <input
+        type="text"
+        placeholder="Job Title"
+        value={work.title}
+        onChange={(e) => {
+          const workExperience = [...formData.workExperience];
+          workExperience[index].title = e.target.value;
+          setFormData({ ...formData, workExperience });
+        }}
+        required // Make this field required
+      />
+      <input
+        type="text"
+        placeholder="Company Name"
+        value={work.company}
+        onChange={(e) => {
+          const workExperience = [...formData.workExperience];
+          workExperience[index].company = e.target.value;
+          setFormData({ ...formData, workExperience });
+        }}
+        required // Make this field required
+      />
+      <input
+        type="text"
+        placeholder="Duration"
+        value={work.duration}
+        onChange={(e) => {
+          const workExperience = [...formData.workExperience];
+          workExperience[index].duration = e.target.value;
+          setFormData({ ...formData, workExperience });
+        }}
+        required // Make this field required
+      />
+      <textarea
+        placeholder="Responsibilities"
+        value={work.responsibilities.join(', ')}
+        onChange={(e) => {
+          const responsibilities = e.target.value.split(',').map(res => res.trim());
+          const workExperience = [...formData.workExperience];
+          workExperience[index].responsibilities = responsibilities;
+          setFormData({ ...formData, workExperience });
+        }}
+        required // Make this field required
+      />
+    </div>
+  ))}
+  <button type="button" onClick={handleAddWorkExperience}>Add Another Work Experience</button>
 
-      {/* Submit Button */}
-      <Box display="flex" justifyContent="center" marginTop="20px">
-        <Button variant="contained" color="primary" size="large" onClick={generateHandler}>
-          Generate CV
-        </Button>
-      </Box>
-    </Paper>
+  <button type="submit">Generate CV</button>
+</form>
+
   );
 };
 
