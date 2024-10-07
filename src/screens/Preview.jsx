@@ -21,7 +21,6 @@ if (!isCvAvailable) {
   return null; // Or a loading spinner, or nothing at all
 }
 
-
   return (<>
   <div className="cv-container">
       {/* Left Column */}
