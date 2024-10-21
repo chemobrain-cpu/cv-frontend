@@ -7,15 +7,17 @@ const Template = () => {
 
   let navigate = useNavigate()
 
-  const navigateHandler = (id)=>{
-    if(id === 'template_1'){
+  const navigateHandler = (id) => {
+    if (id === 'template_1') {
       navigate('/form_job')
-    }else{
+    } else if( id === 'template_2') {
       navigate('/form_education')
-
+    } else if( id === 'template_3') {
+      navigate('/form_3')
     }
+
   }
-  
+
 
   return (
     <>
@@ -37,7 +39,7 @@ const Template = () => {
             >
               <span className="navbar-toggler-icon"></span>
             </button>
-  
+
             <div className="collapse navbar-collapse" id="navbarContent">
               <ul className="navbar-nav ms-auto">
                 <li className="nav-item dropdown">
@@ -65,7 +67,7 @@ const Template = () => {
                   </ul>
                 </li>
               </ul>
-  
+
               <button
                 type="button"
                 className="btn btn-login btn-primary ms-lg-4 px-4 fs-16 mt-1 mt-lg-0"
@@ -76,7 +78,7 @@ const Template = () => {
           </div>
         </nav>
       </header>
-  
+
       <main>
         <section className="steps py-8">
           <div className="container">
@@ -92,7 +94,7 @@ const Template = () => {
             </div>
           </div>
         </section>
-  
+
         <section className="templates py-8 bg-secondary">
           <div className="container">
             <div className="row section-title text-center mb-5">
@@ -106,39 +108,111 @@ const Template = () => {
                 </p>
               </div>
             </div>
-  
+
             <div className="row templates-list gy-5 gx-lg-5">
               <div className="templates-item position-relative col-lg-6">
                 <div className="template-item-img mx-auto me-lg-0 position-relative">
                   <img src="Basic.jpg" alt="" className="img-fluid" />
                   <a
-                    onClick={()=>navigateHandler('template_1')}
+                    onClick={() => navigateHandler('template_1')}
                     className="btn btn-lg btn-primary position-absolute choose-template-btn"
                   >
                     Select Template
                   </a>
                 </div>
               </div>
-  
+
               <div className="templates-item position-relative col-lg-6">
                 <div className="template-item-img mx-auto ms-lg-0 position-relative">
                   <img src="phd-cv-example.webp" alt="" className="img-fluid" />
                   <a
-                    
                     className="btn btn-lg btn-primary position-absolute choose-template-btn"
-                    onClick={()=>navigateHandler('template_2')}
+                    onClick={() => navigateHandler('template_2')}
+                  >
+                    Select Template
+                  </a>
+                </div>
+              </div>
+
+              <div className="templates-item position-relative col-lg-6">
+                <div className="template-item-img mx-auto me-lg-0 position-relative">
+                  <img src="cv3.jpg" alt="CV Template 3" className="img-fluid" />
+                  <a
+                    onClick={() => navigateHandler('template_3')}
+                    className="btn btn-lg btn-primary position-absolute choose-template-btn"
+                  >
+                    Select Template
+                  </a>
+                </div>
+              </div>
+
+              <div className="templates-item position-relative col-lg-6">
+                <div className="template-item-img mx-auto ms-lg-0 position-relative">
+                  <img src="cv4.jpg" alt="CV Template 4" className="img-fluid" />
+                  <a
+                    onClick={() => navigateHandler('template_4')}
+                    className="btn btn-lg btn-primary position-absolute choose-template-btn"
+                  >
+                    Select Template
+                  </a>
+                </div>
+              </div>
+
+              <div className="templates-item position-relative col-lg-6">
+                <div className="template-item-img mx-auto me-lg-0 position-relative">
+                  <img src="cv5.jpg" alt="CV Template 5" className="img-fluid" />
+                  <a
+                    onClick={() => navigateHandler('template_5')}
+                    className="btn btn-lg btn-primary position-absolute choose-template-btn"
+                  >
+                    Select Template
+                  </a>
+                </div>
+              </div>
+
+              <div className="templates-item position-relative col-lg-6">
+                <div className="template-item-img mx-auto ms-lg-0 position-relative">
+                  <img src="cv6.jpg" alt="CV Template 6" className="img-fluid" />
+                  <a
+                    onClick={() => navigateHandler('template_6')}
+                    className="btn btn-lg btn-primary position-absolute choose-template-btn"
+                  >
+                    Select Template
+                  </a>
+                </div>
+              </div>
+
+              <div className="templates-item position-relative col-lg-6">
+                <div className="template-item-img mx-auto me-lg-0 position-relative">
+                  <img src="cv7.jpg" alt="CV Template 7" className="img-fluid" />
+                  <a
+                    onClick={() => navigateHandler('template_7')}
+                    className="btn btn-lg btn-primary position-absolute choose-template-btn"
+                  >
+                    Select Template
+                  </a>
+                </div>
+              </div>
+
+              <div className="templates-item position-relative col-lg-6">
+                <div className="template-item-img mx-auto ms-lg-0 position-relative">
+                  <img src="cv8.jpg" alt="CV Template 8" className="img-fluid" />
+                  <a
+                    onClick={() => navigateHandler('template_8')}
+                    className="btn btn-lg btn-primary position-absolute choose-template-btn"
                   >
                     Select Template
                   </a>
                 </div>
               </div>
             </div>
+
           </div>
         </section>
 
       </main>
-  
-       
+
+
     </>
   );
 }

@@ -1,15 +1,19 @@
 import { LOGIN_USER } from "../action/userAppStorage";
-import { GENERATE_CV } from "../action/userAppStorage";
-
+import { GENERATE_EDUCATIONCV, GENERATE_JOBCV, GENERATE_CV3 } from "../action/userAppStorage";
 
 
 
 const initialState = {
     userToken: '',
     user: null,
-    cvData:null
-
+    cvJobData: null,
+    cvEducationData: null,
+    cvData3: null,
+    isCvAvailable: false
 }
+
+
+
 
 
 
@@ -22,12 +26,32 @@ export const userAuthReducer = (state = initialState, action) => {
                 userToken: action.payload.userToken,
             }
 
-        case GENERATE_CV:
+        case GENERATE_JOBCV:
             return {
                 ...state,
-                user: action.payload.user,
-                cvData:action.payload
+                cvJobData: action.payload,
+                isCvAvailable: true
             }
+
+
+        case GENERATE_EDUCATIONCV:
+            return {
+                ...state,
+                cvEducationData: action.payload,
+                isCvAvailable: true
+            }
+
+
+        case GENERATE_CV3:
+            return {
+                ...state,
+                cvData3: action.payload,
+                isCvAvailable: true
+            }
+
+
+
+
         default:
             return state
     }

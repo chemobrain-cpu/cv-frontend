@@ -1,7 +1,8 @@
 export const SIGNUP_USER = "SIGNUP_USER";
 export const LOGIN_USER = "LOGIN_USER";
-export const GENERATE_CV = "GENERATE_CV";
-
+export const GENERATE_JOBCV = "GENERATE_JOBCV";
+export const GENERATE_EDUCATIONCV = "GENERATE_EDUCATIONCV";
+export const GENERATE_CV3 = "GENERATE_CV3";
 
 //pure functions to calculate the time remaining
 
@@ -170,10 +171,25 @@ export const login = (data) => {
 }
 
 
-export const makeCv = (data) => {
+export const makeJobCv = (data) => {
   return (dispatch, getState) => {
     //do some check on the server if its actually login before proceding to dispatch
-    dispatch({ type: GENERATE_CV, payload: data })
+    dispatch({ type: GENERATE_JOBCV, payload: data })
+  }
+}
+
+export const makeEducationCv = (data) => {
+  return (dispatch, getState) => {
+    //do some check on the server if its actually login before proceding to dispatch
+    dispatch({ type: GENERATE_EDUCATIONCV, payload: data })
+  }
+}
+
+
+export const makeCv3 = (data) => {
+  return (dispatch, getState) => {
+    //do some check on the server if its actually login before proceding to dispatch
+    dispatch({ type: GENERATE_CV3, payload: data })
   }
 }
 

@@ -10,7 +10,7 @@ let Modal = ({content,closeModal}) => {
 
     return <div className={styles.modal_screen}>
         <div className={styles.modal_center}>
-            <div className={styles.modal_input_card}  style={{backgroundColor:user?color.fadeColor:''}}>
+            <div className={styles.modal_input_card}  >
                 <div className={styles.modal_heading_con}>
                     <p className={styles.modal_heading} >
                         {content}
