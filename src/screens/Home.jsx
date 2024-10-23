@@ -103,10 +103,10 @@ const MainContent = () => {
   }, []);
 
   return (
-    <main>
+    <main >
       {/* Steps Section */}
       <section className="steps py-8" style={{ background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)' }}>
-        <div className="container">
+        <div  >
           <div className="row section-title text-center" data-aos="fade-up">
             <div className="col-12">
               <h2 className="display-6 text-white fw-bold" style={{ letterSpacing: '1px' }}>

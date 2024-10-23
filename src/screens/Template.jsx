@@ -1,220 +1,219 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Container, Row, Col, Nav, Navbar, Button } from 'react-bootstrap';
+import { FaUserCircle } from 'react-icons/fa';  // Import human icon
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './Dashboard.css'; // Add the CSS file for styling
 import { useNavigate } from 'react-router-dom';
 
+const Dashboard = () => {
+  const [activeTab, setActiveTab] = useState('overview');
+  const [sidebarOpen, setSidebarOpen] = useState(false); // State to control sidebar toggle on mobile
+  let navigate = useNavigate();
 
-
-const Template = () => {
-
-  let navigate = useNavigate()
-
-  const navigateHandler = (id) => {
-    if (id === 'template_1') {
-      navigate('/form_job')
-    } else if( id === 'template_2') {
-      navigate('/form_education')
-    } else if( id === 'template_3') {
-      navigate('/form_3')
-    }
+  
+  let handleLogout = () => {
 
   }
 
+  const [currentPage, setCurrentPage] = useState(0);
+  const templates = [
+    { src: 'Basic.jpg', alt: 'CV Template 1', id: 'template_1' },
+    { src: 'phd-cv-example.webp', alt: 'CV Template 2', id: 'template_2' },
+    { src: 'cv3.jpg', alt: 'CV Template 3', id: 'template_3' },
+    { src: 'cv4.jpg', alt: 'CV Template 4', id: 'template_4' },
+    { src: 'cv5.jpg', alt: 'CV Template 5', id: 'template_5' },
+    { src: 'cv6.jpg', alt: 'CV Template 6', id: 'template_6' },
+    { src: 'cv7.jpg', alt: 'CV Template 7', id: 'template_7' },
+    { src: 'cv8.jpg', alt: 'CV Template 8', id: 'template_8' },
+  ];
+
+  // Display 3 images at a time
+  const itemsPerPage = 3;
+  const totalPages = Math.ceil(templates.length / itemsPerPage);
+
+  const handlePrevious = () => {
+    setCurrentPage((prevPage) => (prevPage > 0 ? prevPage - 1 : 0));
+  };
+
+  const handleNext = () => {
+    setCurrentPage((prevPage) => (prevPage < totalPages - 1 ? prevPage + 1 : totalPages - 1));
+  };
+
+
+
+
+
+
+  const navigateHandler = (id) => {
+    if (id === 'template_1') {
+      navigate('/form_job');
+    } else if (id === 'template_2') {
+      navigate('/form_education');
+    } else if (id === 'template_3') {
+      navigate('/form_3');
+    }
+  };
+
+
+  const renderContent = () => {
+    return (
+      <main className="bg-white p-4">
+        <p
+          className="text-dark my-4 mx-auto text-center fs-6 fs-md-5 fs-lg-4 px-3 px-md-4 aos-init aos-animate"
+          data-aos="fade-up"
+        >
+          A great job application leads to a good interview. An amazing resume is what makes it
+          all possible. Here are the Best Templates for you to choose from.
+        </p>
+
+        {/* Pagination Buttons */}
+        <div className="d-flex justify-content-between mb-4" data-aos="fade-right">
+          <button
+            className="btn btn-outline-primary rounded-pill px-4 py-2"
+            onClick={handlePrevious}
+            disabled={currentPage === 0}
+          >
+            Previous
+          </button>
+          <button
+            className="btn btn-outline-primary rounded-pill px-4 py-2"
+            onClick={handleNext}
+            disabled={currentPage === totalPages - 1}
+          >
+            Next
+          </button>
+        </div>
+
+        {/* Template Cards */}
+        <div className="row templates-list gy-4 gx-4">
+          {templates
+            .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
+            .map((template) => (
+              <div
+                key={template.id}
+                className="templates-item col-12 col-md-6 col-lg-4 aos-init aos-animate"
+                data-aos="zoom-in"
+                data-aos-delay="100"
+              >
+                <div className="card shadow-lg h-100 border-0">
+                  <img
+                    src={template.src}
+                    alt={template.alt}
+                    className="card-img-top img-fluid rounded"
+                    style={{ height: '220px', objectFit: 'cover' }}
+                  />
+                  <div className="card-body d-flex flex-column">
+                    <h5 className="card-title text-center">{template.alt}</h5>
+                    <button
+                      onClick={() => navigateHandler(template.id)}
+                      className="btn btn-primary mt-auto rounded-pill"
+                    >
+                      Select Template
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
+      </main>
+    );
+  };
+
+
+
+
+
+
 
   return (
-    <>
-      <header className="headere">
-        <nav className="navbar navbar-expand-lg navbar-light bg-secondary">
-          <div className="container">
-            <a className="navbar-brand fw-bold fs-2" href="index.html">
-              <span>
-                <i className="fa-solid fa-file-invoice"></i>
-              </span>
-              <span className="navbar-brand-text">Crea8</span> CV
-            </a>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarContent"
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
+    <div className="dashboard-container">
+      {/* Sidebar */}
+      <div className={`sidebar bg-primary ${sidebarOpen ? 'visible' : ''}`}>
+        <div className="sidebar-header d-flex justify-content-between align-items-center">
+          <h4 className="text-white text-center bg-transparent">Dashboard</h4>
+          <Button
+            variant="outline-light"
+            className="d-md-none sidebar-toggle"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          >
+            ☰
+          </Button>
+        </div>
+        <Nav className="flex-column" data-aos="fade-right">
+          <Nav.Link 
+            onClick={() => {
+              setActiveTab('myCVs') 
+            navigate('/cvs')}}
+            className={`text-white ${activeTab === 'myCVs' ? 'active' : ''}`}
+            data-aos="fade-up" // Animation for this link 
+          >
+            My CVs
+          </Nav.Link>
+          <Nav.Link
+            onClick={() => {
+              setActiveTab('templates')
+            navigate('/template')}}
+            className={`text-white ${activeTab === 'templates' ? 'active' : ''}`}
+            data-aos="fade-up"
+          >
+            Templates
+          </Nav.Link>
+          <Nav.Link
+            onClick={() => {
+              setActiveTab('profileSettings')
+            navigate('/profilesetting')}}
+            className={`text-white ${activeTab === 'profileSettings' ? 'active' : ''}`}
+            data-aos="fade-up"
+          >
+            Profile Settings
+          </Nav.Link>
+          <Nav.Link onClick={handleLogout} className="text-white" data-aos="fade-up">
+            Logout
+          </Nav.Link>
+        </Nav>
 
-            <div className="collapse navbar-collapse" id="navbarContent">
-              <ul className="navbar-nav ms-auto">
-                <li className="nav-item dropdown">
-                  <a
-                    className="nav-link dropdown-toggle text-blue fs-18"
-                    href="#"
-                    id="navbarDropdown"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Resume Templates
-                  </a>
-                  <ul className="dropdown-menu bg-white" aria-labelledby="navbarDropdown">
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Job CV
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Academic CV
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
+      </div>
 
-              <button
-                type="button"
-                className="btn btn-login btn-primary ms-lg-4 px-4 fs-16 mt-1 mt-lg-0"
+      {/* Main content area */}
+      <Container fluid className="main-content">
+        <Navbar expand="lg" className="bg-gradient shadow-lg mb-4 py-3 header-navbar">
+          <Container fluid>
+            <Row className="w-100 align-items-center">
+              {/* Column for Navbar Brand (Welcome text) */}
+              <Col xs={6} md={4} className="d-flex align-items-center">
+                <Navbar.Brand className="ml-3 welcome-text" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.5rem', fontWeight: '600', color: '#fff' }}>
+                  Welcome!
+                </Navbar.Brand>
+              </Col>
+
+              {/* Column for User Icon and Logout Button */}
+              <Col xs={6} md={8} className="d-flex justify-content-end align-items-center">
+                <FaUserCircle size={35} className="me-3 user-icon text-white" />
+                <Button variant="outline-light" className="ml-auto me-3 logout-btn" style={{ borderRadius: '20px', padding: '0.5rem 1.5rem', fontWeight: '500' }} >
+                  Logout
+                </Button>
+              </Col>
+
+              {/* Sidebar toggle button for mobile */}
+              <Button
+                variant="outline-light"
+                className="d-lg-none ms-auto me-3 sidebar-toggle-btn"
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                style={{ fontSize: '1.5rem', padding: '0.5rem', borderRadius: '10px' }}
               >
-                Logout
-              </button>
-            </div>
-          </div>
-        </nav>
-      </header>
+                ☰
+              </Button>
+            </Row>
+          </Container>
+        </Navbar>
 
-      <main>
-        <section className="steps py-8">
-          <div className="container">
-            <div className="row section-title text-center">
-              <div className="col-12">
-                <h2 className="display-6 text-blue fw-bold">
-                  Create your perfect Resume with easy steps
-                </h2>
-                <p className="text-grey fs-4 my-4 mx-auto">
-                  Effortlessly make a job-worthy resume and cover letter that gets you hired faster.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="templates py-8 bg-secondary">
-          <div className="container">
-            <div className="row section-title text-center mb-5">
-              <div className="col-12">
-                <h2 className="display-6 text-blue fw-bold">
-                  Here are the Best Templates for you
-                </h2>
-                <p className="text-grey fs-4 my-4 mx-auto">
-                  A great job application leads to a good interview. An amazing resume is what makes it
-                  all possible.
-                </p>
-              </div>
-            </div>
-
-            <div className="row templates-list gy-5 gx-lg-5">
-              <div className="templates-item position-relative col-lg-6">
-                <div className="template-item-img mx-auto me-lg-0 position-relative">
-                  <img src="Basic.jpg" alt="" className="img-fluid" />
-                  <a
-                    onClick={() => navigateHandler('template_1')}
-                    className="btn btn-lg btn-primary position-absolute choose-template-btn"
-                  >
-                    Select Template
-                  </a>
-                </div>
-              </div>
-
-              <div className="templates-item position-relative col-lg-6">
-                <div className="template-item-img mx-auto ms-lg-0 position-relative">
-                  <img src="phd-cv-example.webp" alt="" className="img-fluid" />
-                  <a
-                    className="btn btn-lg btn-primary position-absolute choose-template-btn"
-                    onClick={() => navigateHandler('template_2')}
-                  >
-                    Select Template
-                  </a>
-                </div>
-              </div>
-
-              <div className="templates-item position-relative col-lg-6">
-                <div className="template-item-img mx-auto me-lg-0 position-relative">
-                  <img src="cv3.jpg" alt="CV Template 3" className="img-fluid" />
-                  <a
-                    onClick={() => navigateHandler('template_3')}
-                    className="btn btn-lg btn-primary position-absolute choose-template-btn"
-                  >
-                    Select Template
-                  </a>
-                </div>
-              </div>
-
-              <div className="templates-item position-relative col-lg-6">
-                <div className="template-item-img mx-auto ms-lg-0 position-relative">
-                  <img src="cv4.jpg" alt="CV Template 4" className="img-fluid" />
-                  <a
-                    onClick={() => navigateHandler('template_4')}
-                    className="btn btn-lg btn-primary position-absolute choose-template-btn"
-                  >
-                    Select Template
-                  </a>
-                </div>
-              </div>
-
-              <div className="templates-item position-relative col-lg-6">
-                <div className="template-item-img mx-auto me-lg-0 position-relative">
-                  <img src="cv5.jpg" alt="CV Template 5" className="img-fluid" />
-                  <a
-                    onClick={() => navigateHandler('template_5')}
-                    className="btn btn-lg btn-primary position-absolute choose-template-btn"
-                  >
-                    Select Template
-                  </a>
-                </div>
-              </div>
-
-              <div className="templates-item position-relative col-lg-6">
-                <div className="template-item-img mx-auto ms-lg-0 position-relative">
-                  <img src="cv6.jpg" alt="CV Template 6" className="img-fluid" />
-                  <a
-                    onClick={() => navigateHandler('template_6')}
-                    className="btn btn-lg btn-primary position-absolute choose-template-btn"
-                  >
-                    Select Template
-                  </a>
-                </div>
-              </div>
-
-              <div className="templates-item position-relative col-lg-6">
-                <div className="template-item-img mx-auto me-lg-0 position-relative">
-                  <img src="cv7.jpg" alt="CV Template 7" className="img-fluid" />
-                  <a
-                    onClick={() => navigateHandler('template_7')}
-                    className="btn btn-lg btn-primary position-absolute choose-template-btn"
-                  >
-                    Select Template
-                  </a>
-                </div>
-              </div>
-
-              <div className="templates-item position-relative col-lg-6">
-                <div className="template-item-img mx-auto ms-lg-0 position-relative">
-                  <img src="cv8.jpg" alt="CV Template 8" className="img-fluid" />
-                  <a
-                    onClick={() => navigateHandler('template_8')}
-                    className="btn btn-lg btn-primary position-absolute choose-template-btn"
-                  >
-                    Select Template
-                  </a>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-      </main>
-
-
-    </>
+        <div className="content">
+          {renderContent()}
+        </div>
+      </Container>
+    </div>
   );
-}
+};
 
-export default Template
+export default Dashboard;
+

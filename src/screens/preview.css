@@ -1,8 +1,9 @@
-body {
+.cv-container  {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f9;
-    margin: 0;
+    margin: auto;
     padding: 0;
+
   }
   
   .cv-container {
@@ -17,7 +18,7 @@ body {
     gap: 20px;
   }
   
-  .left-column {
+  .cv-container .left-column {
     width: 30%;
     background-color: #f1f1f1;
     padding: 20px;
@@ -25,12 +26,12 @@ body {
     text-align: center;
   }
   
-  .right-column {
+  .cv-container .right-column {
     width: 70%;
     padding: 20px;
   }
   
-  .profile-picture img {
+  .cv-container .profile-picture img {
     width: 150px;
     height: 150px;
     border-radius: 50%;
@@ -38,23 +39,23 @@ body {
     margin-bottom: 20px;
   }
   
-  .name {
+  .cv-container .name {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 10px;
   }
   
-  .job-title {
+  .cv-container .job-title {
     font-size: 18px;
     color: #555;
     margin-bottom: 30px;
   }
   
-  .section {
+  .cv-container .section {
     margin-bottom: 30px;
   }
   
-  .section h3 {
+  .cv-container .section h3 {
     font-size: 18px;
     color: #333;
     border-bottom: 1px solid #ddd;
@@ -62,47 +63,47 @@ body {
     margin-bottom: 15px;
   }
   
-  .section p, .section ul {
+  .cv-container .section p, .section ul {
     font-size: 14px;
     color: #555;
     line-height: 1.6;
   }
   
-  .section ul {
+  .cv-container .section ul {
     padding-left: 15px;
   }
   
-  .section ul li {
+  .cv-container.section ul li {
     margin-bottom: 10px;
   }
   
-  .section ul li:before {
+  .cv-container .section ul li:before {
     content: "• ";
     color: #000;
     font-weight: bold;
   }
   
-  .education-item, .work-item {
+  .cv-container .education-item, .work-item {
     margin-bottom: 20px;
   }
   
-  .education-item h4, .work-item h4 {
+  .cv-container .education-item h4, .work-item h4 {
     font-size: 16px;
     color: #000;
     font-weight: bold;
     margin-bottom: 5px;
   }
   
-  ul {
+  .cv-container ul {
     list-style: none;
     padding-left: 0;
   }
   
-  ul li i {
+  .cv-container ul li i {
     margin-right: 8px;
   }
   
-  ul li {
+  .cv-container ul li {
     font-size: 14px;
     color: #333;
     margin-bottom: 8px;
@@ -111,13 +112,13 @@ body {
   }
   
   /* Better text spacing */
-  p, li {
+  .cv-container p, .cv-container li {
     font-size: 15px;
     line-height: 1.6;
   }
 
 
-  .cv-button-con{
+  .cv-container .cv-button-con{
     display: flex;
     justify-content: center;
     gap:10px;
@@ -131,37 +132,37 @@ body {
       padding: 20px;
     }
   
-    .left-column, .right-column {
+    .cv-container .left-column, .cv-container .right-column {
       width: 100%;
       border-right: none;
       border-bottom: 2px solid #ddd;
       padding: 10px;
     }
   
-    .profile-picture img {
+    .cv-container .profile-picture img {
       width: 120px;
       height: 120px;
       margin-bottom: 15px;
     }
   
-    .name {
+    .cv-container .name {
       font-size: 20px;
     }
   
-    .job-title {
+    .cv-container .job-title {
       font-size: 16px;
     }
   
-    .section {
+    .cv-container .section {
       margin-bottom: 20px;
     }
   
-    .section h3 {
+    .cv-container .section h3 {
       font-size: 16px;
       padding-bottom: 6px;
     }
   
-    .section p, .section ul {
+    .cv-container .section p, .cv-container .section ul {
       font-size: 13px;
     }
   }
@@ -172,24 +173,24 @@ body {
       padding: 10px;
     }
   
-    .profile-picture img {
+    .cv-container .profile-picture img {
       width: 100px;
       height: 100px;
     }
   
-    .name {
+    .cv-container .name {
       font-size: 18px;
     }
   
-    .job-title {
+    .cv-container .job-title {
       font-size: 14px;
     }
   
-    .section h3 {
+    .cv-container .section h3 {
       font-size: 15px;
     }
   
-    .section p, .section ul {
+    .cv-container .section p, .cv-container .section ul {
       font-size: 12px;
     }
   }
