@@ -10,7 +10,7 @@ const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false); // State to control sidebar toggle on mobile
   let navigate = useNavigate();
 
-  
+
   let handleLogout = () => {
 
   }
@@ -140,10 +140,11 @@ const Dashboard = () => {
           </Button>
         </div>
         <Nav className="flex-column" data-aos="fade-right">
-          <Nav.Link 
+          <Nav.Link
             onClick={() => {
-              setActiveTab('myCVs') 
-            navigate('/cvs')}}
+              setActiveTab('myCVs')
+              navigate('/cvs')
+            }}
             className={`text-white ${activeTab === 'myCVs' ? 'active' : ''}`}
             data-aos="fade-up" // Animation for this link 
           >
@@ -152,7 +153,8 @@ const Dashboard = () => {
           <Nav.Link
             onClick={() => {
               setActiveTab('templates')
-            navigate('/template')}}
+              navigate('/template')
+            }}
             className={`text-white ${activeTab === 'templates' ? 'active' : ''}`}
             data-aos="fade-up"
           >
@@ -161,7 +163,8 @@ const Dashboard = () => {
           <Nav.Link
             onClick={() => {
               setActiveTab('profileSettings')
-            navigate('/profilesetting')}}
+              navigate('/profilesetting')
+            }}
             className={`text-white ${activeTab === 'profileSettings' ? 'active' : ''}`}
             data-aos="fade-up"
           >
@@ -176,25 +179,31 @@ const Dashboard = () => {
 
       {/* Main content area */}
       <Container fluid className="main-content">
-        <Navbar expand="lg" className="bg-gradient shadow-lg mb-4 py-3 header-navbar">
+        <Navbar expand="lg" className="shadow-lg mb-4 py-3 header-navbar" style={{ backgroundColor: '#007bff' }}>
           <Container fluid>
             <Row className="w-100 align-items-center">
-              {/* Column for Navbar Brand (Welcome text) */}
               <Col xs={6} md={4} className="d-flex align-items-center">
-                <Navbar.Brand className="ml-3 welcome-text" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.5rem', fontWeight: '600', color: '#fff' }}>
+                <Navbar.Brand
+                  className="ml-3 welcome-text"
+                  style={{
+                    fontFamily: 'Poppins, sans-serif',
+                    fontSize: '1.5rem',
+                    fontWeight: '600',
+                    color: '#ffffff' // Changed to white
+                  }}
+                >
                   Welcome!
                 </Navbar.Brand>
+
               </Col>
 
-              {/* Column for User Icon and Logout Button */}
               <Col xs={6} md={8} className="d-flex justify-content-end align-items-center">
                 <FaUserCircle size={35} className="me-3 user-icon text-white" />
-                <Button variant="outline-light" className="ml-auto me-3 logout-btn" style={{ borderRadius: '20px', padding: '0.5rem 1.5rem', fontWeight: '500' }} >
+                <Button variant="outline-light" className="ml-auto me-3 logout-btn" style={{ borderRadius: '20px', padding: '0.5rem 1.5rem', fontWeight: '500' }}>
                   Logout
                 </Button>
               </Col>
 
-              {/* Sidebar toggle button for mobile */}
               <Button
                 variant="outline-light"
                 className="d-lg-none ms-auto me-3 sidebar-toggle-btn"

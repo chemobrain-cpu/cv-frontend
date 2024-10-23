@@ -7,12 +7,13 @@ import { useNavigate } from 'react-router-dom';
 
 const ProfileSettings = () => {
     const [activeTab, setActiveTab] = useState('overview');
-    const [sidebarOpen, setSidebarOpen] = useState(false); // State to control sidebar toggle on mobile
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     let navigate = useNavigate();
-    
-    let handleLogout = () => {
 
-    }
+    const handleLogout = () => {
+        // Add logout functionality
+    };
+
     const [formData, setFormData] = useState({
         fullName: 'John Doe',
         email: 'john@example.com',
@@ -21,9 +22,12 @@ const ProfileSettings = () => {
         jobTitle: 'Software Engineer',
         company: 'Tech Corp',
         skills: 'Java, Python, React',
+        cardNumber: '',
+        expiryDate: '',
+        cvv: '',
+        billingAddress: '',
     });
 
-  
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -31,15 +35,15 @@ const ProfileSettings = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Logic to handle form submission (e.g., send data to API)
         console.log('Profile Updated:', formData);
     };
 
     const renderContent = () => {
         return (
             <main className="bg-white p-4">
-                <h2 className="text-center mb-4">Profile Settings</h2>
+                <h2 className=" mb-4">Profile Settings</h2>
                 <Form onSubmit={handleSubmit}>
+                    {/* Existing profile form */}
                     <Row className="mb-3">
                         <Form.Group as={Col} controlId="formFullName">
                             <Form.Label>Full Name</Form.Label>
@@ -121,6 +125,58 @@ const ProfileSettings = () => {
                         </Form.Group>
                     </Row>
 
+                    {/* Payment Information Section */}
+                    <h4 className="mt-4">Payment Information</h4>
+                    <Row className="mb-3">
+                        <Form.Group as={Col} controlId="formCardNumber">
+                            <Form.Label>Card Number</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="cardNumber"
+                                value={formData.cardNumber}
+                                onChange={handleChange}
+                                placeholder="Enter your card number"
+                            />
+                        </Form.Group>
+                    </Row>
+
+                    <Row className="mb-3">
+                        <Form.Group as={Col} controlId="formExpiryDate">
+                            <Form.Label>Expiry Date</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="expiryDate"
+                                value={formData.expiryDate}
+                                onChange={handleChange}
+                                placeholder="MM/YY"
+                            />
+                        </Form.Group>
+
+                        <Form.Group as={Col} controlId="formCVV">
+                            <Form.Label>CVV</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="cvv"
+                                value={formData.cvv}
+                                onChange={handleChange}
+                                placeholder="CVV"
+                            />
+                        </Form.Group>
+                    </Row>
+
+                    <Row className="mb-3">
+                        <Form.Group as={Col} controlId="formBillingAddress">
+                            <Form.Label>Billing Address</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="billingAddress"
+                                value={formData.billingAddress}
+                                onChange={handleChange}
+                                placeholder="Enter your billing address"
+                            />
+                        </Form.Group>
+                    </Row>
+
                     <Button variant="primary" type="submit" className="w-100">
                         Save Changes
                     </Button>
@@ -131,8 +187,7 @@ const ProfileSettings = () => {
 
     return (
         <div className="dashboard-container">
-            {/* Sidebar */}
-            <div className={`sidebar bg-primary ${sidebarOpen ? 'visible' : ''}`}>
+            <div className={`sidebar ${sidebarOpen ? 'visible' : ''}`}>
                 <div className="sidebar-header d-flex justify-content-between align-items-center">
                     <h4 className="text-white text-center bg-transparent">Dashboard</h4>
                     <Button
@@ -143,65 +198,66 @@ const ProfileSettings = () => {
                         ☰
                     </Button>
                 </div>
-                <Nav className="flex-column" data-aos="fade-right">
+                <Nav className="flex-column">
                     <Nav.Link
                         onClick={() => {
-                            setActiveTab('myCVs')
-                            navigate('/cvs')
+                            setActiveTab('myCVs');
+                            navigate('/cvs');
                         }}
                         className={`text-white ${activeTab === 'myCVs' ? 'active' : ''}`}
-                        data-aos="fade-up" // Animation for this link 
                     >
                         My CVs
                     </Nav.Link>
                     <Nav.Link
                         onClick={() => {
-                            setActiveTab('templates')
-                            navigate('/template')
+                            setActiveTab('templates');
+                            navigate('/template');
                         }}
                         className={`text-white ${activeTab === 'templates' ? 'active' : ''}`}
-                        data-aos="fade-up"
                     >
                         Templates
                     </Nav.Link>
                     <Nav.Link
                         onClick={() => {
-                            setActiveTab('profileSettings')
-                            navigate('/profilesetting')
+                            setActiveTab('profileSettings');
+                            navigate('/profilesetting');
                         }}
                         className={`text-white ${activeTab === 'profileSettings' ? 'active' : ''}`}
-                        data-aos="fade-up"
                     >
                         Profile Settings
                     </Nav.Link>
-                    <Nav.Link onClick={handleLogout} className="text-white" data-aos="fade-up">
+                    <Nav.Link onClick={handleLogout} className="text-white">
                         Logout
                     </Nav.Link>
                 </Nav>
-
             </div>
 
-            {/* Main content area */}
-            <Container fluid className="main-content " >
-                <Navbar expand="lg" className="bg-gradient shadow-lg mb-4 py-3 header-navbar">
+            <Container fluid className="main-content">
+                <Navbar expand="lg" className="shadow-lg mb-4 py-3 header-navbar" style={{ backgroundColor: '#007bff' }}>
                     <Container fluid>
                         <Row className="w-100 align-items-center">
-                            {/* Column for Navbar Brand (Welcome text) */}
                             <Col xs={6} md={4} className="d-flex align-items-center">
-                                <Navbar.Brand className="ml-3 welcome-text" style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.5rem', fontWeight: '600', color: '#fff' }}>
-                                    Welcome!
-                                </Navbar.Brand>
+                                <Navbar.Brand
+    className="ml-3 welcome-text"
+    style={{
+        fontFamily: 'Poppins, sans-serif',
+        fontSize: '1.5rem',
+        fontWeight: '600',
+        color: '#ffffff' // Changed to white
+    }}
+>
+    Welcome!
+</Navbar.Brand>
+
                             </Col>
 
-                            {/* Column for User Icon and Logout Button */}
                             <Col xs={6} md={8} className="d-flex justify-content-end align-items-center">
                                 <FaUserCircle size={35} className="me-3 user-icon text-white" />
-                                <Button variant="outline-light" className="ml-auto me-3 logout-btn" style={{ borderRadius: '20px', padding: '0.5rem 1.5rem', fontWeight: '500' }} >
+                                <Button variant="outline-light" className="ml-auto me-3 logout-btn" style={{ borderRadius: '20px', padding: '0.5rem 1.5rem', fontWeight: '500' }}>
                                     Logout
                                 </Button>
                             </Col>
 
-                            {/* Sidebar toggle button for mobile */}
                             <Button
                                 variant="outline-light"
                                 className="d-lg-none ms-auto me-3 sidebar-toggle-btn"
@@ -219,12 +275,13 @@ const ProfileSettings = () => {
                 </div>
             </Container>
         </div>
-
-
     );
 };
 
 export default ProfileSettings;
+
+
+
 
 
 

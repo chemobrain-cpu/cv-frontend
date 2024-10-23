@@ -110,7 +110,7 @@ function SignupPage() {
     }
 
     return (
-        <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh'}}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh',width:'100vw'}}>
             {isLoading && <Loader />}
             {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
             

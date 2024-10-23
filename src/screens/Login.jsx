@@ -105,11 +105,11 @@ function LoginPage() {
     }
 
     return (
-        <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh'}}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh',width:'100vw'}} >
             {isLoading && <Loader />}
             {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
             
-                <div className="col-md-6 col-sm-12 col-lg-4 ">
+                <div className="col-md-6 col-sm-12 col-lg-4">
                     <form onSubmit={submitHandler} className="border p-4 shadow rounded bg-light">
 
                         <div className="d-flex align-items-center mb-4">
