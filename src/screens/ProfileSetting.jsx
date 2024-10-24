@@ -4,10 +4,15 @@ import { FaUserCircle } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Dashboard.css';
 import { useNavigate } from 'react-router-dom';
+import Modal from '../components/Modal/Modal'; // Ensure correct import path
+import Loader from "../components/loader"; // Ensure correct import path
 
 const ProfileSettings = () => {
     const [activeTab, setActiveTab] = useState('overview');
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(true); // Loader state
+    const [isError, setIsError] = useState(false); // Error state
+    const [isErrorInfo, setIsErrorInfo] = useState(''); // Error message state
     let navigate = useNavigate();
 
     const handleLogout = () => {
@@ -186,7 +191,10 @@ const ProfileSettings = () => {
     };
 
     return (
-        <div className="dashboard-container">
+        <>
+         {isLoading && <Loader />} {/* Loader Component */}
+      {isError && <Modal content={isErrorInfo} closeModal={() => setIsError(false)} />} {/* Modal for Error */}
+      <div className="dashboard-container">
             <div className={`sidebar ${sidebarOpen ? 'visible' : ''}`}>
                 <div className="sidebar-header d-flex justify-content-between align-items-center">
                     <h4 className="text-white text-center bg-transparent">Dashboard</h4>
@@ -198,6 +206,7 @@ const ProfileSettings = () => {
                         ☰
                     </Button>
                 </div>
+
                 <Nav className="flex-column">
                     <Nav.Link
                         onClick={() => {
@@ -226,6 +235,15 @@ const ProfileSettings = () => {
                     >
                         Profile Settings
                     </Nav.Link>
+                    <Nav.Link
+                        onClick={() => {
+                            setActiveTab('pricing');
+                            navigate('/pricing');
+                        }}
+                        className={`text-white ${activeTab === 'pricing' ? 'active' : ''}`}
+                    >
+                        Pricing Plans
+                    </Nav.Link>
                     <Nav.Link onClick={handleLogout} className="text-white">
                         Logout
                     </Nav.Link>
@@ -236,20 +254,7 @@ const ProfileSettings = () => {
                 <Navbar expand="lg" className="shadow-lg mb-4 py-3 header-navbar" style={{ backgroundColor: '#007bff' }}>
                     <Container fluid>
                         <Row className="w-100 align-items-center">
-                            <Col xs={6} md={4} className="d-flex align-items-center">
-                                <Navbar.Brand
-    className="ml-3 welcome-text"
-    style={{
-        fontFamily: 'Poppins, sans-serif',
-        fontSize: '1.5rem',
-        fontWeight: '600',
-        color: '#ffffff' // Changed to white
-    }}
->
-    Welcome!
-</Navbar.Brand>
-
-                            </Col>
+                            
 
                             <Col xs={6} md={8} className="d-flex justify-content-end align-items-center">
                                 <FaUserCircle size={35} className="me-3 user-icon text-white" />
@@ -275,6 +280,9 @@ const ProfileSettings = () => {
                 </div>
             </Container>
         </div>
+        
+        </>
+     
     );
 };
 

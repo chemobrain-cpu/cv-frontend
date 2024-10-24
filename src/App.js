@@ -9,10 +9,9 @@ const ProfileSettings = React.lazy(() => import("./screens/ProfileSetting"));
 const Cvs = React.lazy(() => import("./screens/CVS"));
 
 
-
-
 // Lazy loading components
 const Home = React.lazy(() => import("./screens/Home"));
+const PricingPlan = React.lazy(() => import("./screens/Pricing"));
 const JobCvPreview = React.lazy(() => import("./screens/Preview"));
 const EducationCvPreview = React.lazy(() => import("./screens/EducationPreview"));
 const EditJobCvPreview = React.lazy(() => import("./screens/EditPreview"));
@@ -56,6 +55,7 @@ function App() {
               <Route path='/feedback' element={<Feedback />} /> {/* New Route */}
               <Route path='/profilesetting' element={<ProfileSettings/>} /> {/* New Route */}
               <Route path='/cvs' element={<Cvs />} /> {/* New Route */}
+              <Route path='/pricing' element={<PricingPlan />} /> {/* New Route */}
             </Routes>
           </div>
         </div>

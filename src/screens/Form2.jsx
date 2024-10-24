@@ -44,13 +44,15 @@ const PhdCvForm = () => {
     dispatch(makeEducationCv(formData))
     console.log(formData)
     navigate('/educationcvpreview');
-  };
+  }
+
+
 
   return (
     <div  className='form-container'>
       <div className="cv-form-containers">
       <form onSubmit={handleSubmitHandler}>
-        <h2>Education CV Information</h2>
+        <h2>CV Information</h2>
 
         <div>
           <label>Name:</label>

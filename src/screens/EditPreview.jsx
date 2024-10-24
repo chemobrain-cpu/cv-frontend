@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from "react-redux";
 
 const CVForm = () => {
-
   let { cvJobData} = useSelector(state => state.userAuth);
 
   const [formData, setFormData] = useState({

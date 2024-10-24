@@ -18,11 +18,10 @@ const CVForm = () => {
         education: { degree: '', institution: '', duration: '' },
         certifications: [],
         skills: '',
-    })
+    });
 
-    let navigate = useNavigate()
-
-    let dispatch = useDispatch()
+    let navigate = useNavigate();
+    let dispatch = useDispatch();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -56,106 +55,130 @@ const CVForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        e.preventDefault();
-        // Dispatch action or handle form submission
-        dispatch(makeCv3(formData))
+        dispatch(makeCv3(formData));
         navigate('/preview_3');
     };
-
-
-
-
 
     return (
         <div className='form-container'>
             <div className="cv-form-containers">
                 <form className="cv-form" onSubmit={handleSubmit}>
-                    <h2>Personal Information</h2>
-                    <label>
-                        Name:
-                        <input type="text" name="name" value={formData.name} onChange={handleChange} required />
-                    </label>
-                    <label>
-                        Profile:
-                        <textarea name="profile" value={formData.profile} onChange={handleChange} required />
-                    </label>
-                    <label>
-                        Phone:
-                        <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
-                    </label>
-                    <label>
-                        Email:
-                        <input type="email" name="email" value={formData.email} onChange={handleChange} required />
-                    </label>
-                    <label>
-                        LinkedIn:
-                        <input type="url" name="linkedin" value={formData.linkedin} onChange={handleChange} />
-                    </label>
-                    <label>
-                        Location:
-                        <input type="text" name="location" value={formData.location} onChange={handleChange} required />
-                    </label>
+                <h2>CV Information</h2>
+                    <div>
+                        <label>
+                            Name: </label>
+                            <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+                       
+                    </div>
+                    <div>
+                        <label>
+                            Profile: </label>
+                            <textarea name="profile" value={formData.profile} onChange={handleChange} required />
+                        
+                    </div>
+                    <div>
+                        <label>
+                            Phone: </label>
+                            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
+                        
+                    </div>
+                    <div>
+                        <label>
+                            Email: </label>
+                            <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+                       
+                    </div>
+                    <div>
+                        <label>
+                            LinkedIn: </label>
+                            <input type="url" name="linkedin" value={formData.linkedin} onChange={handleChange} />
+                       
+                    </div>
+                    <div>
+                        <label>
+                            Location: </label>
+                            <input type="text" name="location" value={formData.location} onChange={handleChange} required />
+                        
+                    </div>
 
                     <h2>Experience</h2>
                     {formData.experiences.map((experience, index) => (
                         <div key={index} className="experience-section">
-                            <label>
-                                Job Title:
-                                <input type="text" name="title" value={experience.title} onChange={(e) => handleExperienceChange(index, e)} />
-                            </label>
-                            <label>
-                                Company:
-                                <input type="text" name="company" value={experience.company} onChange={(e) => handleExperienceChange(index, e)} />
-                            </label>
-                            <label>
-                                Duration:
-                                <input type="text" name="duration" value={experience.duration} onChange={(e) => handleExperienceChange(index, e)} />
-                            </label>
-                            <label>
-                                Location:
-                                <input type="text" name="location" value={experience.location} onChange={(e) => handleExperienceChange(index, e)} />
-                            </label>
-                            <label>
-                                Responsibilities:
-                                <textarea name="responsibility" onChange={(e) => handleExperienceChange(index, e)} />
-                            </label>
+                            <div>
+                                <label>
+                                    Job Title: </label>
+                                    <input type="text" name="title" value={experience.title} onChange={(e) => handleExperienceChange(index, e)} />
+                               
+                            </div>
+                            <div>
+                                <label>
+                                    Company: </label>
+                                    <input type="text" name="company" value={experience.company} onChange={(e) => handleExperienceChange(index, e)} />
+                               
+                            </div>
+                            <div>
+                                <label>
+                                    Duration:</label>
+                                    <input type="text" name="duration" value={experience.duration} onChange={(e) => handleExperienceChange(index, e)} /> 
+                            </div>
+                            <div>
+                                <label>
+                                    Location:</label>
+                                    <input type="text" name="location" value={experience.location} onChange={(e) => handleExperienceChange(index, e)} />
+                                
+                            </div>
+                            <div>
+                                <label>
+                                    Responsibilities:</label>
+                                    <textarea name="responsibility" onChange={(e) => handleExperienceChange(index, e)} />
+                                
+                            </div>
                         </div>
                     ))}
 
                     <h2>Education</h2>
-                    <label>
-                        Degree:
-                        <input type="text" name="degree" value={formData.education.degree} onChange={handleEducationChange} required />
-                    </label>
-                    <label>
-                        Institution:
-                        <input type="text" name="institution" value={formData.education.institution} onChange={handleEducationChange} required />
-                    </label>
-                    <label>
-                        Duration:
-                        <input type="text" name="duration" value={formData.education.duration} onChange={handleEducationChange} required />
-                    </label>
+                    <div>
+                        <label>
+                            Degree:</label>
+                            <input type="text" name="degree" value={formData.education.degree} onChange={handleEducationChange} required />
+                        
+                    </div>
+                    <div>
+                        <label>
+                            Institution:</label>
+                            <input type="text" name="institution" value={formData.education.institution} onChange={handleEducationChange} required />
+                  
+                    </div>
+                    <div>
+                        <label>
+                            Duration:</label>
+                            <input type="text" name="duration" value={formData.education.duration} onChange={handleEducationChange} required />
+                        
+                    </div>
 
                     <h2>Certifications</h2>
-                    <label>
-                        Certifications (comma-separated):
-                        <input type="text" name="certifications" onChange={handleCertificationsChange} />
-                    </label>
+                    <div>
+                        <label>
+                            Certifications (comma-separated):</label>
+                            <input type="text" name="certifications" onChange={handleCertificationsChange} />
+                        
+                    </div>
 
                     <h2>Technical Skills</h2>
-                    <label>
-                        Skills (comma-separated):
-                        <input type="text" name="skills" value={formData.skills} onChange={handleSkillsChange} />
-                    </label>
+                    <div>
+                        <label>
+                            Skills (comma-separated):</label>
+                            <input type="text" name="skills" value={formData.skills} onChange={handleSkillsChange} />
+                        
+                    </div>
 
                     <button type="submit" className="submit-button">Generate CV</button>
                 </form>
             </div>
-
         </div>
-
     );
 };
 
 export default CVForm;
+
 
