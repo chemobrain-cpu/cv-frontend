@@ -34,7 +34,6 @@ const CvForm2 = () => {
   });
 
 
-  alert('form')
   let { user } = useSelector(state => state.userAuth); // Fetch user from Redux store
   let dispatch = useDispatch();
   let navigate = useNavigate();
