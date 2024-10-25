@@ -69,14 +69,17 @@ const Dashboard = () => {
 
     return userCVs.map((cv) => (
       <Col xs={12} md={4} key={cv.id} className="mb-4">
-        <Card className="cv-card shadow-sm">
+        <Card className="cv-card shadow-sm" >
           <Card.Body>
             <FaFileAlt size={40} className="text-primary mb-3" />
             <Card.Title>{cv.title}</Card.Title>
             <Card.Text>
               <small className="text-muted">Created on: {cv.dateCreated}</small>
             </Card.Text>
-            <Button variant="outline-primary" onClick={() => navigate(`/cv/${cv.id}`)}>
+            <Button variant="outline-primary" onClick={() => {
+              alert(cv.cvTemplateType)
+              navigate(`/preview/${cv.cvTemplateType}`)
+            }}>
               View CV
             </Button>
           </Card.Body>

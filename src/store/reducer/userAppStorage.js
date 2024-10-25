@@ -1,21 +1,13 @@
 import { LOGIN_USER } from "../action/userAppStorage";
-import { GENERATE_EDUCATIONCV, GENERATE_JOBCV, GENERATE_CV3 } from "../action/userAppStorage";
-
-
+import { GENERATE_CV, FETCH_CVS, UPDATE_USER } from "../action/userAppStorage";
 
 const initialState = {
-    userToken: '',
+    userToken:'',
     user: null,
-    cvJobData: null,
-    cvEducationData: null,
-    cvData3: null,
-    isCvAvailable: false
+    cv: null,
+    isCvAvailable: false,
+    cvs:[]
 }
-
-
-
-
-
 
 export const userAuthReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -25,32 +17,26 @@ export const userAuthReducer = (state = initialState, action) => {
                 user: action.payload.user,
                 userToken: action.payload.userToken,
             }
-
-        case GENERATE_JOBCV:
+        case GENERATE_CV:
             return {
                 ...state,
-                cvJobData: action.payload,
+                cv: action.payload.cv,
+                cvs:[...state.cvs,action.payload.cv],
                 isCvAvailable: true
             }
 
-
-        case GENERATE_EDUCATIONCV:
+        case FETCH_CVS:
             return {
                 ...state,
-                cvEducationData: action.payload,
-                isCvAvailable: true
+                cvs:[...state.cvs,action.payload],
+
             }
 
-
-        case GENERATE_CV3:
+        case UPDATE_USER:
             return {
                 ...state,
-                cvData3: action.payload,
-                isCvAvailable: true
+                user:action.payload
             }
-
-
-
 
         default:
             return state

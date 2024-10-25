@@ -20,6 +20,7 @@ const CVForm = () => {
     cvTemplateType:'template1'
   });
 
+  alert('hey')
   let dispatch = useDispatch()
 
   let navigate = useNavigate()
@@ -67,9 +68,13 @@ const CVForm = () => {
 
 
   let handleSubmitHandler = (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    alert('hello')
+    return
+    // Dispatch action or handle form submission
     dispatch(makeCv(formData))
-    navigate('/jobcvpreview')
+    console.log(formData)
+    navigate(`/preview/${formData.cvTemplateType}`)
   }
 
 

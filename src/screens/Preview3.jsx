@@ -3,7 +3,7 @@ import html2pdf from "html2pdf.js";
 import { Document, Packer, Paragraph } from "docx";
 import { useSelector } from "react-redux";
 
-const CVTemplate = () => {
+const Preview3 = () => {
   // Redux data from state
   const { cv: formData, isCvAvailable } = useSelector(state => state.userAuth);
 
@@ -179,7 +179,7 @@ const buttonStyle = {
   fontSize: "16px",
 };
 
-export default CVTemplate;
+export default Preview3;
 
 
 

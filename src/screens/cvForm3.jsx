@@ -4,7 +4,7 @@ import { makeCv } from '../store/action/userAppStorage';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-const CVForm = () => {
+const CVForm3 = () => {
     const [formData, setFormData] = useState({
         name: '',
         profile: '',
@@ -20,6 +20,8 @@ const CVForm = () => {
         skills: '',
         cvTemplateType:'template3'
     });
+
+    alert('hey3')
 
     let navigate = useNavigate();
     let dispatch = useDispatch();
@@ -66,7 +68,7 @@ const CVForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         dispatch(makeCv(formData));
-        navigate('/preview_3');
+        navigate(`/preview/${formData.cvTemplateType}`)
     };
 
     return (
@@ -189,6 +191,6 @@ const CVForm = () => {
     );
 };
 
-export default CVForm;
+export default CVForm3;
 
 

@@ -4,14 +4,14 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import html2pdf from "html2pdf.js"; // Import html2pdf.js
 
-const PhDCVTemplate = () => {
+const Preview2 = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { cv: formData, isCvAvailable } = useSelector(state => state.userAuth);
   const navigate = useNavigate();
   const pdfRef = useRef(); 
   let { user } = useSelector(state => state.userAuth); 
    
-  
+
   // Protect the dashboard - if no user is present, redirect to login
   useEffect(() => {
     if (!user) {
@@ -142,4 +142,4 @@ const PhDCVTemplate = () => {
   );
 };
 
-export default PhDCVTemplate;
+export default Preview2;

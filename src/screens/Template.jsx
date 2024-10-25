@@ -64,11 +64,11 @@ const Dashboard = () => {
 
   const navigateHandler = (id) => {
     if (id === 'template_1') {
-      navigate('/form_job');
+      navigate('/form/template1');
     } else if (id === 'template_2') {
-      navigate('/form_education');
+      navigate('/form/template2');
     } else if (id === 'template_3') {
-      navigate('/form_3');
+      navigate('/form/template3');
     }
   };
 

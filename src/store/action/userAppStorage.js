@@ -1,8 +1,8 @@
 export const SIGNUP_USER = "SIGNUP_USER";
 export const LOGIN_USER = "LOGIN_USER";
-export const GENERATE_JOBCV = "GENERATE_JOBCV";
-export const GENERATE_EDUCATIONCV = "GENERATE_EDUCATIONCV";
-export const GENERATE_CV3 = "GENERATE_CV3";
+export const GENERATE_CV = "GENERATE_CV";
+export const FETCH_CVS = "FETCH_CVS";
+export const UPDATE_USER = "UPDATE_USER";
 
 //pure functions to calculate the time remaining
 
@@ -170,26 +170,147 @@ export const login = (data) => {
   }
 }
 
+export const makeCv = (data) => {
+  return async (dispatch, getState) => {
+    try {
+      const {userAuth} = getState();
 
-export const makeJobCv = (data) => {
-  return (dispatch, getState) => {
-    //do some check on the server if its actually login before proceding to dispatch
-    dispatch({ type: GENERATE_JOBCV, payload: data })
+  // Access specific slice of the state
+      const response = await fetch(`http://localhost:8080/makecv/${userAuth.user._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+      if (response.status === 404) {
+        alert(400)
+        let data = await response.json()
+        return {
+          bool: false,
+          message: data.message,
+        }
+      }
+      if (response.status === 300) {
+        alert(300)
+        let data = await response.json()
+        return {
+          bool: false,
+          message: data.message,
+        }
+      }
+
+      if (response.status === 200) {
+        alert(200)
+        let data = await response.json()
+        dispatch({ type: GENERATE_CV, payload: data })
+        return {
+          bool: true,
+          message: data.message,
+        }
+      }
+    } catch (err) {
+      alert('error')
+      return {
+        bool: false,
+        message: "network error",
+      }
+
+    }
+
+  }
+
+}
+
+export const fetchCv = (id) => {
+  return async (dispatch, getState) => {
+   //do some check on the server if its actually login before proceding to dispatch
+    try {
+      const response = await fetch(`http://localhost:8080/cvs/${id}`)
+      if (response.status === 404) {
+        let data = await response.json()
+        return {
+          bool: false,
+          message: data.response,
+        }
+      }
+      if (response.status === 300) {
+        let data = await response.json()
+        return {
+          bool: false,
+          message: data.response,
+        }
+      }
+      if (response.status === 200) {
+        let data = await response.json()
+
+        dispatch({ type: FETCH_CVS, payload: data.cvs })
+        return {
+          bool: true,
+          message: data.cvs,
+        }
+      }
+    
+    } catch (err) {
+      return {
+        bool: false,
+        message: "network error"
+      }
+    }
   }
 }
 
-export const makeEducationCv = (data) => {
-  return (dispatch, getState) => {
-    //do some check on the server if its actually login before proceding to dispatch
-    dispatch({ type: GENERATE_EDUCATIONCV, payload: data })
+
+export const updateUser = (data) => {
+  return async (dispatch, getState) => {
+    try {
+      const response = await fetch(`http://localhost:8080/updateaccount/${data._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+      if (response.status === 404) {
+        let data = await response.json()
+        return {
+          bool: false,
+          message: data.response,
+        }
+      }
+      if (response.status === 300) {
+        let data = await response.json()
+        return {
+          bool: false,
+          message: data.response,
+        }
+      }
+
+      if (response.status === 200) {
+        let data = await response.json()
+        /// 
+  
+        dispatch({ type: UPDATE_USER, payload: data.user })
+
+        return {
+          bool: true,
+          message: data,
+        }
+      }
+    } catch (err) {
+      return {
+        bool: false,
+        message: "network error",
+      }
+
+    }
+
   }
+
 }
 
 
-export const makeCv3 = (data) => {
-  return (dispatch, getState) => {
-    //do some check on the server if its actually login before proceding to dispatch
-    dispatch({ type: GENERATE_CV3, payload: data })
-  }
-}
+
+
+
 

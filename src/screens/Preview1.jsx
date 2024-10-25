@@ -5,16 +5,16 @@ import { useNavigate } from "react-router-dom";
 import html2pdf from "html2pdf.js";
 import { Document, Packer, Paragraph, TextRun } from "docx"; 
 
-const CVTemplate = () => {
+const Preview1 = () => {
   let [isLoading, setIsLoading] = useState(false);
   let { cv: formData, isCvAvailable } = useSelector(state => state.userAuth);
   let navigate = useNavigate();
   const cvRef = useRef();
 
   useEffect(() => {
-    if (!isCvAvailable) {
+    /*if (isCvAvailable) {
       navigate('/template');
-    }
+    }*/
   }, [isCvAvailable, navigate]);
 
   if (!isCvAvailable) {
@@ -200,7 +200,7 @@ const CVTemplate = () => {
   )
 };
 
-export default CVTemplate;
+export default Preview1;
 
 
 
