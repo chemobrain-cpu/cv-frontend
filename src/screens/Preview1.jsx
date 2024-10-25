@@ -3,18 +3,17 @@ import './preview1.css';
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import html2pdf from "html2pdf.js";
-import { Document, Packer, Paragraph, TextRun } from "docx"; 
+import { Document, Packer, Paragraph, TextRun } from "docx";
 
 const Preview1 = () => {
   let [isLoading, setIsLoading] = useState(false);
   let { cv: formData, isCvAvailable } = useSelector(state => state.userAuth);
   let navigate = useNavigate();
   const cvRef = useRef();
-
   useEffect(() => {
-    /*if (isCvAvailable) {
+    if (!isCvAvailable) {
       navigate('/template');
-    }*/
+    }
   }, [isCvAvailable, navigate]);
 
   if (!isCvAvailable) {
@@ -111,15 +110,16 @@ const Preview1 = () => {
   };
 
   const editHandler = () => {
-    navigate('/jobcvpreview/edit');
+    navigate(`/editcv/${formData.cvTemplateType}`);
   };
 
   // conditional statement for the right cv preview template
-  
+
 
   return (
-    <>
-      <h1>Preview CV</h1>
+    <div className='container-cv'>
+      <h1 class="text-center">Preview CV</h1>
+
       <div className="cv-container" ref={cvRef}>
         {/* Left Column */}
         <div className="left-column">
@@ -191,12 +191,14 @@ const Preview1 = () => {
           </section>
         </div>
       </div>
-      <div className="cv-button-con">
-        <button onClick={downloadPDF}>Download PDF</button>
-        <button onClick={downloadDOCX}>Download DOCX</button>
-        <button onClick={editHandler}>Edit CV</button>
+      <div className="cv-button-con text-center mt-3">
+        <button onClick={downloadPDF} className="btn btn-primary m-2">Download PDF</button>
+        <button onClick={downloadDOCX} className="btn btn-primary m-2">Download DOCX</button>
+        <button onClick={editHandler} className="btn btn-primary m-2">Edit CV</button>
       </div>
-    </>
+
+
+    </div>
   )
 };
 

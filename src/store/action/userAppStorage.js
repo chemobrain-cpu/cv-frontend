@@ -3,6 +3,7 @@ export const LOGIN_USER = "LOGIN_USER";
 export const GENERATE_CV = "GENERATE_CV";
 export const FETCH_CVS = "FETCH_CVS";
 export const UPDATE_USER = "UPDATE_USER";
+export const OPEN_CV = "OPEN_CV";
 
 //pure functions to calculate the time remaining
 
@@ -160,7 +161,7 @@ export const login = (data) => {
           url: `/template`
         }
       }
-    
+
     } catch (err) {
       return {
         bool: false,
@@ -173,9 +174,9 @@ export const login = (data) => {
 export const makeCv = (data) => {
   return async (dispatch, getState) => {
     try {
-      const {userAuth} = getState();
+      const { userAuth } = getState();
 
-  // Access specific slice of the state
+      // Access specific slice of the state
       const response = await fetch(`http://localhost:8080/makecv/${userAuth.user._id}`, {
         method: "POST",
         headers: {
@@ -224,7 +225,7 @@ export const makeCv = (data) => {
 
 export const fetchCv = (id) => {
   return async (dispatch, getState) => {
-   //do some check on the server if its actually login before proceding to dispatch
+    //do some check on the server if its actually login before proceding to dispatch
     try {
       const response = await fetch(`http://localhost:8080/cvs/${id}`)
       if (response.status === 404) {
@@ -250,7 +251,7 @@ export const fetchCv = (id) => {
           message: data.cvs,
         }
       }
-    
+
     } catch (err) {
       return {
         bool: false,
@@ -259,6 +260,16 @@ export const fetchCv = (id) => {
     }
   }
 }
+
+
+
+export const openCv = (data) => {
+  return async (dispatch, getState) => {
+    dispatch({ type: OPEN_CV, payload: data })
+  }
+
+}
+
 
 
 export const updateUser = (data) => {
@@ -289,7 +300,7 @@ export const updateUser = (data) => {
       if (response.status === 200) {
         let data = await response.json()
         /// 
-  
+
         dispatch({ type: UPDATE_USER, payload: data.user })
 
         return {

@@ -1,12 +1,12 @@
-import { LOGIN_USER } from "../action/userAppStorage";
+import { LOGIN_USER, OPEN_CV } from "../action/userAppStorage";
 import { GENERATE_CV, FETCH_CVS, UPDATE_USER } from "../action/userAppStorage";
 
 const initialState = {
-    userToken:'',
+    userToken: '',
     user: null,
     cv: null,
     isCvAvailable: false,
-    cvs:[]
+    cvs: []
 }
 
 export const userAuthReducer = (state = initialState, action) => {
@@ -21,21 +21,28 @@ export const userAuthReducer = (state = initialState, action) => {
             return {
                 ...state,
                 cv: action.payload.cv,
-                cvs:[...state.cvs,action.payload.cv],
+                cvs: [...state.cvs, action.payload.cv],
+                isCvAvailable: true
+            }
+
+        case OPEN_CV:
+            return {
+                ...state,
+                cv: action.payload,
                 isCvAvailable: true
             }
 
         case FETCH_CVS:
             return {
                 ...state,
-                cvs:[...state.cvs,action.payload],
+                cvs: [...state.cvs, action.payload],
 
             }
 
         case UPDATE_USER:
             return {
                 ...state,
-                user:action.payload
+                user: action.payload
             }
 
         default:

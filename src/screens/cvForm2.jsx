@@ -33,6 +33,8 @@ const CvForm2 = () => {
     cvTemplateType: 'template2'
   });
 
+
+  alert('form')
   let { user } = useSelector(state => state.userAuth); // Fetch user from Redux store
   let dispatch = useDispatch();
   let navigate = useNavigate();

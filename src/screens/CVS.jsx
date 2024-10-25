@@ -4,10 +4,10 @@ import { FaUserCircle, FaFileAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Dashboard.css';
-import Modal from '../components/Modal/Modal'; // Ensure correct import path
+import Modal from '../components/Modal/Modal';
 import Loader from "../components/loader"; // Ensure correct import path
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCv } from '../store/action/userAppStorage';
+import { fetchCv, openCv } from '../store/action/userAppStorage';
 
 
 const Dashboard = () => {
@@ -15,7 +15,7 @@ const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Loader state
   const [isError, setIsError] = useState(false); // Error state
-  const [userCVs, setUserCVs] = useState([]); 
+  const [userCVs, setUserCVs] = useState([]);
   const [isErrorInfo, setIsErrorInfo] = useState(''); // Error message state
   let { user } = useSelector(state => state.userAuth); // Fetch user from Redux store
   let navigate = useNavigate()
@@ -46,25 +46,26 @@ const Dashboard = () => {
     setUserCVs(response.message)
   }
 
+  let navigateHandler = async (cv) => {
+    await dispatch(openCv(cv))
+    navigate(`/preview/${cv.cvTemplateType}`)
+  }
+
   useEffect(() => {
     fetchHandler();
   }, []); // empty dependency array to run only on component mount
 
 
-
-
   // Dummy CV data (replace with dynamic data as needed)
-
-
   const renderCVs = () => {
-    if(userCVs.length === 0){
+    if (userCVs.length === 0) {
       return <div className="container mt-5">
-      <div className="alert  text-center" role="alert">
+        <div className="alert  text-center" role="alert">
           <h2>No CVs Available</h2>
           <p>It looks like you haven't uploaded any CVs yet.</p>
           <p>Get started by adding your CV today!</p>
+        </div>
       </div>
-  </div>
     }
 
     return userCVs.map((cv) => (
@@ -76,10 +77,7 @@ const Dashboard = () => {
             <Card.Text>
               <small className="text-muted">Created on: {cv.dateCreated}</small>
             </Card.Text>
-            <Button variant="outline-primary" onClick={() => {
-              alert(cv.cvTemplateType)
-              navigate(`/preview/${cv.cvTemplateType}`)
-            }}>
+            <Button variant="outline-primary" onClick={() => navigateHandler(cv)}>
               View CV
             </Button>
           </Card.Body>

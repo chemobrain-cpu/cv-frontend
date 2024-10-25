@@ -17,7 +17,7 @@ const CVForm = () => {
       navigate('/login'); // Redirect to login page if user is not found
     }
   }, [user, navigate]);
-
+  
   const [formData, setFormData] = useState({
     name: '',
     jobTitle: '',

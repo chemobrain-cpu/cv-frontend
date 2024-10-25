@@ -1,59 +1,96 @@
 import React, { useState, useEffect, useRef } from "react";
-import './preview2.css'; // Import the CSS file
+import './preview2.css';
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import html2pdf from "html2pdf.js"; // Import html2pdf.js
+import html2pdf from "html2pdf.js";
+import { Document, Packer, Paragraph } from "docx"; // Import docx library
 
 const Preview2 = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { cv: formData, isCvAvailable } = useSelector(state => state.userAuth);
   const navigate = useNavigate();
-  const pdfRef = useRef(); 
-  let { user } = useSelector(state => state.userAuth); 
-   
+  const pdfRef = useRef();
+  let { user } = useSelector(state => state.userAuth);
 
-  // Protect the dashboard - if no user is present, redirect to login
   useEffect(() => {
     if (!user) {
-      navigate('/login'); 
+      navigate('/login');
     }
   }, [user, navigate]);
 
   useEffect(() => {
     if (!isCvAvailable) {
-      navigate('/template'); // Replace with your template page route
+      navigate('/template');
     }
   }, [isCvAvailable, navigate]);
 
-  // Render nothing if isCvAvailable is false, JSX will not show the component body.
   if (!isCvAvailable) {
-    return null; // Or a loading spinner, or nothing at all
+    return null;
   }
 
-  // Function to download PDF
   const downloadPDF = () => {
-    const element = pdfRef.current; // Get the element to be converted to PDF
+    const element = pdfRef.current;
     const options = {
       margin: 1,
-      filename: `${formData.name}_CV.pdf`, // Set the filename for the PDF
+      filename: `${formData.name}_CV.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
     };
-    html2pdf().from(element).set(options).save(); // Convert and save the PDF
+    html2pdf().from(element).set(options).save();
   };
 
+  const downloadDOCX = async () => {
+    const doc = new Document();
+    doc.addSection({
+      children: [
+        new Paragraph({ text: `${formData.name}'s CV`, heading: "Title" }),
+        new Paragraph({ text: "Contact Information", heading: "Heading2" }),
+        new Paragraph(`Phone: ${formData.phone}`),
+        new Paragraph(`Email: ${formData.email}`),
+        new Paragraph(`Location: ${formData.location}`),
+        new Paragraph({ text: "Education", heading: "Heading2" }),
+        ...formData.education.map((edu) =>
+          new Paragraph(`${edu.degree} at ${edu.institution} (${edu.year})`)
+        ),
+        new Paragraph({ text: "Skills", heading: "Heading2" }),
+        ...Object.entries(formData.skills).map(
+          ([skill, level]) => new Paragraph(`${skill}: ${level}`)
+        ),
+        new Paragraph({ text: "Publications", heading: "Heading2" }),
+        ...formData.publications.map((pub) =>
+          new Paragraph(`${pub.title}. ${pub.journal} (${pub.year}): ${pub.pages}`)
+        ),
+        new Paragraph({ text: "Research Experience", heading: "Heading2" }),
+        ...formData.researchExperience.map((exp) => [
+          new Paragraph(`${exp.role} at ${exp.institution} (${exp.duration})`),
+          new Paragraph(exp.description),
+        ]).flat(),
+        new Paragraph({ text: "Awards & Honors", heading: "Heading2" }),
+        ...formData.awards.map((award) =>
+          new Paragraph(`${award.year} - ${award.title}, ${award.institution}`)
+        ),
+      ],
+    });
 
-  let editHandler = ()=>{
-    navigate('/educationcvpreview/edit')
-  }
+    const blob = await Packer.toBlob(doc);
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${formData.name}_CV.docx`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
+  const editHandler = () => {
+    navigate(`/editcv/${formData.cvTemplateType}`);
+  };
 
   return (
-    <>
-
-      <h1>Preview CV</h1>
+    <div className="container-cv">
+      <h1 className="text-center">Preview CV</h1>
       <div className="cv-container" ref={pdfRef}>
-        {/* Header Section */}
         <div className="cv-header">
           <h1 className="cv-title">{formData.name}'s CV</h1>
           <div className="contact-info">
@@ -62,12 +99,8 @@ const Preview2 = () => {
             <p><i className="fas fa-envelope"></i> {formData.email}</p>
           </div>
         </div>
-
-        {/* Main content divided into two columns */}
         <div className="cv-main">
-          {/* Left Section */}
           <div className="cv-left">
-            {/* Education Section */}
             <section className="section education">
               <h3>Education</h3>
               {formData.education.map((edu, index) => (
@@ -81,8 +114,6 @@ const Preview2 = () => {
                 </div>
               ))}
             </section>
-
-            {/* Additional Skills Section */}
             <section className="section skills">
               <h3>Additional Skills</h3>
               <ul>
@@ -92,10 +123,7 @@ const Preview2 = () => {
               </ul>
             </section>
           </div>
-
-          {/* Right Section */}
           <div className="cv-right">
-            {/* Publications Section */}
             <section className="section publications">
               <h3>Publications</h3>
               {formData.publications.map((pub, index) => (
@@ -104,8 +132,6 @@ const Preview2 = () => {
                 </p>
               ))}
             </section>
-
-            {/* Research Experience Section */}
             <section className="section research-experience">
               <h3>Research Experience</h3>
               {formData.researchExperience.map((exp, index) => (
@@ -119,8 +145,6 @@ const Preview2 = () => {
                 </div>
               ))}
             </section>
-
-            {/* Awards & Honors Section */}
             <section className="section awards">
               <h3>Awards & Honors</h3>
               {formData.awards.map((award, index) => (
@@ -132,14 +156,15 @@ const Preview2 = () => {
           </div>
         </div>
       </div>
-      <div className="cv-button-con">
-        <button style={{ marginRight: '5px' }} onClick={downloadPDF}>Download PDF</button>
-        <button onClick={editHandler}>Edit CV</button>
+      <div className="cv-button-con text-center mt-3">
+        <button onClick={downloadPDF} className="btn btn-primary m-2">Download PDF</button>
+        <button onClick={downloadDOCX} className="btn btn-primary m-2">Download DOCX</button>
+        <button onClick={editHandler} className="btn btn-primary m-2">Edit CV</button>
       </div>
-
-
-    </>
+    </div>
   );
 };
 
 export default Preview2;
+
+

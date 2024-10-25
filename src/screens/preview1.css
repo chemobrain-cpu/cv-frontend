@@ -1,9 +1,12 @@
+.container-cv{
+  width:100vw;
+}
+
 .cv-container  {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f9;
     margin: auto;
     padding: 0;
-
   }
   
   .cv-container {

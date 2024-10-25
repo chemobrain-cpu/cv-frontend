@@ -7,12 +7,13 @@ import { useParams } from "react-router-dom";
 
 const CVPreview = () => {
     let { id } = useParams()
-
-    if (id = 'template1') {
+    
+    if (id === 'template1') {
         return <Preview1 />
-    } else if (id = 'template2') {
+    } else if (id === 'template2') {
+        
         return <Preview2 />
-    } else if (id = 'template3') {
+    } else if (id === 'template3') {
         return <Preview3 />
     }
 };

@@ -69,7 +69,6 @@ const CVForm = () => {
 
   let handleSubmitHandler = (e) => {
     e.preventDefault();
-    alert('hello')
     return
     // Dispatch action or handle form submission
     dispatch(makeCv(formData))
