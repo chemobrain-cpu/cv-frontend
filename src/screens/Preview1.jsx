@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import './preview.css';
+import './preview1.css';
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import html2pdf from "html2pdf.js";
-import { Document, Packer, Paragraph, TextRun } from "docx"; // Import necessary elements from docx
+import { Document, Packer, Paragraph, TextRun } from "docx"; 
 
 const CVTemplate = () => {
   let [isLoading, setIsLoading] = useState(false);
-  let { cvJobData: formData, isCvAvailable } = useSelector(state => state.userAuth);
+  let { cv: formData, isCvAvailable } = useSelector(state => state.userAuth);
   let navigate = useNavigate();
   const cvRef = useRef();
 
@@ -114,6 +114,9 @@ const CVTemplate = () => {
     navigate('/jobcvpreview/edit');
   };
 
+  // conditional statement for the right cv preview template
+  
+
   return (
     <>
       <h1>Preview CV</h1>
@@ -194,7 +197,7 @@ const CVTemplate = () => {
         <button onClick={editHandler}>Edit CV</button>
       </div>
     </>
-  );
+  )
 };
 
 export default CVTemplate;

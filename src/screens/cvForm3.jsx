@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import './form.css'; // Assuming you have form-specific styles here
-import { makeCv3 } from '../store/action/userAppStorage';
-import { useDispatch } from 'react-redux';
+import { makeCv } from '../store/action/userAppStorage';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 const CVForm = () => {
@@ -18,10 +18,20 @@ const CVForm = () => {
         education: { degree: '', institution: '', duration: '' },
         certifications: [],
         skills: '',
+        cvTemplateType:'template3'
     });
 
     let navigate = useNavigate();
     let dispatch = useDispatch();
+    let { user } = useSelector(state => state.userAuth); // Fetch user from Redux store
+
+    // Protect the dashboard - if no user is present, redirect to login
+    useEffect(() => {
+      if (!user) {
+        navigate('/login'); // Redirect to login page if user is not found
+      }
+    }, [user, navigate]);
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -55,7 +65,7 @@ const CVForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(makeCv3(formData));
+        dispatch(makeCv(formData));
         navigate('/preview_3');
     };
 

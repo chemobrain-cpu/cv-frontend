@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './form.css'; // Assuming you have form-specific styles here
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { makeEducationCv } from '../store/action/userAppStorage';
+import { makeCv } from '../store/action/userAppStorage';
 
 const PhdCvForm = () => {
   const [formData, setFormData] = useState({
@@ -26,12 +26,23 @@ const PhdCvForm = () => {
       { title: '', institution: '', year: '' },
       { title: '', institution: '', year: '' }
     ],
-    skills: { R: '', Spanish: '', Mandarin: '' }
+    skills: { R: '', Spanish: '', Mandarin: '' },
+    cvTemplateType:'template2'
   });
 
-
+  let { user } = useSelector(state => state.userAuth); // Fetch user from Redux store
   let dispatch = useDispatch();
   let navigate = useNavigate();
+  
+  // Protect the dashboard - if no user is present, redirect to login
+  useEffect(() => {
+    if (!user) {
+      navigate('/login'); // Redirect to login page if user is not found
+    }
+  }, [user, navigate]);
+
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,7 +52,7 @@ const PhdCvForm = () => {
   const handleSubmitHandler = (e) => {
     e.preventDefault();
     // Dispatch action or handle form submission
-    dispatch(makeEducationCv(formData))
+    dispatch(makeCv(formData))
     console.log(formData)
     navigate('/educationcvpreview');
   }

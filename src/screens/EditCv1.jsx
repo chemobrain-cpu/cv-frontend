@@ -2,11 +2,22 @@ import React, { useEffect, useState } from 'react';
 import './form.css'; // Assuming you have form-specific styles here
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { makeEducationCv } from '../store/action/userAppStorage';
+import { makeCv } from '../store/action/userAppStorage';
 
 
 const PhdCvForm = () => {
-  const { cvEducationData } = useSelector(state => state.userAuth);
+  const { cv } = useSelector(state => state.userAuth);
+
+
+let { user } = useSelector(state => state.userAuth); // Fetch user from Redux store
+
+
+// Protect the dashboard - if no user is present, redirect to login
+useEffect(() => {
+  if (!user) {
+    navigate('/login'); // Redirect to login page if user is not found
+  }
+}, [user, navigate]);
 
 
   const [formData, setFormData] = useState({
@@ -35,7 +46,7 @@ const PhdCvForm = () => {
 
 
   useEffect(() => {
-    setFormData(cvEducationData)
+    setFormData(cv)
   }, [])
 
 
@@ -50,7 +61,7 @@ const PhdCvForm = () => {
   const handleSubmitHandler = (e) => {
     e.preventDefault();
     // Dispatch action or handle form submission
-    dispatch(makeEducationCv(formData))
+    dispatch(makeCv(formData))
     console.log(formData)
     navigate('/educationcvpreview');
   };

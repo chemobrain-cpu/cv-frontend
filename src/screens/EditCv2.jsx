@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import './form.css'
-import { makeJobCv } from '../store/action/userAppStorage';
+import { makeCv } from '../store/action/userAppStorage';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from "react-redux";
 
+
 const CVForm = () => {
-  let { cvJobData} = useSelector(state => state.userAuth);
+  let { cv} = useSelector(state => state.userAuth);
+  let { user } = useSelector(state => state.userAuth); // Fetch user from Redux store
+  let navigate = useNavigate()
+  
+  // Protect the dashboard - if no user is present, redirect to login
+  useEffect(() => {
+    if (!user) {
+      navigate('/login'); // Redirect to login page if user is not found
+    }
+  }, [user, navigate]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -24,7 +34,6 @@ const CVForm = () => {
 
   let dispatch = useDispatch()
 
-  let navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -62,14 +71,14 @@ const CVForm = () => {
 
   let handleSubmitHandler = (e)=>{
     e.preventDefault()
-    dispatch(makeJobCv(formData))
+    dispatch(makeCv(formData))
     navigate('/jobcvpreview')
   }
 
 
 
   useEffect(()=>{
-    setFormData(cvJobData)
+    setFormData(cv)
   },[])
 
   return (

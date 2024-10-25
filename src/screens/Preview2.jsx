@@ -6,9 +6,18 @@ import html2pdf from "html2pdf.js"; // Import html2pdf.js
 
 const PhDCVTemplate = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { cvEducationData: formData, isCvAvailable } = useSelector(state => state.userAuth);
+  const { cv: formData, isCvAvailable } = useSelector(state => state.userAuth);
   const navigate = useNavigate();
-  const pdfRef = useRef(); // Create a ref for the cv-container
+  const pdfRef = useRef(); 
+  let { user } = useSelector(state => state.userAuth); 
+   
+  
+  // Protect the dashboard - if no user is present, redirect to login
+  useEffect(() => {
+    if (!user) {
+      navigate('/login'); 
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     if (!isCvAvailable) {

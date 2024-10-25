@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 const CVTemplate = () => {
   // Redux data from state
-  const { cvData3: formData, isCvAvailable } = useSelector(state => state.userAuth);
+  const { cv: formData, isCvAvailable } = useSelector(state => state.userAuth);
 
   const cvRef = useRef();
 

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Nav, Navbar, Button } from 'react-bootstrap';
 import { FaUserCircle } from 'react-icons/fa';  // Import human icon
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Dashboard.css'; // Add the CSS file for styling
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux'; // Import useSelector to access Redux store
 import Modal from '../components/Modal/Modal'; // Ensure correct import path
 import Loader from "../components/loader"; // Ensure correct import path
 
@@ -13,13 +14,20 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false); 
   const [isError, setIsError] = useState(false);
   const [isErrorInfo, setIsErrorInfo] = useState('');
-  let { user} = useSelector(state => state.userAuth);
+  let { user } = useSelector(state => state.userAuth); // Fetch user from Redux store
   let navigate = useNavigate();
+
+  // Protect the dashboard - if no user is present, redirect to login
+  useEffect(() => {
+    if (!user) {
+      navigate('/login'); // Redirect to login page if user is not found
+    }
+  }, [user, navigate]);
 
   const handleLogout = async () => {
     setIsLoading(true);
-    // Simulate an API call for logout
     try {
+      // Simulate an API call for logout
       // Call your logout function here
       // await logout();
       navigate('/login'); // Redirect to login after logout
@@ -43,7 +51,6 @@ const Dashboard = () => {
     { src: 'cv8.jpg', alt: 'CV Template 8', id: 'template_8' },
   ];
 
-  // Display 3 images at a time
   const itemsPerPage = 3;
   const totalPages = Math.ceil(templates.length / itemsPerPage);
 
@@ -181,13 +188,11 @@ const Dashboard = () => {
           </Navbar>
 
           <div className="content">
-
             {renderContent()}
           </div>
         </Container>
       </div>
     </>
-
   );
 };
 

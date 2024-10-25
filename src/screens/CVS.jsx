@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button, Nav, Navbar } from 'react-bootstrap';
 import { FaUserCircle, FaFileAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -6,27 +6,67 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './Dashboard.css';
 import Modal from '../components/Modal/Modal'; // Ensure correct import path
 import Loader from "../components/loader"; // Ensure correct import path
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCv } from '../store/action/userAppStorage';
+
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('myCVs');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Loader state
+  const [isLoading, setIsLoading] = useState(true); // Loader state
   const [isError, setIsError] = useState(false); // Error state
+  const [userCVs, setUserCVs] = useState([]); 
   const [isErrorInfo, setIsErrorInfo] = useState(''); // Error message state
-  let navigate = useNavigate();
+  let { user } = useSelector(state => state.userAuth); // Fetch user from Redux store
+  let navigate = useNavigate()
+  let dispatch = useDispatch()
+
+  // Protect the dashboard - if no user is present, redirect to login
+  useEffect(() => {
+    if (!user) {
+      navigate('/login'); // Redirect to login page if user is not found
+    }
+  }, [user, navigate]);
 
   const handleLogout = () => {
     // Add logout functionality
   };
 
+
+  // code to fetch all cvs
+  const fetchHandler = async (e) => {
+    let response = await dispatch(fetchCv(user._id))
+
+    if (!response.bool) {
+      setIsLoading(false)
+      setIsError(true)
+      setIsErrorInfo(response.message)
+    }
+    setIsLoading(false)
+    setUserCVs(response.message)
+  }
+
+  useEffect(() => {
+    fetchHandler();
+  }, []); // empty dependency array to run only on component mount
+
+
+
+
   // Dummy CV data (replace with dynamic data as needed)
-  const userCVs = [
-    { id: 1, title: 'Software Engineer CV', dateCreated: '2023-08-15' },
-    { id: 2, title: 'Marketing Manager CV', dateCreated: '2023-09-05' },
-    { id: 3, title: 'Graphic Designer CV', dateCreated: '2023-10-01' },
-  ];
+
 
   const renderCVs = () => {
+    if(userCVs.length === 0){
+      return <div className="container mt-5">
+      <div className="alert  text-center" role="alert">
+          <h2>No CVs Available</h2>
+          <p>It looks like you haven't uploaded any CVs yet.</p>
+          <p>Get started by adding your CV today!</p>
+      </div>
+  </div>
+    }
+
     return userCVs.map((cv) => (
       <Col xs={12} md={4} key={cv.id} className="mb-4">
         <Card className="cv-card shadow-sm">
