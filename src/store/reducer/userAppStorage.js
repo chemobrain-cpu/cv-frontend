@@ -1,5 +1,5 @@
 import { LOGIN_USER, OPEN_CV } from "../action/userAppStorage";
-import { GENERATE_CV, FETCH_CVS, UPDATE_USER } from "../action/userAppStorage";
+import { GENERATE_CV, FETCH_CVS, UPDATE_USER, UPDATE_CV } from "../action/userAppStorage";
 
 const initialState = {
     userToken: '',
@@ -44,6 +44,20 @@ export const userAuthReducer = (state = initialState, action) => {
                 ...state,
                 user: action.payload
             }
+
+        case UPDATE_CV:
+            return {
+                ...state,
+
+            }
+        case UPDATE_CV:
+            return {
+                ...state,
+                cvs: state.cvs.map(cv =>
+                    cv.id === action.payload.id ? { ...cv, ...action.payload.data } : cv
+                ),
+            };
+
 
         default:
             return state

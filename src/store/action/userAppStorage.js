@@ -4,6 +4,7 @@ export const GENERATE_CV = "GENERATE_CV";
 export const FETCH_CVS = "FETCH_CVS";
 export const UPDATE_USER = "UPDATE_USER";
 export const OPEN_CV = "OPEN_CV";
+export const UPDATE_CV = "UPDATE_CV";
 
 //pure functions to calculate the time remaining
 
@@ -175,7 +176,6 @@ export const makeCv = (data) => {
   return async (dispatch, getState) => {
     try {
       const { userAuth } = getState();
-
       // Access specific slice of the state
       const response = await fetch(`http://localhost:8080/makecv/${userAuth.user._id}`, {
         method: "POST",
@@ -185,7 +185,7 @@ export const makeCv = (data) => {
         body: JSON.stringify(data)
       })
       if (response.status === 404) {
-        alert(400)
+      
         let data = await response.json()
         return {
           bool: false,
@@ -193,7 +193,7 @@ export const makeCv = (data) => {
         }
       }
       if (response.status === 300) {
-        alert(300)
+       
         let data = await response.json()
         return {
           bool: false,
@@ -202,7 +202,7 @@ export const makeCv = (data) => {
       }
 
       if (response.status === 200) {
-        alert(200)
+        
         let data = await response.json()
         dispatch({ type: GENERATE_CV, payload: data })
         return {
@@ -211,7 +211,7 @@ export const makeCv = (data) => {
         }
       }
     } catch (err) {
-      alert('error')
+      
       return {
         bool: false,
         message: "network error",
@@ -222,6 +222,63 @@ export const makeCv = (data) => {
   }
 
 }
+
+export const updateCv = (data) => {
+  return async (dispatch, getState) => {
+    try {
+      const { userAuth } = getState(); // Access user authentication data
+      const response = await fetch(`http://localhost:8080/updatecv/${userAuth.user._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (response.status === 404 || response.status === 300) {
+        // Handle specific error responses from the server
+        const errorData = await response.json();
+        return {
+          bool: false,
+          message: errorData.message,
+        };
+      }
+
+      if (response.status === 200) {
+        // Success: parse the data and update the store
+        const updatedCvData = await response.json();
+        dispatch({ 
+          type: UPDATE_CV, 
+          payload: {
+            id: userAuth.user._id, // or use the specific CV's ID if different
+            data: updatedCvData.cv
+          }
+        });
+        
+        return {
+          bool: true,
+          message: "CV updated successfully",
+        };
+      }
+
+      // Handle unexpected status codes
+      return {
+        bool: false,
+        message: "Unexpected error",
+      };
+
+    } catch (err) {
+      // Network or other errors
+      return {
+        bool: false,
+        message: "Network error",
+      };
+    }
+  };
+};
+
+
+
 
 export const fetchCv = (id) => {
   return async (dispatch, getState) => {
