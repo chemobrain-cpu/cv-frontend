@@ -11,7 +11,6 @@ import { updateUser } from '../store/action/userAppStorage';
 
 
 
-
 const ProfileSettings = () => {
     const [activeTab, setActiveTab] = useState('overview');
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -43,14 +42,16 @@ const ProfileSettings = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setIsUser({ ...user, [name]: value });
+        setIsUser({ ...isUser, [name]: value });
     };
 
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true)
-        let response = await dispatch(updateUser(user))
+        
+        let response = await dispatch(updateUser(isUser))
 
         if (!response.bool) {
             setIsLoading(false)
@@ -149,17 +150,6 @@ const ProfileSettings = () => {
                                 value={isUser.password}
                                 onChange={handleChange}
                                 placeholder="Enter new password"
-                            />
-                        </Form.Group>
-
-                        <Form.Group as={Col} controlId="formConfirmPassword">
-                            <Form.Label>Confirm Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                name="confirmPassword"
-                                value={isUser.confirmPassword}
-                                onChange={handleChange}
-                                placeholder="Confirm new password"
                             />
                         </Form.Group>
                     </Row>

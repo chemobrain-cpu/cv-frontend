@@ -71,7 +71,6 @@ const Preview3 = () => {
       document.body.removeChild(a);
     } catch (error) {
       console.error("Error generating DOCX:", error);
-      alert("There was an error generating the DOCX file. Please try again.");
     }
   };
 
