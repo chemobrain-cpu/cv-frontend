@@ -19,7 +19,7 @@ const CVForm3 = () => {
         ],
         education: { degree: '', institution: '', duration: '' },
         certifications: [],
-        skills: '',
+        skills3: '',
         cvTemplateType: 'template3'
     });
     let navigate = useNavigate();
@@ -68,9 +68,10 @@ const CVForm3 = () => {
     };
 
     const handleSkillsChange = (e) => {
-        setFormData((prevData) => ({ ...prevData, skills: e.target.value }));
+        setFormData((prevData) => ({ ...prevData, skills3: e.target.value }));
     };
 
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true)
@@ -203,7 +204,7 @@ const CVForm3 = () => {
                         <div>
                             <label>
                                 Skills (comma-separated):</label>
-                            <input type="text" name="skills" value={formData.skills} onChange={handleSkillsChange} />
+                            <input type="text" name="skills" value={formData.skills3} onChange={handleSkillsChange} />
 
                         </div>
 

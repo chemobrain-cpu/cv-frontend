@@ -30,30 +30,30 @@ const Preview3 = () => {
       sections: [{
         properties: {},
         children: [
-          new Paragraph({ text: formData?.fullName || "Full Name", heading: "Title" }),
-          new Paragraph({ text: formData?.profileTitle || "Profile Title", heading: "Heading2" }),
+          new Paragraph({ text: formData?.name || "Full Name", heading: "Title" }),
+          new Paragraph({ text: formData?.profile || "Profile Title", heading: "Heading2" }),
           new Paragraph(formData?.phone || "Phone"),
           new Paragraph(formData?.email || "Email"),
           new Paragraph(formData?.linkedin || "LinkedIn"),
           new Paragraph(formData?.location || "Location"),
           new Paragraph("PROFILE"),
-          new Paragraph(formData?.profileDescription || "Profile Description"),
+          new Paragraph(formData?.profile || "Profile Description"),
 
           new Paragraph("PROFESSIONAL EXPERIENCE"),
-          ...(formData?.experience || []).map(job => 
+          ...(formData?.experience || []).map(job =>
             new Paragraph(`${job.role} - ${job.company} | ${job.startDate} - ${job.endDate} | ${job.location}`)
           ),
-          
+
           new Paragraph("EDUCATION"),
           new Paragraph(`${formData?.education.degree} - ${formData?.education.institution} | ${formData?.education.startDate} - ${formData?.education.endDate}`),
 
           new Paragraph("CERTIFICATION"),
-          ...(formData?.certifications || []).map(cert => 
+          ...(formData?.certifications || []).map(cert =>
             new Paragraph(`${cert.title} | ${cert.organization}`)
           ),
 
           new Paragraph("TECHNICAL SKILLS"),
-          new Paragraph((formData?.skills || [])),
+          new Paragraph((formData?.skills3 || [])),
 
           new Paragraph("Powered by Enhancv"),
         ],
@@ -79,6 +79,8 @@ const Preview3 = () => {
     return <div>No CV available</div>;
   }
 
+
+
   return (
     <div
       ref={cvRef}
@@ -95,9 +97,12 @@ const Preview3 = () => {
     >
       {/* Header Section */}
       <header style={{ textAlign: "left", marginBottom: "20px" }}>
-        <h1 style={{ fontSize: "36px", margin: 0 }}>{formData?.fullName || "Full Name"}</h1>
+        <h1 style={{ fontSize: "36px", margin: 0 }}>{formData?.name || "Full Name"}</h1>
         <p style={{ fontSize: "18px", fontStyle: "italic", margin: "5px 0" }}>
-          {formData?.profileTitle || "I solve problems and help people overcome obstacles."}
+
+          {(formData?.experiences || []).map((job, index) => (
+            <p>{job.role}</p>
+          ))}
         </p>
         <div style={{ fontSize: "14px", marginTop: "10px" }}>
           <p>
@@ -112,50 +117,57 @@ const Preview3 = () => {
       {/* Profile Section */}
       <section>
         <h2 style={{ borderBottom: "2px solid black", paddingBottom: "5px" }}>PROFILE</h2>
-        <p>{formData?.profileDescription || "Result-oriented project team leader with experience covering project and product management."}</p>
+        <p>{formData?.profile || "Result-oriented project team leader with experience covering project and product management."}</p>
       </section>
 
       {/* Professional Experience Section */}
       <section>
         <h2 style={{ borderBottom: "2px solid black", paddingBottom: "5px" }}>PROFESSIONAL EXPERIENCE</h2>
-        {(formData?.experience || []).map((job, index) => (
+        {(formData?.experiences || []).map((job, index) => (
           <div key={index} style={{ marginBottom: "20px" }}>
             <h3>{job.role}</h3>
-            <p><strong>{job.company}</strong> | {job.startDate} - {job.endDate} | {job.location}</p>
+            <p><strong>{job.company}</strong> | {job.duration} | {job.location}</p>
             <ul>
-              {job.responsibilities.map((resp, idx) => (
-                <li key={idx}>{resp}</li>
-              ))}
+              {job.responsibilities[job.responsibilities.length - 1]}
             </ul>
           </div>
         ))}
       </section>
 
+
+
       {/* Education Section */}
       <section>
         <h2 style={{ borderBottom: "2px solid black", paddingBottom: "5px" }}>EDUCATION</h2>
-        <p><strong>{formData?.education?.degree || "Degree"}</strong></p>
-        <p>{formData?.education?.institution || "Institution"} | {formData?.education?.startDate || "Start"} - {formData?.education?.endDate || "End"}</p>
+        {(formData?.education || []).map((education, index) => (
+          <div>
+            <p><strong>{education?.degree || "Degree"}</strong></p>
+            <p>{education?.institution || "Institution" || "End"}</p>
+            <p>{education?.duration || 'Duration'}</p>
+          </div>
+
+        ))}
+
       </section>
 
       {/* Certification Section */}
       <section>
         <h2 style={{ borderBottom: "2px solid black", paddingBottom: "5px" }}>CERTIFICATION</h2>
         {(formData?.certifications || []).map((cert, index) => (
-          <p key={index}>{cert.title} | {cert.organization}</p>
+          <p key={index}>{cert}</p>
         ))}
       </section>
 
       {/* Technical Skills Section */}
       <section>
         <h2 style={{ borderBottom: "2px solid black", paddingBottom: "5px" }}>TECHNICAL SKILLS</h2>
-        <p>{(formData?.skills || [])}</p>
+        <p>{(formData?.skills3 || "")}</p>
+
+
       </section>
 
       {/* Footer Section */}
-      <footer style={{ marginTop: "40px", textAlign: "center" }}>
-        <p>Powered by Enhancv</p>
-      </footer>
+
 
       {/* Buttons for downloading */}
       <div style={{ display: "flex", justifyContent: "space-around", marginTop: "20px" }}>
