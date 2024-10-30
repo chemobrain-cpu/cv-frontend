@@ -69,6 +69,8 @@ const Dashboard = () => {
       navigate('/form/template2');
     } else if (id === 'template_3') {
       navigate('/form/template3');
+    } else if (id === 'template_4') {
+      navigate('/form/template4');
     }
   };
 
