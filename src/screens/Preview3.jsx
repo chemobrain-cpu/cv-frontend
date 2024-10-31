@@ -135,9 +135,12 @@ const Preview3 = () => {
               <strong>{job.company}</strong> | {job.startDate} - {job.endDate} | {job.location}
             </p>
             <ul>
-              {job.responsibilities.map((responsibility, resIndex) => (
-                <li key={resIndex}>{responsibility}</li>
-              ))}
+              {job.responsibilities.length > 0 && (
+                <li key={job.responsibilities.length - 1}>
+                  {job.responsibilities[job.responsibilities.length - 1]}
+                </li>
+              )}
+
             </ul>
           </div>
         ))}

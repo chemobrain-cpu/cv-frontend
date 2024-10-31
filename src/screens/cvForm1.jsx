@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './form.css';
+import './form.css'; // Assuming you have form-specific styles here
 import { makeCv } from '../store/action/userAppStorage';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -91,14 +91,17 @@ const CVForm = () => {
   }
 
 
+  let closeModal = () => {
+    setIsError(false)
+
+  }
+
 
 
   return (
     <>
-
       {isLoading && <Loader />}
       {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
-
 
       <div className='form-container'>
         <div className="cv-form-containers">
@@ -348,7 +351,11 @@ const CVForm = () => {
         </div>
 
       </div>
+
     </>
+
+
+
 
 
 

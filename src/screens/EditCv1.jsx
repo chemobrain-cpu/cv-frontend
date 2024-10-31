@@ -345,7 +345,7 @@ const CVForm = () => {
           ))}
           <button type="button" onClick={handleAddWorkExperience}>Add Another Work Experience</button>
 
-          <button type="submit">Generate CV</button>
+          <button type="submit">Update CV</button>
         </form>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import CvForm1 from './cvForm2';
+import CvForm1 from './cvForm1';
 import CvForm2 from './cvForm2';
 import CVForm3 from './cvForm3';
 import CVForm4 from './cvForm4';
@@ -10,6 +10,7 @@ const CVForm = () => {
     
     let { id } = useParams()
     if(id == 'template1'){
+        alert('hi')
         return <CvForm1/>
     }else if(id == 'template2'){
         return <CvForm2/>

@@ -1,15 +1,24 @@
 import React, { useState, useEffect, useRef } from "react";
 import './preview1.css';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import html2pdf from "html2pdf.js";
 import { Document, Packer, Paragraph, TextRun } from "docx";
+import { deleteCv } from "../store/action/userAppStorage";
+import Modal from '../components/Modal/Modal';
+import Loader from "../components/loader";
+
 
 const Preview1 = () => {
   let [isLoading, setIsLoading] = useState(false);
   let { cv: formData, isCvAvailable } = useSelector(state => state.userAuth);
+  const [isError, setIsError] = useState(false);
+  const [isErrorInfo, setIsErrorInfo] = useState('');
+  const dispatch = useDispatch();
   let navigate = useNavigate();
   const cvRef = useRef();
+
+
   useEffect(() => {
     if (!isCvAvailable) {
       navigate('/template');
@@ -113,11 +122,34 @@ const Preview1 = () => {
     navigate(`/editcv/${formData.cvTemplateType}`);
   };
 
-  // conditional statement for the right cv preview template
+  //deleteCv
+  const deleteHandler = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const response = await dispatch(deleteCv(formData));
+    if (!response.bool) {
+      setIsLoading(false);
+      setIsError(true);
+      setIsErrorInfo(response.message);
+    } else {
+      setIsLoading(false);
+      navigate(`/cvs`);
+    }
+  };
+
+
+  let closeModal = () => {
+    setIsError(false)
+  }
 
 
   return (
+
     <div className='container-cv'>
+       {isLoading && <Loader />}
+      {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
+     
       <h1 class="text-center">Preview CV</h1>
 
       <div className="cv-container" ref={cvRef}>
@@ -195,10 +227,13 @@ const Preview1 = () => {
         <button onClick={downloadPDF} className="btn btn-primary m-2">Download PDF</button>
         <button onClick={downloadDOCX} className="btn btn-primary m-2">Download DOCX</button>
         <button onClick={editHandler} className="btn btn-primary m-2">Edit CV</button>
+        <button onClick={deleteHandler} className="btn btn-primary m-2">Delete CV</button>
       </div>
 
 
     </div>
+
+
   )
 };
 
