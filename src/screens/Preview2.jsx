@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import './preview2.css';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import html2pdf from "html2pdf.js";
 import { Document, Packer, Paragraph } from "docx";
+import Modal from '../components/Modal/Modal';
+import Loader from "../components/loader";
+import { deleteCv } from "../store/action/userAppStorage";
+
 
 const Preview2 = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,6 +15,11 @@ const Preview2 = () => {
   const navigate = useNavigate();
   const pdfRef = useRef();
   const { user } = useSelector(state => state.userAuth);
+  const [isError, setIsError] = useState(false);
+  const [isErrorInfo, setIsErrorInfo] = useState('');
+  const dispatch = useDispatch();
+
+
 
   useEffect(() => {
     if (!user) {
@@ -100,81 +109,107 @@ const Preview2 = () => {
     navigate(`/editcv/${formData.cvTemplateType}`);
   };
 
+  const deleteHandler = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const response = await dispatch(deleteCv(formData));
+    if (!response.bool) {
+      setIsLoading(false);
+      setIsError(true);
+      setIsErrorInfo(response.message);
+    } else {
+      setIsLoading(false);
+      navigate(`/cvs`);
+    }
+  };
+
+  let closeModal = () => {
+    setIsError(false)
+  }
+
+
   return (
-    <div className="container-cv">
-      <h1 className="text-center">Preview CV</h1>
-      <div className="cv-container" ref={pdfRef}>
-        <div className="cv-header">
-          <h1 className="cv-title">{formData?.name || 'Your Name'}'s CV</h1>
-          <div className="contact-info">
-            <p><i className="fas fa-phone"></i> {formData?.phone || 'N/A'}</p>
-            <p><i className="fas fa-map-marker-alt"></i> {formData?.location || 'N/A'}</p>
-            <p><i className="fas fa-envelope"></i> {formData?.email || 'N/A'}</p>
+    <>
+
+      {isLoading && <Loader />}
+      {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
+      <div className="container-cv">
+        <h1 className="text-center">Preview CV</h1>
+        <div className="cv-container" ref={pdfRef}>
+          <div className="cv-header">
+            <h1 className="cv-title">{formData?.name || 'Your Name'}'s CV</h1>
+            <div className="contact-info">
+              <p><i className="fas fa-phone"></i> {formData?.phone || 'N/A'}</p>
+              <p><i className="fas fa-map-marker-alt"></i> {formData?.location || 'N/A'}</p>
+              <p><i className="fas fa-envelope"></i> {formData?.email || 'N/A'}</p>
+            </div>
+          </div>
+          <div className="cv-main">
+            <div className="cv-left">
+              <section className="section education">
+                <h3>Education</h3>
+                {formData?.education?.map((edu, index) => (
+                  <div className="education-item" key={index}>
+                    <p>{edu?.year || ''}</p>
+                    <div>
+                      <h4>{edu?.degree || 'Degree'}</h4>
+                      <p>{edu?.institution || 'Institution'}</p>
+                      <p>{edu?.details || 'Details'}</p>
+                    </div>
+                  </div>
+                ))}
+              </section>
+              <section className="section skills">
+                <h3>Additional Skills</h3>
+                <ul>
+                  <li>R: {formData?.skills?.R || 'N/A'}</li>
+                  <li>Spanish: {formData?.skills?.Spanish || 'N/A'}</li>
+                  <li>Mandarin: {formData?.skills?.Mandarin || 'N/A'}</li>
+                </ul>
+              </section>
+            </div>
+            <div className="cv-right">
+              <section className="section publications">
+                <h3>Publications</h3>
+                {formData?.publications?.map((pub, index) => (
+                  <p key={index}>
+                    {pub?.title || 'Title'}. <i>{pub?.journal || 'Journal'}</i> ({pub?.year || 'Year'}): {pub?.pages || 'Pages'}.
+                  </p>
+                ))}
+              </section>
+              <section className="section research-experience">
+                <h3>Research Experience</h3>
+                {formData?.researchExperience?.map((exp, index) => (
+                  <div className="research-item" key={index}>
+                    <p>{exp?.duration || ''}</p>
+                    <div>
+                      <h4>{exp?.role || 'Role'}</h4>
+                      <p>{exp?.institution || 'Institution'}</p>
+                      <p>{exp?.description || 'Description'}</p>
+                    </div>
+                  </div>
+                ))}
+              </section>
+              <section className="section awards">
+                <h3>Awards & Honors</h3>
+                {formData?.awards?.map((award, index) => (
+                  <p key={index}>
+                    {award?.year || ''} - {award?.title || 'Title'}, {award?.institution || 'Institution'}
+                  </p>
+                ))}
+              </section>
+            </div>
           </div>
         </div>
-        <div className="cv-main">
-          <div className="cv-left">
-            <section className="section education">
-              <h3>Education</h3>
-              {formData?.education?.map((edu, index) => (
-                <div className="education-item" key={index}>
-                  <p>{edu?.year || ''}</p>
-                  <div>
-                    <h4>{edu?.degree || 'Degree'}</h4>
-                    <p>{edu?.institution || 'Institution'}</p>
-                    <p>{edu?.details || 'Details'}</p>
-                  </div>
-                </div>
-              ))}
-            </section>
-            <section className="section skills">
-              <h3>Additional Skills</h3>
-              <ul>
-                <li>R: {formData?.skills?.R || 'N/A'}</li>
-                <li>Spanish: {formData?.skills?.Spanish || 'N/A'}</li>
-                <li>Mandarin: {formData?.skills?.Mandarin || 'N/A'}</li>
-              </ul>
-            </section>
-          </div>
-          <div className="cv-right">
-            <section className="section publications">
-              <h3>Publications</h3>
-              {formData?.publications?.map((pub, index) => (
-                <p key={index}>
-                  {pub?.title || 'Title'}. <i>{pub?.journal || 'Journal'}</i> ({pub?.year || 'Year'}): {pub?.pages || 'Pages'}.
-                </p>
-              ))}
-            </section>
-            <section className="section research-experience">
-              <h3>Research Experience</h3>
-              {formData?.researchExperience?.map((exp, index) => (
-                <div className="research-item" key={index}>
-                  <p>{exp?.duration || ''}</p>
-                  <div>
-                    <h4>{exp?.role || 'Role'}</h4>
-                    <p>{exp?.institution || 'Institution'}</p>
-                    <p>{exp?.description || 'Description'}</p>
-                  </div>
-                </div>
-              ))}
-            </section>
-            <section className="section awards">
-              <h3>Awards & Honors</h3>
-              {formData?.awards?.map((award, index) => (
-                <p key={index}>
-                  {award?.year || ''} - {award?.title || 'Title'}, {award?.institution || 'Institution'}
-                </p>
-              ))}
-            </section>
-          </div>
+        <div className="cv-button-con text-center mt-3">
+          <button onClick={downloadPDF} className="btn btn-primary m-2">Download PDF</button>
+          <button onClick={downloadDOCX} className="btn btn-primary m-2">Download DOCX</button>
+          <button onClick={editHandler} className="btn btn-primary m-2">Edit CV</button>
+          <button onClick={deleteHandler} className="btn btn-primary m-2">Delete CV</button>
         </div>
       </div>
-      <div className="cv-button-con text-center mt-3">
-        <button onClick={downloadPDF} className="btn btn-primary m-2">Download PDF</button>
-        <button onClick={downloadDOCX} className="btn btn-primary m-2">Download DOCX</button>
-        <button onClick={editHandler} className="btn btn-primary m-2">Edit CV</button>
-      </div>
-    </div>
+    </>
+
   );
 };
 

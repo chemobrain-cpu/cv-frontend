@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import './preview1.css';
+import './preview.css';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import html2pdf from "html2pdf.js";
@@ -146,13 +146,13 @@ const Preview1 = () => {
 
   return (
 
-    <div className='container-cv'>
+    <div className='container-cvs'>
        {isLoading && <Loader />}
       {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
      
       <h1 class="text-center">Preview CV</h1>
 
-      <div className="cv-container" ref={cvRef}>
+      <div className="cv-containers" ref={cvRef}>
         {/* Left Column */}
         <div className="left-column">
           <div className="profile-picture">

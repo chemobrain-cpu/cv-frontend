@@ -7,7 +7,7 @@ import Loader from "../components/loader";
 import { deleteCv } from "../store/action/userAppStorage";
 
 
-const Preview3 = () => {
+const Preview4 = () => {
   const { cv: formData, isCvAvailable } = useSelector((state) => state.userAuth);
   const cvRef = useRef();
   let navigate = useNavigate()
@@ -193,5 +193,5 @@ const buttonStyle = {
   fontSize: "16px",
 };
 
-export default Preview3;
+export default Preview4;
 

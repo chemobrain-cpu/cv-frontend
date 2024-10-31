@@ -49,13 +49,25 @@ const CVForm3 = () => {
     const handleExperienceChange = (index, e) => {
         const { name, value } = e.target;
         const updatedExperiences = [...formData.experiences];
-        if (name === 'responsibility') {
-            updatedExperiences[index].responsibilities.push(value);
-        } else {
-            updatedExperiences[index][name] = value;
-        }
+        updatedExperiences[index][name] = value;
         setFormData({ ...formData, experiences: updatedExperiences });
     };
+
+    const handleAddResponsibility = (index) => {
+        const updatedExperiences = [...formData.experiences];
+        updatedExperiences[index].responsibilities.push('');
+        setFormData({ ...formData, experiences: updatedExperiences });
+    };
+    
+    const handleResponsibilityChange = (expIndex, resIndex, value) => {
+        const updatedExperiences = [...formData.experiences];
+        updatedExperiences[expIndex].responsibilities[resIndex] = value;
+        setFormData({ ...formData, experiences: updatedExperiences });
+    };
+    
+
+    // Usage example: You could call handleResponsibilityChange in your input field for responsibilities.
+
 
     const handleEducationChange = (e) => {
         const { name, value } = e.target;
@@ -71,7 +83,7 @@ const CVForm3 = () => {
         setFormData((prevData) => ({ ...prevData, skills3: e.target.value }));
     };
 
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true)
@@ -141,36 +153,59 @@ const CVForm3 = () => {
                         {formData.experiences.map((experience, index) => (
                             <div key={index} className="experience-section">
                                 <div>
-                                    <label>
-                                        Job Title: </label>
-                                    <input type="text" name="title" value={experience.title} onChange={(e) => handleExperienceChange(index, e)} />
-
+                                    <label>Job Title:</label>
+                                    <input
+                                        type="text"
+                                        name="title"
+                                        value={experience.title}
+                                        onChange={(e) => handleExperienceChange(index, e)}
+                                    />
                                 </div>
                                 <div>
-                                    <label>
-                                        Company: </label>
-                                    <input type="text" name="company" value={experience.company} onChange={(e) => handleExperienceChange(index, e)} />
-
+                                    <label>Company:</label>
+                                    <input
+                                        type="text"
+                                        name="company"
+                                        value={experience.company}
+                                        onChange={(e) => handleExperienceChange(index, e)}
+                                    />
                                 </div>
                                 <div>
-                                    <label>
-                                        Duration:</label>
-                                    <input type="text" name="duration" value={experience.duration} onChange={(e) => handleExperienceChange(index, e)} />
+                                    <label>Duration:</label>
+                                    <input
+                                        type="text"
+                                        name="duration"
+                                        value={experience.duration}
+                                        onChange={(e) => handleExperienceChange(index, e)}
+                                    />
                                 </div>
                                 <div>
-                                    <label>
-                                        Location:</label>
-                                    <input type="text" name="location" value={experience.location} onChange={(e) => handleExperienceChange(index, e)} />
-
+                                    <label>Location:</label>
+                                    <input
+                                        type="text"
+                                        name="location"
+                                        value={experience.location}
+                                        onChange={(e) => handleExperienceChange(index, e)}
+                                    />
                                 </div>
                                 <div>
-                                    <label>
-                                        Responsibilities:</label>
-                                    <textarea name="responsibility" onChange={(e) => handleExperienceChange(index, e)} />
-
+                                    <label>Responsibilities:</label>
+                                    {experience.responsibilities.map((res, resIndex) => (
+                                        <div key={resIndex}>
+                                            <textarea
+                                                value={res}
+                                                placeholder="Responsibility"
+                                                onChange={(e) => handleResponsibilityChange(index, resIndex, e.target.value)}
+                                            />
+                                        </div>
+                                    ))}
+                                    <button type="button" onClick={() => handleAddResponsibility(index)}>
+                                        Add Responsibility
+                                    </button>
                                 </div>
                             </div>
                         ))}
+
 
                         <h2>Education</h2>
                         <div>
