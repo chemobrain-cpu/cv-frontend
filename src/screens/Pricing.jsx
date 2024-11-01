@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 const PricingPlan = () => {
     const [activeTab, setActiveTab] = useState('pricing');
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(true); // Loader state
+    const [isLoading, setIsLoading] = useState(false); // Loader state
     const [isError, setIsError] = useState(false); // Error state
     const [isErrorInfo, setIsErrorInfo] = useState(''); // Error message state
     const navigate = useNavigate();

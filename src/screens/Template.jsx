@@ -45,10 +45,6 @@ const Dashboard = () => {
     { src: 'cv2.webp', alt: 'CV Template 2', id: 'template_2' },
     { src: 'cv3.jpg', alt: 'CV Template 3', id: 'template_3' },
     { src: 'cv4.jpg', alt: 'CV Template 4', id: 'template_4' },
-    { src: 'cv5.jpg', alt: 'CV Template 5', id: 'template_5' },
-    { src: 'cv6.jpg', alt: 'CV Template 6', id: 'template_6' },
-    { src: 'cv7.jpg', alt: 'CV Template 7', id: 'template_7' },
-    { src: 'cv8.jpg', alt: 'CV Template 8', id: 'template_8' },
   ];
 
   const itemsPerPage = 3;

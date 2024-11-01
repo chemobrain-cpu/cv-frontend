@@ -6,6 +6,7 @@ import 'aos/dist/aos.css';
 import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 
+
 const Crea8CV = () => {
   let navigate = useNavigate();
 
@@ -22,12 +23,13 @@ const Crea8CV = () => {
       {/* Navbar */}
       <nav className="navbar navbar-expand-lg navbar-light">
         <div className="container">
-          <a className="navbar-brand fw-bold fs-2 text-blue" href="index.html">
-            <span>
-              <i className="fa-solid fa-file-invoice"></i>
-            </span>
-            <span className="navbar-brand-text">Crea8</span> CV
-          </a>
+     
+
+        <a className="navbar-brand fw-bold fs-2 text-blue" href="index.html" style={{width: '50px', height: 'auto'}}>
+        <img src="/Asset 11-8_010653.png" style={{width:'150px'}} alt="Crea8 CV Logo" className="navbar-logo" />
+</a>
+
+
           <button
             className="navbar-toggler"
             type="button"
@@ -473,7 +475,7 @@ const Home = () => {
   return (<>
     <Crea8CV />
     <MainContent />
-    <PricingSection/>
+    <PricingSection />
     <Footer />
   </>)
 

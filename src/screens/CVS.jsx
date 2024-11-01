@@ -87,7 +87,7 @@ const Dashboard = () => {
             <FaFileAlt size={40} className="text-primary mb-3" />
             <Card.Title>{cv.title}</Card.Title>
             <Card.Text>
-              <small className="text-muted">Created on: {cv.dateCreated}</small>
+              <small className="text-muted">Created on: {cv.createdAt}</small>
             </Card.Text>
             <Button variant="outline-primary" onClick={() => navigateHandler(cv)}>
               View CV

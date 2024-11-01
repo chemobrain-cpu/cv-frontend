@@ -3,21 +3,19 @@ import './preview.css';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import html2pdf from "html2pdf.js";
-import { Document, Packer, Paragraph, TextRun } from "docx";
+import { Document, Packer, Paragraph } from "docx";
 import { deleteCv } from "../store/action/userAppStorage";
 import Modal from '../components/Modal/Modal';
 import Loader from "../components/loader";
 
-
 const Preview1 = () => {
-  let [isLoading, setIsLoading] = useState(false);
-  let { cv: formData, isCvAvailable } = useSelector(state => state.userAuth);
+  const [isLoading, setIsLoading] = useState(false);
+  const { cv: formData, isCvAvailable } = useSelector(state => state.userAuth);
   const [isError, setIsError] = useState(false);
   const [isErrorInfo, setIsErrorInfo] = useState('');
   const dispatch = useDispatch();
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const cvRef = useRef();
-
 
   useEffect(() => {
     if (!isCvAvailable) {
@@ -39,90 +37,78 @@ const Preview1 = () => {
       jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
     };
 
-    html2pdf()
-      .from(element)
-      .set(options)
-      .save();
+    html2pdf().from(element).set(options).save();
   };
 
-  // Function to download the CV as a DOCX file
   const downloadDOCX = async () => {
-    const doc = new Document();
+    const doc = new Document({
+      sections: [
+        {
+          properties: {},
+          children: [
+            new Paragraph({ text: formData?.name || "Full Name", heading: "Title" }),
+            new Paragraph({ text: formData?.jobTitle || "Job Title", heading: "Heading2" }),
+            new Paragraph("SUMMARY"),
+            new Paragraph(`Phone: ${formData.phone}`),
+            new Paragraph(`Email: ${formData.email}`),
+            new Paragraph(`Location: ${formData.location}`),
+            new Paragraph(`Social Media: ${formData.socialMedia}`),
 
-    // Adding the CV content
-    doc.addSection({
-      children: [
-        new Paragraph({
-          text: formData.name,
-          heading: "Title",
-        }),
-        new Paragraph({
-          text: formData.jobTitle,
-          heading: "Heading2",
-        }),
-        new Paragraph({
-          text: "SUMMARY",
-          heading: "Heading3",
-        }),
-        new Paragraph(`Phone: ${formData.phone}`),
-        new Paragraph(`Email: ${formData.email}`),
-        new Paragraph(`Location: ${formData.location}`),
-        new Paragraph(`Social Media: ${formData.socialMedia}`),
-        new Paragraph({
-          text: "AWARDS",
-          heading: "Heading3",
-        }),
-        ...formData.awards.map((award) =>
-          new Paragraph({
-            text: `${award.title} - ${award.organization} / ${award.year} / ${award.location}`,
-          })
-        ),
-        new Paragraph({
-          text: "ACHIEVEMENTS",
-          heading: "Heading3",
-        }),
-        ...formData.achievements.map((achievement) =>
-          new Paragraph(achievement.description)
-        ),
-        new Paragraph({
-          text: "EDUCATION",
-          heading: "Heading3",
-        }),
-        ...formData.education.map((edu) =>
-          new Paragraph(`${edu.degree} - ${edu.institution} / ${edu.year}`)
-        ),
-        new Paragraph({
-          text: "WORK EXPERIENCE",
-          heading: "Heading3",
-        }),
-        ...formData.workExperience.map((work) => {
-          const responsibilities = work.responsibilities.map(responsibility =>
-            new Paragraph(`• ${responsibility}`)
-          );
-          return [
-            new Paragraph(`${work.title} - ${work.company} / ${work.duration}`),
-            ...responsibilities,
-          ];
-        }).flat(),
+            new Paragraph("AWARDS"),
+            ...(formData?.awards || []).map(
+              (award) =>
+                new Paragraph(
+                  `${award.title} - ${award.organization} / ${award.year} / ${award.location}`
+                )
+            ),
+
+            new Paragraph("ACHIEVEMENTS"),
+            ...(formData?.achievements || []).map(
+              (achievement) =>
+                new Paragraph(achievement.description)
+            ),
+
+            new Paragraph("EDUCATION"),
+            ...(formData?.education || []).map(
+              (edu) =>
+                new Paragraph(
+                  `${edu.degree} - ${edu.institution} / ${edu.year}`
+                )
+            ),
+
+            new Paragraph("WORK EXPERIENCE"),
+            ...(formData?.workExperience || []).map((work) => {
+              const responsibilities = work?.responsibilities?.map(
+                (responsibility) => new Paragraph(`• ${responsibility}`)
+              );
+              return [
+                new Paragraph(`${work.title} - ${work.company} / ${work.duration}`),
+                ...responsibilities,
+              ];
+            }).flat(),
+          ],
+        },
       ],
     });
 
-    // Generate and download the DOCX file
-    const blob = await Packer.toBlob(doc);
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "CV.docx";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    try {
+      const blob = await Packer.toBlob(doc);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "CV.docx";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error("Error generating DOCX:", error);
+    }
   };
 
   const editHandler = () => {
     navigate(`/editcv/${formData.cvTemplateType}`);
   };
 
-  //deleteCv
   const deleteHandler = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -138,22 +124,19 @@ const Preview1 = () => {
     }
   };
 
-
-  let closeModal = () => {
-    setIsError(false)
-  }
-
+  const closeModal = () => {
+    setIsError(false);
+  };
 
   return (
-
-    <div className='container-cvs'>
-       {isLoading && <Loader />}
+    <div style={{display:'flex',justifyContent:'center',width:'100vw'}}>
+<div className="container-cvs">
+      {isLoading && <Loader />}
       {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
-     
-      <h1 class="text-center">Preview CV</h1>
+      
+      <h1 className="text-center">Preview CV</h1>
 
       <div className="cv-containers" ref={cvRef}>
-        {/* Left Column */}
         <div className="left-column">
           <div className="profile-picture">
             <img src="profile.jpg" alt="Profile Picture" />
@@ -189,7 +172,6 @@ const Preview1 = () => {
           </section>
         </div>
 
-        {/* Right Column */}
         <div className="right-column">
           <section className="section summary">
             <h3>SUMMARY</h3>
@@ -223,21 +205,21 @@ const Preview1 = () => {
           </section>
         </div>
       </div>
+
       <div className="cv-button-con text-center mt-3">
         <button onClick={downloadPDF} className="btn btn-primary m-2">Download PDF</button>
         <button onClick={downloadDOCX} className="btn btn-primary m-2">Download DOCX</button>
         <button onClick={editHandler} className="btn btn-primary m-2">Edit CV</button>
         <button onClick={deleteHandler} className="btn btn-primary m-2">Delete CV</button>
       </div>
-
-
     </div>
-
-
-  )
+    </div>
+    
+  );
 };
 
 export default Preview1;
+
 
 
 

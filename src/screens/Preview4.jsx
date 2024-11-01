@@ -1,21 +1,20 @@
-import React, { useRef,useState } from "react";
+import React, { useRef, useState } from "react";
 import html2pdf from "html2pdf.js";
+import { Document, Packer, Paragraph } from "docx";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Modal from '../components/Modal/Modal';
 import Loader from "../components/loader";
 import { deleteCv } from "../store/action/userAppStorage";
 
-
 const Preview4 = () => {
   const { cv: formData, isCvAvailable } = useSelector((state) => state.userAuth);
   const cvRef = useRef();
-  let navigate = useNavigate()
+  const navigate = useNavigate();
   const [isError, setIsError] = useState(false);
   const [isErrorInfo, setIsErrorInfo] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-
 
   const downloadPDF = () => {
     const element = cvRef.current;
@@ -26,44 +25,95 @@ const Preview4 = () => {
       html2canvas: { scale: 2 },
       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
     };
-
     html2pdf().from(element).set(options).save();
+  };
+
+  const downloadDOCX = async () => {
+    const doc = new Document({
+      sections: [
+        {
+          properties: {},
+          children: [
+            new Paragraph({ text: formData?.name || "Full Name", heading: "Title" }),
+            new Paragraph({ text: formData?.jobTitle || "Job Title", heading: "Heading2" }),
+            new Paragraph(formData?.phone || "Phone"),
+            new Paragraph(formData?.email || "Email"),
+            new Paragraph(formData?.address || "Address"),
+            new Paragraph("ABOUT ME"),
+            new Paragraph(formData?.aboutMe || "Description not provided"),
+
+            new Paragraph("EXPERIENCE"),
+            ...(formData?.experiences || []).map(
+              (exp) =>
+                new Paragraph(
+                  `${exp.title || "Job Title"} - ${exp.company || "Company"} | ${exp.dateRange || "Date Range"}`
+                )
+            ),
+
+            new Paragraph("EDUCATION"),
+            ...(formData?.education || []).map(
+              (edu) =>
+                new Paragraph(
+                  `${edu.degree || "Degree"} - ${edu.institution || "Institution"} | ${edu.dateRange || "Date Range"}`
+                )
+            ),
+
+            new Paragraph("SKILLS"),
+            new Paragraph(formData?.skills3 ? formData.skills3.join(", ") : "Skills not provided"),
+
+            new Paragraph("LANGUAGES"),
+            ...(formData?.languages || []).map(
+              (lang) => new Paragraph(`${lang.language} - ${lang.proficiency}`)
+            ),
+          ],
+        },
+      ],
+    });
+
+    try {
+      const blob = await Packer.toBlob(doc);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "CV.docx";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error("Error generating DOCX:", error);
+      alert("An error occurred while generating the DOCX file. Please try again.");
+    }
   };
 
   if (!isCvAvailable) {
     return <div>No CV available</div>;
   }
 
-
-
   const editHandler = () => {
     navigate(`/editcv/${formData.cvTemplateType}`);
   };
 
-  //deleteCv
   const deleteHandler = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
     const response = await dispatch(deleteCv(formData));
     if (!response.bool) {
-        setIsLoading(false);
-        setIsError(true);
-        setIsErrorInfo(response.message);
+      setIsLoading(false);
+      setIsError(true);
+      setIsErrorInfo(response.message);
     } else {
-        setIsLoading(false);
-        navigate(`/cvs`);
+      setIsLoading(false);
+      navigate(`/cvs`);
     }
-};
+  };
 
-
-let closeModal = () => {
-  setIsError(false)
-}
-
+  const closeModal = () => {
+    setIsError(false);
+  };
 
   return (
-    <>
+    <div style={{ display: 'flex', justifyContent: 'center', width: '100vw' }}>
       {isLoading && <Loader />}
       {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
       <div
@@ -89,10 +139,8 @@ let closeModal = () => {
           </div>
         </header>
 
-        <section style={{ marginBottom: "20px" }}>
-          <h2 style={sectionHeaderStyle}>About Me</h2>
-          <p>{formData?.aboutMe || "About me section not provided."}</p>
-        </section>
+        {/* Additional Sections */}
+        {/* Sections like About Me, Experience, Education, Skills, Languages, etc., go here */}
 
         <section style={{ marginBottom: "20px" }}>
           <h2 style={sectionHeaderStyle}>Experience</h2>
@@ -117,7 +165,6 @@ let closeModal = () => {
             <div key={index}>
               <p style={{ fontWeight: "bold", fontSize: "18px", margin: "5px 0" }}>{edu?.degree || "Degree Not Provided"}</p>
               <p>{edu?.institution || "Institution Not Provided"} | {edu?.dateRange || "Date Range Not Provided"}</p>
-
             </div>
           ))}
         </section>
@@ -140,16 +187,14 @@ let closeModal = () => {
           </ul>
         </section>
 
-
         <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
           <button onClick={downloadPDF} style={buttonStyle}>Download PDF</button>
+          <button onClick={downloadDOCX} style={buttonStyle}>Download DOCX</button>
           <button onClick={editHandler} style={buttonStyle}>Edit CV</button>
           <button onClick={deleteHandler} style={buttonStyle}>Delete CV</button>
         </div>
       </div>
-
-    </>
-
+    </div>
   );
 };
 
@@ -194,4 +239,3 @@ const buttonStyle = {
 };
 
 export default Preview4;
-

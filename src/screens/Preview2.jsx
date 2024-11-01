@@ -3,11 +3,10 @@ import './preview2.css';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import html2pdf from "html2pdf.js";
-import { Document, Packer, Paragraph } from "docx";
+import { Document, Packer, Paragraph, TextRun, Header, Footer, PageBreak } from "docx"; // Import necessary classes from docx
 import Modal from '../components/Modal/Modal';
 import Loader from "../components/loader";
 import { deleteCv } from "../store/action/userAppStorage";
-
 
 const Preview2 = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -19,26 +18,28 @@ const Preview2 = () => {
   const [isErrorInfo, setIsErrorInfo] = useState('');
   const dispatch = useDispatch();
 
-
-
+  // Redirect to login if the user is not authenticated
   useEffect(() => {
     if (!user) {
       navigate('/login');
     }
   }, [user, navigate]);
 
+  // Redirect to template if no CV is available
   useEffect(() => {
     if (!isCvAvailable) {
       navigate('/template');
     }
   }, [isCvAvailable, navigate]);
 
+  // If no CV is available, render nothing
   if (!isCvAvailable) {
     return null;
   }
 
+  // Function to download CV as a PDF
   const downloadPDF = () => {
-    if (!pdfRef.current) return; // Ensure pdfRef is defined
+    if (!pdfRef.current) return;
     const element = pdfRef.current;
     const options = {
       margin: 1,
@@ -50,59 +51,117 @@ const Preview2 = () => {
     html2pdf().from(element).set(options).save();
   };
 
+  // Function to download CV as a DOCX
   const downloadDOCX = async () => {
-    if (!formData) return;
+    const doc = new Document({
+      sections: [
+        {
+          properties: {},
+          headers: {
+            default: new Header({
+              children: [new Paragraph("Header Text")],
+            }),
+          },
+          footers: {
+            default: new Footer({
+              children: [new Paragraph("Footer Text")],
+            }),
+          },
+          children: [
+            new Paragraph({
+              text: `${formData?.name || 'Your Name'}'s CV`,
+              heading: "TITLE",
+            }),
+            new Paragraph({
+              text: `Phone: ${formData?.phone || 'N/A'}`,
+            }),
+            new Paragraph({
+              text: `Location: ${formData?.location || 'N/A'}`,
+            }),
+            new Paragraph({
+              text: `Email: ${formData?.email || 'N/A'}`,
+            }),
+            new Paragraph({
+              text: "Education",
+              heading: "HEADING_1",
+            }),
+            ...formData.education.map(edu => 
+              new Paragraph({
+                children: [
+                  new TextRun(edu?.year || ''),
+                  new TextRun({
+                    text: ` ${edu?.degree || 'Degree'}, ${edu?.institution || 'Institution'}`,
+                    bold: true,
+                  }),
+                  new TextRun({
+                    text: ` - ${edu?.details || 'Details'}`,
+                  }),
+                ],
+              })
+            ),
+            new PageBreak(), // Adding page break between sections
+            new Paragraph({
+              text: "Additional Skills",
+              heading: "HEADING_1",
+            }),
+            new Paragraph(`R: ${formData?.skills?.R || 'N/A'}`),
+            new Paragraph(`Spanish: ${formData?.skills?.Spanish || 'N/A'}`),
+            new Paragraph(`Mandarin: ${formData?.skills?.Mandarin || 'N/A'}`),
+            new PageBreak(),
+            new Paragraph({
+              text: "Publications",
+              heading: "HEADING_1",
+            }),
+            ...formData.publications.map(pub => 
+              new Paragraph({
+                text: `${pub?.title || 'Title'}. ${pub?.journal || 'Journal'} (${pub?.year || 'Year'}): ${pub?.pages || 'Pages'}.`,
+              })
+            ),
+            new PageBreak(),
+            new Paragraph({
+              text: "Research Experience",
+              heading: "HEADING_1",
+            }),
+            ...formData.researchExperience.map(exp => 
+              new Paragraph({
+                children: [
+                  new TextRun(exp?.duration || ''),
+                  new TextRun({
+                    text: ` ${exp?.role || 'Role'}, ${exp?.institution || 'Institution'}`,
+                    bold: true,
+                  }),
+                  new TextRun({
+                    text: ` - ${exp?.description || 'Description'}`,
+                  }),
+                ],
+              })
+            ),
+            new PageBreak(),
+            new Paragraph({
+              text: "Awards & Honors",
+              heading: "HEADING_1",
+            }),
+            ...formData.awards.map(award => 
+              new Paragraph({
+                text: `${award?.year || ''} - ${award?.title || 'Title'}, ${award?.institution || 'Institution'}`,
+              })
+            ),
+          ],
+        },
+      ],
+    });
 
-    const doc = new Document();
-    try {
-      doc.addSection({
-        children: [
-          new Paragraph({ text: `${formData.name || 'Unknown'}'s CV`, heading: "Title" }),
-          new Paragraph({ text: "Contact Information", heading: "Heading2" }),
-          formData.phone ? new Paragraph(`Phone: ${formData.phone}`) : new Paragraph(),
-          formData.email ? new Paragraph(`Email: ${formData.email}`) : new Paragraph(),
-          formData.location ? new Paragraph(`Location: ${formData.location}`) : new Paragraph(),
-
-          new Paragraph({ text: "Education", heading: "Heading2" }),
-          ...(formData.education || []).map(edu =>
-            new Paragraph(`${edu.degree || ''} at ${edu.institution || ''} (${edu.year || ''})`)
-          ),
-
-          new Paragraph({ text: "Skills", heading: "Heading2" }),
-          ...Object.entries(formData.skills || {}).map(
-            ([skill, level]) => new Paragraph(`${skill}: ${level}`)
-          ),
-
-          new Paragraph({ text: "Publications", heading: "Heading2" }),
-          ...(formData.publications || []).map(pub =>
-            new Paragraph(`${pub.title || ''}. ${pub.journal || ''} (${pub.year || ''}): ${pub.pages || ''}`)
-          ),
-
-          new Paragraph({ text: "Research Experience", heading: "Heading2" }),
-          ...(formData.researchExperience || []).flatMap(exp => [
-            new Paragraph(`${exp.role || ''} at ${exp.institution || ''} (${exp.duration || ''})`),
-            new Paragraph(exp.description || '')
-          ]),
-
-          new Paragraph({ text: "Awards & Honors", heading: "Heading2" }),
-          ...(formData.awards || []).map(award =>
-            new Paragraph(`${award.year || ''} - ${award.title || ''}, ${award.institution || ''}`)
-          ),
-        ],
-      });
-
-      const blob = await Packer.toBlob(doc);
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${formData.name || 'CV'}.docx`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url); // Free up memory
-    } catch (error) {
-      console.error("Error generating DOCX:", error);
-    }
+    // Create a Blob from the document and download it
+    Packer.toBlob(doc).then(blob => {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${formData?.name || 'CV'}.docx`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }).catch(error => {
+      console.error("Error creating DOCX file:", error);
+    });
   };
 
   const editHandler = () => {
@@ -123,14 +182,12 @@ const Preview2 = () => {
     }
   };
 
-  let closeModal = () => {
-    setIsError(false)
-  }
-
+  const closeModal = () => {
+    setIsError(false);
+  };
 
   return (
-    <>
-
+    <div style={{display:'flex',justifyContent:'center',width:'100vw'}}>
       {isLoading && <Loader />}
       {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
       <div className="container-cv">
@@ -208,12 +265,17 @@ const Preview2 = () => {
           <button onClick={deleteHandler} className="btn btn-primary m-2">Delete CV</button>
         </div>
       </div>
-    </>
-
+    </div>
   );
 };
 
 export default Preview2;
+
+
+
+
+
+
 
 
 

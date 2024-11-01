@@ -119,7 +119,7 @@ const Preview3 = () => {
   }
 
   return (
-    <> {isLoading && <Loader />}
+    <div style={{display:'flex',justifyContent:'center',width:'100vw'}}> {isLoading && <Loader />}
       {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
       <div
         ref={cvRef}
@@ -204,7 +204,7 @@ const Preview3 = () => {
           <button onClick={deleteHandler} style={buttonStyle} className="btn btn-primary m-2">Delete CV</button>
         </div>
       </div>
-    </>
+    </div>
 
   );
 };
