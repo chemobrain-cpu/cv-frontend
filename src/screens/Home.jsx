@@ -23,11 +23,11 @@ const Crea8CV = () => {
       {/* Navbar */}
       <nav className="navbar navbar-expand-lg navbar-light">
         <div className="container">
-     
 
-        <a className="navbar-brand fw-bold fs-2 text-blue" href="index.html" style={{width: '50px', height: 'auto'}}>
-        <img src="/Asset 11-8_010653.png" style={{width:'150px'}} alt="Crea8 CV Logo" className="navbar-logo" />
-</a>
+
+          <a className="navbar-brand fw-bold fs-2 text-blue" href="index.html" style={{ width: '50px', height: 'auto' }}>
+            <img src="/Asset 11-8_010653.png" style={{ width: '150px' }} alt="Crea8 CV Logo" className="navbar-logo" />
+          </a>
 
 
           <button
@@ -218,7 +218,7 @@ const MainContent = () => {
 
 const Footer = () => {
   return (
-    <footer className="pt-5" data-aos="fade-up" style={{ background: "linear-gradient(135deg, #1d2671, #c33764)", color: "#f5f5f5" }}>
+    <footer className="pt-5" data-aos="fade-up" style={{ background: "#f0f0f0" }}> {/* Change background color here */}
       <div className="container my-md-4">
         <div className="row">
           {/* Company Info */}
@@ -227,18 +227,18 @@ const Footer = () => {
               <FaFileInvoice className="me-2" />
               <span className="navbar-brand-text">Crea8 CV</span>
             </div>
-            <p className="my-3" style={{ fontSize: "1.1rem", color: "#e0e0e0" }}>
+            <p className="my-3" style={{ fontSize: "1.1rem", color: "black" }}> {/* Change paragraph color to black */}
               Our resume builder helps you create your perfect resume, 100% free.
             </p>
             <div className="d-flex">
               {/* Social Media Icons */}
-              <a href="#" className="me-3 text-white" style={{ fontSize: "1.5rem" }}>
+              <a href="#" className="me-3 text-black" style={{ fontSize: "1.5rem" }}>
                 <FaFacebookF />
               </a>
-              <a href="#" className="me-3 text-white" style={{ fontSize: "1.5rem" }}>
+              <a href="#" className="me-3 text-black" style={{ fontSize: "1.5rem" }}>
                 <FaTwitter />
               </a>
-              <a href="#" className="text-white" style={{ fontSize: "1.5rem" }}>
+              <a href="#" className="text-black" style={{ fontSize: "1.5rem" }}>
                 <FaInstagram />
               </a>
             </div>
@@ -246,20 +246,22 @@ const Footer = () => {
 
           {/* Company Links */}
           <div className="col-md-6 col-lg-2 my-2">
-            <h5 className="fw-bold mb-4" style={{ fontSize: "1.3rem", color: "#f5f5f5" }}>Company</h5>
+            <h5 className="fw-bold mb-4" style={{ fontSize: "1.3rem", color: "blue" }}> {/* Change header color to blue */}
+              Company
+            </h5>
             <ul className="list-unstyled">
               <li className="my-3">
-                <a href="#" className="text-light text-decoration-none" style={{ transition: "color 0.3s ease" }}>
+                <a href="#" className="text-black text-decoration-none" style={{ transition: "color 0.3s ease" }}>
                   About Us
                 </a>
               </li>
               <li className="my-3">
-                <a href="#" className="text-light text-decoration-none" style={{ transition: "color 0.3s ease" }}>
+                <a href="#" className="text-black text-decoration-none" style={{ transition: "color 0.3s ease" }}>
                   Services
                 </a>
               </li>
               <li className="my-3">
-                <a href="#" className="text-light text-decoration-none" style={{ transition: "color 0.3s ease" }}>
+                <a href="#" className="text-black text-decoration-none" style={{ transition: "color 0.3s ease" }}>
                   Careers
                 </a>
               </li>
@@ -268,20 +270,22 @@ const Footer = () => {
 
           {/* Community Links */}
           <div className="col-md-6 col-lg-2 my-2">
-            <h5 className="fw-bold mb-4" style={{ fontSize: "1.3rem", color: "#f5f5f5" }}>Community</h5>
+            <h5 className="fw-bold mb-4" style={{ fontSize: "1.3rem", color: "blue" }}> {/* Change header color to blue */}
+              Community
+            </h5>
             <ul className="list-unstyled">
               <li className="my-3">
-                <a href="#" className="text-light text-decoration-none" style={{ transition: "color 0.3s ease" }}>
+                <a href="#" className="text-black text-decoration-none" style={{ transition: "color 0.3s ease" }}>
                   Forum
                 </a>
               </li>
               <li className="my-3">
-                <a href="#" className="text-light text-decoration-none" style={{ transition: "color 0.3s ease" }}>
+                <a href="#" className="text-black text-decoration-none" style={{ transition: "color 0.3s ease" }}>
                   Blog
                 </a>
               </li>
               <li className="my-3">
-                <a href="#" className="text-light text-decoration-none" style={{ transition: "color 0.3s ease" }}>
+                <a href="#" className="text-black text-decoration-none" style={{ transition: "color 0.3s ease" }}>
                   Podcast
                 </a>
               </li>
@@ -290,15 +294,17 @@ const Footer = () => {
 
           {/* Support Links */}
           <div className="col-md-6 col-lg-2 my-2">
-            <h5 className="fw-bold mb-4" style={{ fontSize: "1.3rem", color: "#f5f5f5" }}>Support</h5>
+            <h5 className="fw-bold mb-4" style={{ fontSize: "1.3rem", color: "blue" }}> {/* Change header color to blue */}
+              Support
+            </h5>
             <ul className="list-unstyled">
               <li className="my-3">
-                <a href="#" className="text-light text-decoration-none" style={{ transition: "color 0.3s ease" }}>
+                <a href="#" className="text-black text-decoration-none" style={{ transition: "color 0.3s ease" }}>
                   Help Center
                 </a>
               </li>
               <li className="my-3">
-                <a href="#" className="text-light text-decoration-none" style={{ transition: "color 0.3s ease" }}>
+                <a href="#" className="text-black text-decoration-none" style={{ transition: "color 0.3s ease" }}>
                   Contact Us
                 </a>
               </li>
@@ -307,8 +313,10 @@ const Footer = () => {
 
           {/* Newsletter Subscription */}
           <div className="col-md-6 col-lg-3 my-2">
-            <h5 className="fw-bold mb-4" style={{ fontSize: "1.3rem", color: "#f5f5f5" }}>Subscribe</h5>
-            <p className="mb-4" style={{ fontSize: "1.1rem", color: "#e0e0e0" }}>
+            <h5 className="fw-bold mb-4" style={{ fontSize: "1.3rem", color: "blue" }}> {/* Change header color to blue */}
+              Subscribe
+            </h5>
+            <p className="mb-4" style={{ fontSize: "1.1rem", color: "black" }}> {/* Change paragraph color to black */}
               Get the latest updates right in your inbox.
             </p>
             <div className="input-group mb-3">
@@ -327,19 +335,19 @@ const Footer = () => {
       </div>
 
       {/* Bottom Section */}
-      <div className="pt-4" style={{ background: "#141414" }}>
+      <div className="pt-4" >
         <div className="container">
           <div className="row justify-content-between align-items-center">
             {/* Copyright */}
             <div className="col-md-8 my-1">
-              <small className="text-light">© 2024 Crea8 CV. All Rights Reserved.</small>
+              <small className="text-black">© 2024 Crea8 CV. All Rights Reserved.</small>
             </div>
             {/* Legal Links */}
             <div className="col-md-4 my-1 text-md-end">
-              <a href="#" className="text-light text-decoration-none me-4" style={{ transition: "color 0.3s ease" }}>
+              <a href="#" className="text-black text-decoration-none me-4" style={{ transition: "color 0.3s ease" }}>
                 Privacy Policy
               </a>
-              <a href="#" className="text-light text-decoration-none" style={{ transition: "color 0.3s ease" }}>
+              <a href="#" className="text-black text-decoration-none" style={{ transition: "color 0.3s ease" }}>
                 Terms of Use
               </a>
             </div>
@@ -347,6 +355,9 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+
+
+
   );
 };
 
