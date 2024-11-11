@@ -1,5 +1,6 @@
 import { LOGIN_USER, OPEN_CV } from "../action/userAppStorage";
-import { GENERATE_CV, FETCH_CVS, UPDATE_USER, UPDATE_CV } from "../action/userAppStorage";
+import { GENERATE_CV, FETCH_CVS, UPDATE_USER, UPDATE_CV, DELETE_CV, REFRESH_LOGIN } from "../action/userAppStorage";
+
 
 const initialState = {
     userToken: '',
@@ -17,6 +18,14 @@ export const userAuthReducer = (state = initialState, action) => {
                 user: action.payload.user,
                 userToken: action.payload.userToken,
             }
+
+        case REFRESH_LOGIN:
+            return {
+                ...state,
+                user: action.payload.user,
+                userToken: action.payload.response,
+            }
+
         case GENERATE_CV:
             return {
                 ...state,
@@ -36,7 +45,6 @@ export const userAuthReducer = (state = initialState, action) => {
             return {
                 ...state,
                 cvs: [...state.cvs, action.payload],
-
             }
 
         case UPDATE_USER:
@@ -57,6 +65,12 @@ export const userAuthReducer = (state = initialState, action) => {
                     cv.id === action.payload.id ? { ...cv, ...action.payload.data } : cv
                 ),
             };
+        case DELETE_CV:
+            return {
+                ...state,
+                cvs: state.cvs.filter(cv => cv.id !== action.payload.id),
+            };
+
 
 
         default:

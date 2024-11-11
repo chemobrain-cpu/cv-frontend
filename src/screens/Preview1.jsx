@@ -139,7 +139,7 @@ const Preview1 = () => {
       <div className="cv-containers" ref={cvRef}>
         <div className="left-column">
           <div className="profile-picture">
-            <img src="profile.jpg" alt="Profile Picture" />
+            {/*<img src="profile.jpg" alt="Profile Picture" />*/}
           </div>
           <h1 className="name">{formData.name}</h1>
           <h2 className="job-title">{formData.jobTitle}</h2>

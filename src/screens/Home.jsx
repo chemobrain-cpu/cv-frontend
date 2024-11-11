@@ -224,8 +224,9 @@ const Footer = () => {
           {/* Company Info */}
           <div className="col-md-6 col-lg-3 my-2">
             <div className="navbar-brand fw-bold fs-2 d-flex align-items-center" style={{ color: "#f5f5f5" }}>
-              <FaFileInvoice className="me-2" />
-              <span className="navbar-brand-text">Crea8 CV</span>
+              <a className="navbar-brand fw-bold fs-2 text-blue" href="index.html" style={{ width: '50px', height: 'auto' }}>
+            <img src="/Asset 11-8_010653.png" style={{ width: '150px' }} alt="Crea8 CV Logo" className="navbar-logo" />
+          </a>
             </div>
             <p className="my-3" style={{ fontSize: "1.1rem", color: "black" }}> {/* Change paragraph color to black */}
               Our resume builder helps you create your perfect resume, 100% free.

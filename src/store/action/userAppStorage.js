@@ -5,44 +5,122 @@ export const FETCH_CVS = "FETCH_CVS";
 export const UPDATE_USER = "UPDATE_USER";
 export const OPEN_CV = "OPEN_CV";
 export const UPDATE_CV = "UPDATE_CV";
+export const DELETE_CV = "DELETE_CV";
+export const REFRESH_LOGIN = "REFRESH_LOGIN";
 
-//pure functions to calculate the time remaining
-
-let calculateRemainingTime = (expiryDate) => {
-  //getting current time in milliseconds
-  const currentTime = new Date().getMilliseconds()
-  //getting expiration time in milliseconds
-  const adjustExpirationTime = (expiryDate * 60 * 60 * 1000)
-  const timeLeft = adjustExpirationTime - currentTime
-  return timeLeft
-}
+let calculateRemainingTime = (hoursUntilExpiry) => {
+  const currentTime = new Date().getTime();
+  const expirationTime = currentTime + hoursUntilExpiry * 60 * 60 * 1000; // Convert hours to milliseconds
+  const timeLeft = expirationTime - currentTime; // Time left in milliseconds
+  return Math.max(timeLeft, 0); // Ensure non-negative result
+};
 
 
+// Function to retrieve admin token and check its validity
 let retrievedAdminStoredToken = () => {
-  let tokenFromStorage = localStorage.getItem('token')
-  let expiryDate = localStorage.getItem('expiry')
-  const timeLeft = calculateRemainingTime(expiryDate)
+  const tokenFromStorage = localStorage.getItem('token');
+  const expiryDate = localStorage.getItem('expiry'); // This should be a timestamp
 
-  if (timeLeft <= 3600) {
-    localStorage.removeItem('token')
-    localStorage.removeItem('expiry')
-    localStorage.removeItem('user')
+
+  if (!expiryDate) {
+    return {
+      token: "",
+      expiresIn: ""
+    };
+  }
+
+  const timeLeft = calculateRemainingTime(Number(expiryDate)); // Ensure expiryDate is a number
+  
+  if (timeLeft <= 1000) {
+   
+     // Less than or equal to 1 hour
+    localStorage.removeItem('token');
+    localStorage.removeItem('expiry');
+    localStorage.removeItem('user');
 
     return {
-      adminToken: "",
-      adminExpiresIn: ""
-    }
+      token: "",
+      expiresIn: ""
+    };
   }
 
   return {
-    adminToken: tokenFromStorage,
-    adminExpiresIn: timeLeft
+    token: tokenFromStorage,
+    expiresIn: timeLeft
+  };
+}
+
+// Redux async function for automatic login based on stored token
+export const autoLogin = () => {
+  return async (dispatch, getState) => {
+    // Get the admin token and its expiry
+    const { token, expiresIn } = retrievedAdminStoredToken();
+
+    if (!token) {
+      
+      return {
+        bool: false,
+        message: "No valid session found",
+        url: "/login"
+      };
+    }
+
+    // Check if the token is still valid
+    if (expiresIn <= 0) {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      localStorage.removeItem("expiry");
+      return {
+        bool: false,
+        message: "Session expired, please log in again",
+        url: "/login"
+      };
+    }
+
+    // Optionally validate the token with the server
+    try {
+      const response = await fetch('http://localhost:8080/validate-token', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (response.status === 200) {
+        const data = await response.json();
+        
+        
+        dispatch({ type: REFRESH_LOGIN, payload: data });
+        return {
+          bool: true,
+          message: "Successfully logged in",
+          url: `/template`
+        };
+      } else {
+       
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        localStorage.removeItem("expiry");
+        return {
+          bool: false,
+          message: "Invalid token, please log in again",
+          url: "/login"
+        };
+      }
+
+    } catch (err) {
+      return {
+        bool: false,
+        message: "Network error"
+      };
+    }
   }
 }
 
 /*   user sections */
 export const signup = (data) => {
-  let objData = data
+  let objData = data;
   return async (dispatch, getState) => {
     try {
       const response = await fetch(`http://localhost:8080/signup`, {
@@ -51,76 +129,57 @@ export const signup = (data) => {
           "Content-Type": "application/json"
         },
         body: JSON.stringify(data)
-      })
-      if (response.status === 404) {
-        let data = await response.json()
-        return {
-          bool: false,
-          message: data.response,
-          url: '/signup'
-        }
-      }
-      if (response.status === 300) {
-        let data = await response.json()
+      });
+      const responseData = await response.json();
 
+      if (response.status === 404 || response.status === 300) {
         return {
           bool: false,
-          message: data.response,
+          message: responseData.response,
           url: '/signup'
-        }
+        };
       }
+
       if (response.status === 301) {
-        let data = await response.json()
-
         return {
           bool: false,
-          message: data.response,
+          message: responseData.response,
           url: '/login'
-        }
+        };
       }
 
       if (response.status === 200) {
-        let data = await response.json()
-
-
-
-        localStorage.setItem("user", JSON.stringify(data.user))
-
-        localStorage.setItem("user_token", JSON.stringify(data.userToken))
-
-        localStorage.setItem("user_expiry", JSON.stringify(data.userExpiresIn))
+        localStorage.setItem("user", JSON.stringify(responseData.user));
+        localStorage.setItem("token", responseData.userToken); // Store directly as a string
+        localStorage.setItem("expiry", responseData.userExpiresIn.toString()); // Store expiry as string
 
         let payloadData = {
-          user: data.user,
-          userToken: data.userToken,
-          userExpiresIn: data.userExpiresIn
-
-        }
-        dispatch({ type: LOGIN_USER, payload: payloadData })
+          user: responseData.user,
+          userToken: responseData.userToken,
+          userExpiresIn: responseData.userExpiresIn
+        };
+        dispatch({ type: LOGIN_USER, payload: payloadData });
 
         return {
           bool: true,
-          message: data.response,
+          message: responseData.response,
           url: `/login`
-        }
+        };
       }
     } catch (err) {
       return {
         bool: false,
-        message: "network error",
+        message: "Network error",
         url: '/signup'
-      }
-
+      };
     }
-
   }
-
 }
 
 export const login = (data) => {
   return async (dispatch, getState) => {
-    let userData = data
-    //do some check on the server if its actually login before proceding to dispatch
+    let userData = data;
+    // Do some check on the server if it's actually login before proceeding to dispatch
     try {
       const response = await fetch('http://localhost:8080/login', {
         method: "POST",
@@ -128,49 +187,39 @@ export const login = (data) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data)
-      })
-      if (response.status === 404) {
-        let data = await response.json()
+      });
+      const responseData = await response.json();
+
+      if (response.status === 404 || response.status === 300) {
         return {
           bool: false,
-          message: data.response,
+          message: responseData.response,
           url: "/login"
-        }
+        };
       }
-      if (response.status === 300) {
-        let data = await response.json()
-        return {
-          bool: false,
-          message: data.response,
-          url: "/login"
-        }
-      }
+
       if (response.status === 200) {
-        let data = await response.json()
+        localStorage.setItem("user", JSON.stringify(responseData.response.user));
+        localStorage.setItem("token", responseData.response.userToken); // Store directly as a string
+        localStorage.setItem("expiry", responseData.response.userExpiresIn.toString()); // Store expiry as string
 
-        localStorage.setItem("user", JSON.stringify(data.response.user))
-
-        localStorage.setItem("user_token", JSON.stringify(data.response.userToken))
-
-        localStorage.setItem("user_expiry", JSON.stringify(data.response.userExpiresIn))
-
-        dispatch({ type: LOGIN_USER, payload: data.response })
+        dispatch({ type: LOGIN_USER, payload: responseData.response });
         return {
           bool: true,
-          //data here refers to user and dispatch
-          message: data.response.message,
+          message: responseData.response.message,
           url: `/template`
-        }
+        };
       }
 
     } catch (err) {
       return {
         bool: false,
-        message: "network error"
-      }
+        message: "Network error"
+      };
     }
   }
 }
+
 
 export const makeCv = (data) => {
   return async (dispatch, getState) => {
@@ -275,9 +324,59 @@ export const updateCv = (data) => {
       };
     }
   };
+}
+
+export const deleteCv = (data) => {
+  return async (dispatch, getState) => {
+    try {
+      const { userAuth } = getState(); // Access user authentication data
+      const response = await fetch(`http://localhost:8080/deletecv/${userAuth.user._id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (response.status === 404 || response.status === 300) {
+        // Handle specific error responses from the server
+        const errorData = await response.json();
+        return {
+          bool: false,
+          message: errorData.message,
+        };
+      }
+
+      if (response.status === 200) {
+        // Success: dispatch an action to remove the CV from the store
+        dispatch({ 
+          type: DELETE_CV, 
+          payload: {
+            id:data._id // or use the specific CV's ID if different
+          }
+        });
+        
+        return {
+          bool: true,
+          message: "CV deleted successfully",
+        };
+      }
+
+      // Handle unexpected status codes
+      return {
+        bool: false,
+        message: "Unexpected error",
+      };
+
+    } catch (err) {
+      // Network or other errors
+      return {
+        bool: false,
+        message: "Network error",
+      };
+    }
+  };
 };
-
-
 
 
 export const fetchCv = (id) => {
