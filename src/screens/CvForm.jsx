@@ -10,7 +10,6 @@ const CVForm = () => {
     
     let { id } = useParams()
     if(id == 'template1'){
-      
         return <CvForm1/>
     }else if(id == 'template2'){
         return <CvForm2/>

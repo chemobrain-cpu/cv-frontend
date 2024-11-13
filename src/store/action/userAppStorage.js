@@ -79,7 +79,7 @@ export const autoLogin = () => {
 
     // Optionally validate the token with the server
     try {
-      const response = await fetch('http://localhost:8080/validate-token', {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/validate-token`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -120,10 +120,10 @@ export const autoLogin = () => {
 
 /*   user sections */
 export const signup = (data) => {
-  let objData = data;
+  
   return async (dispatch, getState) => {
     try {
-      const response = await fetch(`http://localhost:8080/signup`, {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -181,7 +181,7 @@ export const login = (data) => {
     let userData = data;
     // Do some check on the server if it's actually login before proceeding to dispatch
     try {
-      const response = await fetch('http://localhost:8080/login', {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -226,7 +226,7 @@ export const makeCv = (data) => {
     try {
       const { userAuth } = getState();
       // Access specific slice of the state
-      const response = await fetch(`http://localhost:8080/makecv/${userAuth.user._id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/makecv/${userAuth.user._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -276,7 +276,7 @@ export const updateCv = (data) => {
   return async (dispatch, getState) => {
     try {
       const { userAuth } = getState(); // Access user authentication data
-      const response = await fetch(`http://localhost:8080/updatecv/${userAuth.user._id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/updatecv/${userAuth.user._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -330,7 +330,7 @@ export const deleteCv = (data) => {
   return async (dispatch, getState) => {
     try {
       const { userAuth } = getState(); // Access user authentication data
-      const response = await fetch(`http://localhost:8080/deletecv/${userAuth.user._id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/deletecv/${userAuth.user._id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json"
@@ -383,7 +383,7 @@ export const fetchCv = (id) => {
   return async (dispatch, getState) => {
     //do some check on the server if its actually login before proceding to dispatch
     try {
-      const response = await fetch(`http://localhost:8080/cvs/${id}`)
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/cvs/${id}`)
       if (response.status === 404) {
         let data = await response.json()
         return {
@@ -431,7 +431,7 @@ export const openCv = (data) => {
 export const updateUser = (data) => {
   return async (dispatch, getState) => {
     try {
-      const response = await fetch(`http://localhost:8080/updateaccount/${data._id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/updateaccount/${data._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

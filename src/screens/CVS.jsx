@@ -58,6 +58,10 @@ const Dashboard = () => {
     fetchHandler();
   }, []); // empty dependency array to run only on component mount
 
+
+
+
+  const dashboardUrl = "https://crea8cv-v3.vercel.app"
   // Render CVs or an empty state if there's an error
   const renderCVs = () => {
     if (isError) {
@@ -116,6 +120,14 @@ const Dashboard = () => {
             </Button>
           </div>
           <Nav className="flex-column">
+            <Nav.Link
+              onClick={() => {
+                window.location.href = dashboardUrl;
+              }}
+              className={`text-white ${activeTab === "myCVs" ? "active" : ""}`}
+            >
+              Create with AI
+            </Nav.Link>
             <Nav.Link
               onClick={() => {
                 setActiveTab('myCVs');

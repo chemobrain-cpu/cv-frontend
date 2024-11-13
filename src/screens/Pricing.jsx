@@ -35,7 +35,8 @@ const PricingPlan = () => {
         navigate(path);
     };
 
-    const renderContent = () => (
+   const dashboardUrl = "https://crea8cv-v3.vercel.app"
+  const renderContent = () =>  (
         <main className="bg-white p-4">
             <h2 className="mb-4">Pricing Plans</h2>
             <Row>
@@ -76,6 +77,14 @@ const PricingPlan = () => {
                         </Button>
                     </div>
                     <Nav className="flex-column">
+            <Nav.Link
+              onClick={() => {
+                window.location.href = dashboardUrl;
+              }}
+              className={`text-white ${activeTab === "myCVs" ? "active" : ""}`}
+            >
+              Create with AI
+            </Nav.Link>
                         {[
                             { name: 'My CVs', path: '/cvs' },
                             { name: 'Templates', path: '/template' },

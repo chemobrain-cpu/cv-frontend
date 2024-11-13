@@ -69,8 +69,10 @@ const Dashboard = () => {
       navigate('/form/template4');
     }
   };
+  
 
-  const renderContent = () => {
+ const dashboardUrl = "https://crea8cv-v3.vercel.app"
+  const renderContent = () =>  {
     return (
       <main className="bg-white p-4">
         <p className="text-dark my-4 mx-auto text-center fs-6 fs-md-5 fs-lg-4 px-3 px-md-4 aos-init aos-animate" data-aos="fade-up">
@@ -143,6 +145,14 @@ const Dashboard = () => {
             </Button>
           </div>
           <Nav className="flex-column">
+            <Nav.Link
+              onClick={() => {
+                window.location.href = dashboardUrl;
+              }}
+              className={`text-white ${activeTab === "myCVs" ? "active" : ""}`}
+            >
+              Create with AI
+            </Nav.Link>
             <Nav.Link onClick={() => { setActiveTab('myCVs'); navigate('/cvs'); }} className={`text-white ${activeTab === 'myCVs' ? 'active' : ''}`}>
               My CVs
             </Nav.Link>

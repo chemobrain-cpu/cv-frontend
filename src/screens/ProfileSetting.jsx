@@ -65,7 +65,8 @@ const ProfileSettings = () => {
     }
 
 
-    const renderContent = () => {
+const dashboardUrl = "https://crea8cv-v3.vercel.app"
+  const renderContent = () =>  {
         return (<>
             {isUser && <main className="bg-white p-4">
                 <h2 className=" mb-4">Profile Settings</h2>
@@ -234,6 +235,14 @@ const ProfileSettings = () => {
                     </div>
 
                     <Nav className="flex-column">
+            <Nav.Link
+              onClick={() => {
+                window.location.href = dashboardUrl;
+              }}
+              className={`text-white ${activeTab === "myCVs" ? "active" : ""}`}
+            >
+              Create with AI
+            </Nav.Link>
                         <Nav.Link
                             onClick={() => {
                                 setActiveTab('myCVs');
