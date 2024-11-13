@@ -6,13 +6,14 @@ import './Dashboard.css';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Modal/Modal';
 import Loader from "../components/loader";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux'; 
+import { logout } from '../store/action/userAppStorage';
 import { updateUser } from '../store/action/userAppStorage';
 
 
 
 const ProfileSettings = () => {
-    const [activeTab, setActiveTab] = useState('overview');
+    const [activeTab, setActiveTab] = useState('profileSettings');
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true); // Loader state
     const [isError, setIsError] = useState(false); // Error state
@@ -34,9 +35,11 @@ const ProfileSettings = () => {
     }, [user, navigate]);
 
 
-    const handleLogout = () => {
-        // Add logout functionality
-    };
+    const handleLogout = async () => {
+        await dispatch( logout())
+        navigate('/login')
+      };
+    
 
 
 
@@ -293,7 +296,7 @@ const dashboardUrl = "https://crea8cv-v3.vercel.app"
 
                                 <Col xs={6} md={8} className="d-flex justify-content-end align-items-center">
                                     <FaUserCircle size={35} className="me-3 user-icon text-white" />
-                                    <Button variant="outline-light" className="ml-auto me-3 logout-btn" style={{ borderRadius: '20px', padding: '0.5rem 1.5rem', fontWeight: '500' }}>
+                                    <Button variant="outline-light" className="ml-auto me-3 logout-btn" style={{ borderRadius: '20px', padding: '0.5rem 1.5rem', fontWeight: '500' }} onClick={handleLogout}>
                                         Logout
                                     </Button>
                                 </Col>

@@ -6,7 +6,10 @@ import './Dashboard.css'; // Ensure you have the correct styling
 import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Modal/Modal'; // Ensure correct import path
 import Loader from "../components/loader"; // Ensure correct import path
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux'; 
+import { logout } from '../store/action/userAppStorage';
+
+
 
 const PricingPlan = () => {
     const [activeTab, setActiveTab] = useState('pricing');
@@ -16,6 +19,7 @@ const PricingPlan = () => {
     const [isErrorInfo, setIsErrorInfo] = useState(''); // Error message state
     const navigate = useNavigate();
     const { user } = useSelector(state => state.userAuth); // Fetch user from Redux store
+    let dispatch = useDispatch()
 
     useEffect(() => {
         if (!user) {
@@ -23,11 +27,12 @@ const PricingPlan = () => {
         }
     }, [user, navigate]);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        await dispatch( logout())
+        navigate('/login')
+      };
+    
 
-        
-        alert('logging!')
-    };
 
     const handleTabChange = (tab, path) => {
         setActiveTab(tab);
@@ -81,7 +86,7 @@ const PricingPlan = () => {
                             { name: 'My CVs', path: '/cvs' },
                             { name: 'Templates', path: '/template' },
                             { name: 'Profile Settings', path: '/profilesetting' },
-                            { name: 'Pricing Plans', path: '/pricing' },
+                            { name: 'pricing', path: '/pricing' },
                         ].map((item, index) => (
                             <Nav.Link
                                 key={index}

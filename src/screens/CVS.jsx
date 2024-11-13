@@ -7,7 +7,10 @@ import './Dashboard.css';
 import Modal from '../components/Modal/Modal';
 import Loader from "../components/loader"; // Ensure correct import path
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCv, openCv } from '../store/action/userAppStorage';
+import { fetchCv, logout, openCv } from '../store/action/userAppStorage';
+
+
+
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('myCVs');
@@ -27,9 +30,11 @@ const Dashboard = () => {
     }
   }, [user, navigate]);
 
-  const handleLogout = () => {
-    // Add logout functionality
+  const handleLogout = async () => {
+    await dispatch( logout())
+    navigate('/login')
   };
+
 
   // Fetch all CVs with error handling
   const fetchHandler = async () => {
@@ -124,7 +129,7 @@ const Dashboard = () => {
               onClick={() => {
                 window.location.href = dashboardUrl;
               }}
-              className={`text-white ${activeTab === "myCVs" ? "active" : ""}`}
+              
             >
               Create with AI
             </Nav.Link>
@@ -176,7 +181,7 @@ const Dashboard = () => {
               <Row className="w-100 align-items-center">
                 <Col xs={6} md={8} className="d-flex justify-content-end align-items-center">
                   <FaUserCircle size={35} className="me-3 user-icon text-white" />
-                  <Button variant="outline-light" className="ml-auto me-3 logout-btn" style={{ borderRadius: '20px', padding: '0.5rem 1.5rem', fontWeight: '500' }}>
+                  <Button variant="outline-light" className="ml-auto me-3 logout-btn" style={{ borderRadius: '20px', padding: '0.5rem 1.5rem', fontWeight: '500' }} onClick={handleLogout}>
                     Logout
                   </Button>
                 </Col>

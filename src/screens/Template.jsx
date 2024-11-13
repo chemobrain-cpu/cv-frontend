@@ -4,16 +4,15 @@ import { FaUserCircle } from 'react-icons/fa';  // Import human icon
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Dashboard.css'; // Add the CSS file for styling
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux'; // Import useSelector to access Redux store
+import { useDispatch, useSelector } from 'react-redux'; 
+import { logout } from '../store/action/userAppStorage';
 import Modal from '../components/Modal/Modal'; // Ensure correct import path
 import Loader from "../components/loader"; // Ensure correct import path
-import { logout } from '../store/action/userAppStorage';
-
 
 
 
 const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('templates');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
