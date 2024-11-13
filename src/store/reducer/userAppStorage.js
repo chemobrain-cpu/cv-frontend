@@ -1,5 +1,5 @@
 import { LOGIN_USER, OPEN_CV } from "../action/userAppStorage";
-import { GENERATE_CV, FETCH_CVS, UPDATE_USER, UPDATE_CV, DELETE_CV, REFRESH_LOGIN } from "../action/userAppStorage";
+import { GENERATE_CV, FETCH_CVS, UPDATE_USER, UPDATE_CV, DELETE_CV, REFRESH_LOGIN,LOGOUT } from "../action/userAppStorage";
 
 
 const initialState = {
@@ -12,6 +12,14 @@ const initialState = {
 
 export const userAuthReducer = (state = initialState, action) => {
     switch (action.type) {
+        case LOGOUT:
+            return {
+                userToken: '',
+                user: null,
+                cv: null,
+                isCvAvailable: false,
+                cvs: []
+            }
         case LOGIN_USER:
             return {
                 ...state,

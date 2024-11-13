@@ -4,42 +4,56 @@ import { FaUserCircle } from 'react-icons/fa';  // Import human icon
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Dashboard.css'; // Add the CSS file for styling
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux'; // Import useSelector to access Redux store
+import { useDispatch, useSelector } from 'react-redux'; // Import useSelector to access Redux store
 import Modal from '../components/Modal/Modal'; // Ensure correct import path
 import Loader from "../components/loader"; // Ensure correct import path
+import { logout } from '../store/action/userAppStorage';
+
+
+
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isErrorInfo, setIsErrorInfo] = useState('');
   let { user } = useSelector(state => state.userAuth); // Fetch user from Redux store
   let navigate = useNavigate();
+  let dispatch = useDispatch()
+ 
 
-  // Protect the dashboard - if no user is present, redirect to login
   useEffect(() => {
     if (!user) {
-      navigate('/login'); // Redirect to login page if user is not found
+      navigate('/login');
     }
   }, [user, navigate]);
 
   const handleLogout = async () => {
-    setIsLoading(true);
-    try {
-      // Simulate an API call for logout
-      // Call your logout function here
-      // await logout();
-      navigate('/login'); // Redirect to login after logout
-    } catch (error) {
-      setIsError(true);
-      setIsErrorInfo('Failed to logout. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+    await dispatch( logout())
+    navigate('/login')
   };
 
   const [currentPage, setCurrentPage] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(3);
+
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      if (window.innerWidth < 768) {
+        setItemsPerPage(1);
+      } else {
+        setItemsPerPage(3);
+      }
+    };
+
+    updateItemsPerPage(); // Initial check
+    window.addEventListener('resize', updateItemsPerPage); // Update on resize
+
+    return () => {
+      window.removeEventListener('resize', updateItemsPerPage);
+    };
+  }, []);
+
   const templates = [
     { src: 'cv1.jpg', alt: 'CV Template 1', id: 'template_1' },
     { src: 'cv2.webp', alt: 'CV Template 2', id: 'template_2' },
@@ -47,15 +61,14 @@ const Dashboard = () => {
     { src: 'cv4.jpg', alt: 'CV Template 4', id: 'template_4' },
   ];
 
-  const itemsPerPage = 3;
   const totalPages = Math.ceil(templates.length / itemsPerPage);
 
   const handlePrevious = () => {
-    setCurrentPage((prevPage) => (prevPage > 0 ? prevPage - 1 : 0));
+    setCurrentPage(prevPage => (prevPage > 0 ? prevPage - 1 : 0));
   };
 
   const handleNext = () => {
-    setCurrentPage((prevPage) => (prevPage < totalPages - 1 ? prevPage + 1 : totalPages - 1));
+    setCurrentPage(prevPage => (prevPage < totalPages - 1 ? prevPage + 1 : totalPages - 1));
   };
 
   const navigateHandler = (id) => {
@@ -69,17 +82,14 @@ const Dashboard = () => {
       navigate('/form/template4');
     }
   };
-  
-
- const dashboardUrl = "https://crea8cv-v3.vercel.app"
-  const renderContent = () =>  {
+  const dashboardUrl = "https://crea8cv-v3.vercel.app"
+  const renderContent = () => {
     return (
       <main className="bg-white p-4">
         <p className="text-dark my-4 mx-auto text-center fs-6 fs-md-5 fs-lg-4 px-3 px-md-4 aos-init aos-animate" data-aos="fade-up">
-          A great job application leads to a good interview. An amazing resume is what makes it all possible. Here are the Best Templates for you to choose from.
+        A great job application leads to a good interview. An amazing resume is what makes it all possible. Here are the Best Templates for you to choose from.
         </p>
 
-        {/* Pagination Buttons */}
         <div className="d-flex justify-content-between mb-4" data-aos="fade-right">
           <button
             className="btn btn-outline-primary rounded-pill px-4 py-2"
@@ -97,12 +107,11 @@ const Dashboard = () => {
           </button>
         </div>
 
-        {/* Template Cards */}
         <div className="row templates-list gy-4 gx-4">
           {templates
             .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
             .map((template) => (
-              <div key={template.id} className="templates-item col-12 col-md-6 col-lg-4 aos-init aos-animate" data-aos="zoom-in" data-aos-delay="100">
+              <div key={template.id} className="templates-item col-12 col-md-6 col-lg-4 " data-aos="zoom-in" data-aos-delay="100">
                 <div className="card shadow-lg h-100 border-0">
                   <img
                     src={template.src}

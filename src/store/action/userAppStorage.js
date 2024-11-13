@@ -7,6 +7,7 @@ export const OPEN_CV = "OPEN_CV";
 export const UPDATE_CV = "UPDATE_CV";
 export const DELETE_CV = "DELETE_CV";
 export const REFRESH_LOGIN = "REFRESH_LOGIN";
+export const LOGOUT = "LOGOUT";
 
 let calculateRemainingTime = (hoursUntilExpiry) => {
   const currentTime = new Date().getTime();
@@ -14,7 +15,6 @@ let calculateRemainingTime = (hoursUntilExpiry) => {
   const timeLeft = expirationTime - currentTime; // Time left in milliseconds
   return Math.max(timeLeft, 0); // Ensure non-negative result
 };
-
 
 // Function to retrieve admin token and check its validity
 let retrievedAdminStoredToken = () => {
@@ -30,10 +30,10 @@ let retrievedAdminStoredToken = () => {
   }
 
   const timeLeft = calculateRemainingTime(Number(expiryDate)); // Ensure expiryDate is a number
-  
+
   if (timeLeft <= 1000) {
-   
-     // Less than or equal to 1 hour
+
+    // Less than or equal to 1 hour
     localStorage.removeItem('token');
     localStorage.removeItem('expiry');
     localStorage.removeItem('user');
@@ -57,7 +57,7 @@ export const autoLogin = () => {
     const { token, expiresIn } = retrievedAdminStoredToken();
 
     if (!token) {
-      
+
       return {
         bool: false,
         message: "No valid session found",
@@ -89,8 +89,8 @@ export const autoLogin = () => {
 
       if (response.status === 200) {
         const data = await response.json();
-        
-        
+
+
         dispatch({ type: REFRESH_LOGIN, payload: data });
         return {
           bool: true,
@@ -98,7 +98,7 @@ export const autoLogin = () => {
           url: `/template`
         };
       } else {
-       
+
         localStorage.removeItem("user");
         localStorage.removeItem("token");
         localStorage.removeItem("expiry");
@@ -120,7 +120,7 @@ export const autoLogin = () => {
 
 /*   user sections */
 export const signup = (data) => {
-  
+
   return async (dispatch, getState) => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/signup`, {
@@ -207,7 +207,7 @@ export const login = (data) => {
         return {
           bool: true,
           message: responseData.response.message,
-          url: `/template`
+          url: `/cvs`
         };
       }
 
@@ -234,7 +234,7 @@ export const makeCv = (data) => {
         body: JSON.stringify(data)
       })
       if (response.status === 404) {
-      
+
         let data = await response.json()
         return {
           bool: false,
@@ -242,7 +242,7 @@ export const makeCv = (data) => {
         }
       }
       if (response.status === 300) {
-       
+
         let data = await response.json()
         return {
           bool: false,
@@ -251,7 +251,7 @@ export const makeCv = (data) => {
       }
 
       if (response.status === 200) {
-        
+
         let data = await response.json()
         dispatch({ type: GENERATE_CV, payload: data })
         return {
@@ -260,7 +260,7 @@ export const makeCv = (data) => {
         }
       }
     } catch (err) {
-      
+
       return {
         bool: false,
         message: "network error",
@@ -296,14 +296,14 @@ export const updateCv = (data) => {
       if (response.status === 200) {
         // Success: parse the data and update the store
         const updatedCvData = await response.json();
-        dispatch({ 
-          type: UPDATE_CV, 
+        dispatch({
+          type: UPDATE_CV,
           payload: {
             id: userAuth.user._id, // or use the specific CV's ID if different
             data: updatedCvData.cv
           }
         });
-        
+
         return {
           bool: true,
           message: "CV updated successfully",
@@ -349,13 +349,13 @@ export const deleteCv = (data) => {
 
       if (response.status === 200) {
         // Success: dispatch an action to remove the CV from the store
-        dispatch({ 
-          type: DELETE_CV, 
+        dispatch({
+          type: DELETE_CV,
           payload: {
-            id:data._id // or use the specific CV's ID if different
+            id: data._id // or use the specific CV's ID if different
           }
         });
-        
+
         return {
           bool: true,
           message: "CV deleted successfully",
@@ -417,16 +417,12 @@ export const fetchCv = (id) => {
   }
 }
 
-
-
 export const openCv = (data) => {
   return async (dispatch, getState) => {
     dispatch({ type: OPEN_CV, payload: data })
   }
 
 }
-
-
 
 export const updateUser = (data) => {
   return async (dispatch, getState) => {
@@ -474,6 +470,16 @@ export const updateUser = (data) => {
 
   }
 
+}
+
+
+export const logout = () => {
+  return async (dispatch, getState) => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("expiry");
+    dispatch({ type: LOGOUT })
+  }
 }
 
 
