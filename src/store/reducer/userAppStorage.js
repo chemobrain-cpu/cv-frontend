@@ -72,7 +72,6 @@ export const userAuthReducer = (state = initialState, action) => {
             for(let mem of state.cvs){
                 console.log(mem)
                 if(mem._id === action.payload.cv._id){
-                    alert('found one')
                     emptyArr.push(action.payload.cv)
                 } else{
                     emptyArr.push(mem)
