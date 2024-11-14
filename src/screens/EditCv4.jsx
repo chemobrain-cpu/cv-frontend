@@ -82,6 +82,7 @@ const CVForm = () => {
         updatedSkills[index] = value;
         setFormData({ ...formData, skills3: updatedSkills });
     };
+   
 
     const handleAddSkill = () => {
         setFormData((prevData) => ({ ...prevData, skills3: [...prevData.skills3, ''] }));

@@ -4,7 +4,7 @@ import CvForm1 from './cvForm1';
 import CvForm2 from './cvForm2';
 import CVForm3 from './cvForm3';
 import CVForm4 from './cvForm4';
-
+import CVForm5 from './cvForm5';
 
 const CVForm = () => {
     
@@ -18,6 +18,9 @@ const CVForm = () => {
     }else if(id == 'template4'){
         
         return <CVForm4/>
+    }else if(id == 'template5'){
+        
+        return <CVForm5/>
     }
 
 };

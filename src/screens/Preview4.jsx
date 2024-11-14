@@ -2,10 +2,11 @@ import React, { useRef, useState } from "react";
 import html2pdf from "html2pdf.js";
 import { Document, Packer, Paragraph } from "docx";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import Modal from '../components/Modal/Modal';
 import Loader from "../components/loader";
 import { deleteCv } from "../store/action/userAppStorage";
+import { FacebookShareButton, TwitterShareButton, LinkedinShareButton, WhatsappShareButton, FacebookIcon, TwitterIcon, LinkedinIcon, WhatsappIcon } from 'react-share';
 
 const Preview4 = () => {
   const { cv: formData, isCvAvailable } = useSelector((state) => state.userAuth);
@@ -15,6 +16,9 @@ const Preview4 = () => {
   const [isErrorInfo, setIsErrorInfo] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+
+  let location = useLocation()
+  const shareUrl = window.location.origin + location.pathname;
 
   const downloadPDF = () => {
     const element = cvRef.current;
@@ -186,12 +190,41 @@ const Preview4 = () => {
           </ul>
         </section>
 
-        <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-          <button onClick={downloadPDF} style={buttonStyle}>Download PDF</button>
-          <button onClick={downloadDOCX} style={buttonStyle}>Download DOCX</button>
-          <button onClick={editHandler} style={buttonStyle}>Edit CV</button>
-          <button onClick={deleteHandler} style={buttonStyle}>Delete CV</button>
+        <div className="d-flex flex-column flex-sm-row justify-content-between mt-4">
+          <button onClick={downloadPDF} className="btn btn-primary shadow-sm mb-2 mb-sm-0">
+            Download PDF
+          </button>
+          <button onClick={downloadDOCX} className="btn btn-primary shadow-sm mb-2 mb-sm-0">
+            Download DOCX
+          </button>
+          <button onClick={editHandler} className="btn btn-primary shadow-sm mb-2 mb-sm-0">
+            Edit CV
+          </button>
+          <button onClick={deleteHandler} className="btn btn-primary shadow-sm mb-2 mb-sm-0">
+            Delete CV
+          </button>
         </div>
+
+        <div className="social-share-buttons text-center mt-3">
+        <h3>Share your CV</h3>
+        <div className="share-buttons-container">
+          <FacebookShareButton url={shareUrl} quote="Check out my CV!" className="share-button">
+            <FacebookIcon size={32} round />
+          </FacebookShareButton>
+          <TwitterShareButton url={shareUrl} title="Check out my CV!" className="share-button">
+            <TwitterIcon size={32} round />
+          </TwitterShareButton>
+          <LinkedinShareButton url={shareUrl} className="share-button">
+            <LinkedinIcon size={32} round />
+          </LinkedinShareButton>
+          <WhatsappShareButton url={shareUrl} title="Check out my CV!" className="share-button">
+            <WhatsappIcon size={32} round />
+          </WhatsappShareButton>
+        </div>
+      </div>
+
+
+
       </div>
     </div>
   );

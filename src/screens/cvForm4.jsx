@@ -85,8 +85,10 @@ const CVForm = () => {
     };
 
     const handleAddSkill = () => {
-        setFormData((prevData) => ({ ...prevData, skills: [...prevData.skills, ''] }));
+        setFormData((prevData) => ({ ...prevData, skills3: [...prevData.skills3, ''] }));
     };
+    
+    
 
     const handleLanguageChange = (index, e) => {
         const { name, value } = e.target;
@@ -172,6 +174,7 @@ const CVForm = () => {
                                 onChange={(e) => handleSkillChange(index, e.target.value)}
                             />
                         ))}
+                        
                         <button type="button" onClick={handleAddSkill}>Add Skill</button>
 
                         <h2>Languages</h2>

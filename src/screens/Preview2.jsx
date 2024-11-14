@@ -9,9 +9,6 @@ import Loader from "../components/loader";
 import { deleteCv } from "../store/action/userAppStorage";
 import { FacebookShareButton, TwitterShareButton, LinkedinShareButton, WhatsappShareButton, FacebookIcon, TwitterIcon, LinkedinIcon, WhatsappIcon } from 'react-share';
 
-
-
-
 const Preview2 = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { cv: formData, isCvAvailable } = useSelector(state => state.userAuth);
@@ -22,29 +19,24 @@ const Preview2 = () => {
   const [isErrorInfo, setIsErrorInfo] = useState('');
   const dispatch = useDispatch();
   let location = useLocation()
-  // Social media sharing URL (you can customize this based on your needs)
   const shareUrl = window.location.origin + location.pathname;
 
-  // Redirect to login if the user is not authenticated
   useEffect(() => {
     if (!user) {
       navigate('/login');
     }
   }, [user, navigate]);
 
-  // Redirect to template if no CV is available
   useEffect(() => {
     if (!isCvAvailable) {
       navigate('/template');
     }
   }, [isCvAvailable, navigate]);
 
-  // If no CV is available, render nothing
   if (!isCvAvailable) {
     return null;
   }
 
-  // Function to download CV as a PDF
   const downloadPDF = () => {
     if (!pdfRef.current) return;
     const element = pdfRef.current;
@@ -58,7 +50,6 @@ const Preview2 = () => {
     html2pdf().from(element).set(options).save();
   };
 
-  // Function to download CV as a DOCX
   const downloadDOCX = async () => {
     const doc = new Document({
       sections: [
@@ -92,7 +83,7 @@ const Preview2 = () => {
               text: "Education",
               heading: "HEADING_1",
             }),
-            ...formData.education.map(edu => 
+            ...formData.education.map(edu =>
               new Paragraph({
                 children: [
                   new TextRun(edu?.year || ''),
@@ -106,7 +97,7 @@ const Preview2 = () => {
                 ],
               })
             ),
-            new PageBreak(), // Adding page break between sections
+            new PageBreak(),
             new Paragraph({
               text: "Additional Skills",
               heading: "HEADING_1",
@@ -119,7 +110,7 @@ const Preview2 = () => {
               text: "Publications",
               heading: "HEADING_1",
             }),
-            ...formData.publications.map(pub => 
+            ...formData.publications.map(pub =>
               new Paragraph({
                 text: `${pub?.title || 'Title'}. ${pub?.journal || 'Journal'} (${pub?.year || 'Year'}): ${pub?.pages || 'Pages'}.`,
               })
@@ -129,7 +120,7 @@ const Preview2 = () => {
               text: "Research Experience",
               heading: "HEADING_1",
             }),
-            ...formData.researchExperience.map(exp => 
+            ...formData.researchExperience.map(exp =>
               new Paragraph({
                 children: [
                   new TextRun(exp?.duration || ''),
@@ -148,7 +139,7 @@ const Preview2 = () => {
               text: "Awards & Honors",
               heading: "HEADING_1",
             }),
-            ...formData.awards.map(award => 
+            ...formData.awards.map(award =>
               new Paragraph({
                 text: `${award?.year || ''} - ${award?.title || 'Title'}, ${award?.institution || 'Institution'}`,
               })
@@ -158,7 +149,6 @@ const Preview2 = () => {
       ],
     });
 
-    // Create a Blob from the document and download it
     Packer.toBlob(doc).then(blob => {
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -194,108 +184,107 @@ const Preview2 = () => {
   };
 
   return (
-    <div style={{width:'100vw'}}>
+    <div style={{ width: '100vw' }}>
       {isLoading && <Loader />}
       {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
 
-        <div className="cv-container" ref={pdfRef} style={{display:'flex',justifyContent:'center',flexDirection:'column'}}>
-          <div className="cv-header">
-            <h1 className="cv-title">{formData?.name || 'Your Name'}</h1>
-            <div className="contact-info">
-              <p><i className="fas fa-phone"></i> {formData?.phone || 'N/A'}</p>
-              <p><i className="fas fa-map-marker-alt"></i> {formData?.location || 'N/A'}</p>
-              <p><i className="fas fa-envelope"></i> {formData?.email || 'N/A'}</p>
-            </div>
+      <div className="cv-container shadow-lg p-4" ref={pdfRef} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+        <div className="cv-header">
+          <h1 className="cv-title">{formData?.name || 'Your Name'}</h1>
+          <div className="contact-info">
+            <p><i className="fas fa-phone"></i> {formData?.phone || 'N/A'}</p>
+            <p><i className="fas fa-map-marker-alt"></i> {formData?.location || 'N/A'}</p>
+            <p><i className="fas fa-envelope"></i> {formData?.email || 'N/A'}</p>
           </div>
-          <div className="cv-main">
-            <div className="cv-left">
-              <section className="section education">
-                <h3>Education</h3>
-                {formData?.education?.map((edu, index) => (
-                  <div className="education-item" key={index}>
-                    <p>{edu?.year || ''}</p>
-                    <div>
-                      <h4>{edu?.degree || 'Degree'}</h4>
-                      <p>{edu?.institution || 'Institution'}</p>
-                      <p>{edu?.details || 'Details'}</p>
-                    </div>
+        </div>
+        <div className="cv-main">
+          <div className="cv-left">
+            <section className="section education">
+              <h3>Education</h3>
+              {formData?.education?.map((edu, index) => (
+                <div className="education-item" key={index}>
+                  <p>{edu?.year || ''}</p>
+                  <div>
+                    <h4>{edu?.degree || 'Degree'}</h4>
+                    <p>{edu?.institution || 'Institution'}</p>
+                    <p>{edu?.details || 'Details'}</p>
                   </div>
-                ))}
-              </section>
-              <section className="section skills">
-                <h3>Additional Skills</h3>
-                <ul>
-                  <li>R: {formData?.skills?.R || 'N/A'}</li>
-                  <li>Spanish: {formData?.skills?.Spanish || 'N/A'}</li>
-                  <li>Mandarin: {formData?.skills?.Mandarin || 'N/A'}</li>
-                </ul>
-              </section>
-            </div>
-            <div className="cv-right">
-              <section className="section publications">
-                <h3>Publications</h3>
-                {formData?.publications?.map((pub, index) => (
-                  <p key={index}>
-                    {pub?.title || 'Title'}. <i>{pub?.journal || 'Journal'}</i> ({pub?.year || 'Year'}): {pub?.pages || 'Pages'}.
-                  </p>
-                ))}
-              </section>
-              <section className="section research-experience">
-                <h3>Research Experience</h3>
-                {formData?.researchExperience?.map((exp, index) => (
-                  <div className="research-item" key={index}>
-                    <p>{exp?.duration || ''}</p>
-                    <div>
-                      <h4>{exp?.role || 'Role'}</h4>
-                      <p>{exp?.institution || 'Institution'}</p>
-                      <p>{exp?.description || 'Description'}</p>
-                    </div>
+                </div>
+              ))}
+            </section>
+            <section className="section skills">
+              <h3>Additional Skills</h3>
+              <ul>
+                <li>R: {formData?.skills?.R || 'N/A'}</li>
+                <li>Spanish: {formData?.skills?.Spanish || 'N/A'}</li>
+                <li>Mandarin: {formData?.skills?.Mandarin || 'N/A'}</li>
+              </ul>
+            </section>
+          </div>
+          <div className="cv-right">
+            <section className="section publications">
+              <h3>Publications</h3>
+              {formData?.publications?.map((pub, index) => (
+                <p key={index}>
+                  {pub?.title || 'Title'}. <i>{pub?.journal || 'Journal'}</i> ({pub?.year || 'Year'}): {pub?.pages || 'Pages'}.
+                </p>
+              ))}
+            </section>
+            <section className="section research-experience">
+              <h3>Research Experience</h3>
+              {formData?.researchExperience?.map((exp, index) => (
+                <div key={index}>
+                  <p>{exp?.duration || ''}</p>
+                  <div>
+                    <h4>{exp?.role || 'Role'}</h4>
+                    <p>{exp?.institution || 'Institution'}</p>
+                    <p>{exp?.description || 'Description'}</p>
                   </div>
-                ))}
-              </section>
-              <section className="section awards">
-                <h3>Awards & Honors</h3>
-                {formData?.awards?.map((award, index) => (
-                  <p key={index}>
-                    {award?.year || ''} - {award?.title || 'Title'}, {award?.institution || 'Institution'}
-                  </p>
-                ))}
-              </section>
-            </div>
+                </div>
+              ))}
+            </section>
+            <section className="section awards">
+              <h3>Awards & Honors</h3>
+              {formData?.awards?.map((award, index) => (
+                <p key={index}>{award?.year || ''} - {award?.title || 'Title'}, {award?.institution || 'Institution'}</p>
+              ))}
+            </section>
           </div>
         </div>
+      </div>
 
-        <div className="cv-button-con text-center mt-3">
-          <button onClick={downloadPDF} className="btn btn-primary m-2">Download PDF</button>
-          <button onClick={downloadDOCX} className="btn btn-primary m-2">Download DOCX</button>
-          <button onClick={editHandler} className="btn btn-primary m-2">Edit CV</button>
-          <button onClick={deleteHandler} className="btn btn-primary m-2">Delete CV</button>
+      <div className="d-flex flex-column flex-md-row justify-content-center gap-3 mt-4">
+        <button className="btn btn-primary" onClick={downloadPDF}>Download as PDF</button>
+        <button className="btn btn-primary" onClick={downloadDOCX}>Download as DOCX</button>
+        <button className="btn btn-primary" onClick={editHandler}>Edit CV</button>
+        <button className="btn btn-primary" onClick={deleteHandler}>Delete CV</button>
+      </div>
+
+
+
+      <div className="social-share-buttons text-center mt-3">
+        <h3>Share your CV</h3>
+        <div className="share-buttons-container">
+          <FacebookShareButton url={shareUrl} quote="Check out my CV!" className="share-button">
+            <FacebookIcon size={32} round />
+          </FacebookShareButton>
+          <TwitterShareButton url={shareUrl} title="Check out my CV!" className="share-button">
+            <TwitterIcon size={32} round />
+          </TwitterShareButton>
+          <LinkedinShareButton url={shareUrl} className="share-button">
+            <LinkedinIcon size={32} round />
+          </LinkedinShareButton>
+          <WhatsappShareButton url={shareUrl} title="Check out my CV!" className="share-button">
+            <WhatsappIcon size={32} round />
+          </WhatsappShareButton>
         </div>
-
-
-        <div className="social-share-buttons text-center mt-3">
-          <h3>Share your CV</h3>
-          <div className="share-buttons-container">
-            <FacebookShareButton url={shareUrl} quote="Check out my CV!" className="share-button">
-              <FacebookIcon size={32} round />
-            </FacebookShareButton>
-            <TwitterShareButton url={shareUrl} title="Check out my CV!" className="share-button">
-              <TwitterIcon size={32} round />
-            </TwitterShareButton>
-            <LinkedinShareButton url={shareUrl} className="share-button">
-              <LinkedinIcon size={32} round />
-            </LinkedinShareButton>
-            <WhatsappShareButton url={shareUrl} title="Check out my CV!" className="share-button">
-              <WhatsappIcon size={32} round />
-            </WhatsappShareButton>
-          </div>
-        </div>
-      
+      </div>
     </div>
   );
 };
 
 export default Preview2;
+
 
 
 

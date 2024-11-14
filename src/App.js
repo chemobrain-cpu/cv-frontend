@@ -19,7 +19,9 @@ const Template = React.lazy(() => import("./screens/Template"));
 const Form = React.lazy(() => import("./screens/CvForm"));
 const Login = React.lazy(() => import("./screens/Login"));
 const Signup = React.lazy(() => import("./screens/Signup"));
-const Help = React.lazy(() => import("./screens/Help"));
+const Help = React.lazy(() =>import("./screens/Help"));
+const P = React.lazy(() => import("./screens/Preview5"));
+
 
 function App() {
   const navigate = useNavigate();
@@ -60,6 +62,7 @@ function App() {
               <Route path='/profilesetting' element={user?<ProfileSettings />:<Login />} />
               <Route path='/cvs' element={user?<Cvs />:<Login />} />
               <Route path='/pricing' element={user?<PricingPlan />:<Login />} />
+              <Route path='/test' element={user?<P />:<Login />} />
               
             </Routes>
           </div>
