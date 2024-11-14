@@ -1,5 +1,6 @@
+import { FaCcVisa } from "react-icons/fa";
 import { LOGIN_USER, OPEN_CV } from "../action/userAppStorage";
-import { GENERATE_CV, FETCH_CVS, UPDATE_USER, UPDATE_CV, DELETE_CV, REFRESH_LOGIN,LOGOUT } from "../action/userAppStorage";
+import { GENERATE_CV, FETCH_CVS, UPDATE_USER, UPDATE_CV, DELETE_CV, REFRESH_LOGIN, LOGOUT } from "../action/userAppStorage";
 
 
 const initialState = {
@@ -43,6 +44,7 @@ export const userAuthReducer = (state = initialState, action) => {
             }
 
         case OPEN_CV:
+            console.log(action.payload)
             return {
                 ...state,
                 cv: action.payload,
@@ -50,9 +52,10 @@ export const userAuthReducer = (state = initialState, action) => {
             }
 
         case FETCH_CVS:
+            console.log(action.payload)
             return {
                 ...state,
-                cvs: [...state.cvs, action.payload],
+                cvs: action.payload,
             }
 
         case UPDATE_USER:
@@ -61,17 +64,28 @@ export const userAuthReducer = (state = initialState, action) => {
                 user: action.payload
             }
 
+
         case UPDATE_CV:
-            return {
-                ...state,
+            // Find the CV that matches the provided id
+            let emptyArr = []
+
+            for(let mem of state.cvs){
+                console.log(mem)
+                if(mem._id === action.payload.cv._id){
+                    alert('found one')
+                    emptyArr.push(action.payload.cv)
+                } else{
+                    emptyArr.push(mem)
+                }
 
             }
-        case UPDATE_CV:
+
+            
+
             return {
                 ...state,
-                cvs: state.cvs.map(cv =>
-                    cv.id === action.payload.id ? { ...cv, ...action.payload.data } : cv
-                ),
+                cvs:  emptyArr,
+                cv:action.payload.cv
             };
         case DELETE_CV:
             return {

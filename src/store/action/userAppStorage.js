@@ -300,7 +300,7 @@ export const updateCv = (data) => {
           type: UPDATE_CV,
           payload: {
             id: userAuth.user._id, // or use the specific CV's ID if different
-            data: updatedCvData.cv
+            cv: updatedCvData.cv
           }
         });
 

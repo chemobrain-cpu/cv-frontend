@@ -187,14 +187,13 @@ const Preview2 = () => {
   };
 
   return (
-    <div style={{display:'flex',justifyContent:'center',width:'100vw'}}>
+    <div style={{width:'100vw'}}>
       {isLoading && <Loader />}
       {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
-      <div className="container-cv">
-        <h1 className="text-center">Preview CV</h1>
-        <div className="cv-container" ref={pdfRef}>
+
+        <div className="cv-container" ref={pdfRef} style={{display:'flex',justifyContent:'center',flexDirection:'column'}}>
           <div className="cv-header">
-            <h1 className="cv-title">{formData?.name || 'Your Name'}'s CV</h1>
+            <h1 className="cv-title">{formData?.name || 'Your Name'}</h1>
             <div className="contact-info">
               <p><i className="fas fa-phone"></i> {formData?.phone || 'N/A'}</p>
               <p><i className="fas fa-map-marker-alt"></i> {formData?.location || 'N/A'}</p>
@@ -258,13 +257,14 @@ const Preview2 = () => {
             </div>
           </div>
         </div>
+
         <div className="cv-button-con text-center mt-3">
           <button onClick={downloadPDF} className="btn btn-primary m-2">Download PDF</button>
           <button onClick={downloadDOCX} className="btn btn-primary m-2">Download DOCX</button>
           <button onClick={editHandler} className="btn btn-primary m-2">Edit CV</button>
           <button onClick={deleteHandler} className="btn btn-primary m-2">Delete CV</button>
         </div>
-      </div>
+      
     </div>
   );
 };
