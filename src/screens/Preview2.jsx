@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import './preview2.css';
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import html2pdf from "html2pdf.js";
 import { Document, Packer, Paragraph, TextRun, Header, Footer, PageBreak } from "docx"; // Import necessary classes from docx
 import Modal from '../components/Modal/Modal';
 import Loader from "../components/loader";
 import { deleteCv } from "../store/action/userAppStorage";
+import { FacebookShareButton, TwitterShareButton, LinkedinShareButton, WhatsappShareButton, FacebookIcon, TwitterIcon, LinkedinIcon, WhatsappIcon } from 'react-share';
+
+
+
 
 const Preview2 = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,6 +21,9 @@ const Preview2 = () => {
   const [isError, setIsError] = useState(false);
   const [isErrorInfo, setIsErrorInfo] = useState('');
   const dispatch = useDispatch();
+  let location = useLocation()
+  // Social media sharing URL (you can customize this based on your needs)
+  const shareUrl = window.location.origin + location.pathname;
 
   // Redirect to login if the user is not authenticated
   useEffect(() => {
@@ -263,6 +270,25 @@ const Preview2 = () => {
           <button onClick={downloadDOCX} className="btn btn-primary m-2">Download DOCX</button>
           <button onClick={editHandler} className="btn btn-primary m-2">Edit CV</button>
           <button onClick={deleteHandler} className="btn btn-primary m-2">Delete CV</button>
+        </div>
+
+
+        <div className="social-share-buttons text-center mt-3">
+          <h3>Share your CV</h3>
+          <div className="share-buttons-container">
+            <FacebookShareButton url={shareUrl} quote="Check out my CV!" className="share-button">
+              <FacebookIcon size={32} round />
+            </FacebookShareButton>
+            <TwitterShareButton url={shareUrl} title="Check out my CV!" className="share-button">
+              <TwitterIcon size={32} round />
+            </TwitterShareButton>
+            <LinkedinShareButton url={shareUrl} className="share-button">
+              <LinkedinIcon size={32} round />
+            </LinkedinShareButton>
+            <WhatsappShareButton url={shareUrl} title="Check out my CV!" className="share-button">
+              <WhatsappIcon size={32} round />
+            </WhatsappShareButton>
+          </div>
         </div>
       
     </div>

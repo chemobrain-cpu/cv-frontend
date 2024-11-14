@@ -23,7 +23,7 @@ const Preview1 = () => {
   let location = useLocation()
   // Social media sharing URL (you can customize this based on your needs)
   const shareUrl = window.location.origin + location.pathname;
- console.log(formData)
+ 
   useEffect(() => {
     if (!isCvAvailable) {
       navigate('/template');
