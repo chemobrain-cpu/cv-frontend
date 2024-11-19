@@ -20,6 +20,12 @@ function SignupPage() {
     let [isErrorInfo, setIsErrorInfo] = useState('')
     let [isLoading, setIsLoading] = useState(false)
     let [isUrl, setIsUrl] = useState(false)
+
+    let [username, setusername] = useState("")
+    let [fullName, setFullName] = useState("")
+
+    let [usernameError, setusernameError] = useState("")
+    let [fullNameError, setFullNameError] = useState("")
     //initialising reduzx
     let dispatch = useDispatch()
     let { color } = useSelector(state => state.userAuth)
@@ -36,7 +42,7 @@ function SignupPage() {
     }
 
 
-    let isFormValid = userEmail && !userEmailError && userPassword && userConfirmPassword && !userPasswordError && !userConfirmPasswordError
+    let isFormValid = userEmail && !userEmailError && userPassword && userConfirmPassword && !userPasswordError && !userConfirmPasswordError && username && !usernameError && fullName && !fullNameError 
 
     let formError = (userConfirmPassword.length === 7 && userPassword !== userConfirmPassword)?'Password does not match':''
 
@@ -68,6 +74,18 @@ function SignupPage() {
             let formValue = e.value
             setUserConfirmPassword(formValue)
             setUserConfirmPasswordError(e.error)
+        }if (e.formName === "username") {
+
+            let formValue = e.value
+            setusername(formValue)
+            setusernameError(e.error)
+
+        }if (e.formName === "fullName") {
+
+            let formValue = e.value
+            setFullName(formValue)
+            setFullNameError(e.error)
+
         }
     }, [])
 
@@ -81,7 +99,9 @@ function SignupPage() {
 
         let response = await dispatch(signup({
             email: userEmail,
-            password: userPassword
+            password: userPassword,
+            username:username,
+            fullName:fullName
         }))
 
         if (!response.bool) {
@@ -114,7 +134,7 @@ function SignupPage() {
             {isLoading && <Loader />}
             {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
             
-                <div className="col-md-6 col-sm-12 col-lg-4 ">
+                <div className="col-md-6 col-sm-12 col-lg-4 " style={{marginTop:'250px'}}>
                     <form onSubmit={submitHandler} className="border p-4 shadow rounded bg-light">
 
                         <div className="d-flex align-items-center mb-4">
@@ -128,6 +148,28 @@ function SignupPage() {
                                 type="email"
                                 formName="userEmail"
                                 placeholder="Email"
+                                setFormDetails={setFormDetails}
+                                className="form-control"
+                            />
+                        </div>
+
+                        <div className="mb-3">
+                            <FormInput
+                                icon="edit"
+                                type="text"
+                                formName="username"
+                                placeholder="username"
+                                setFormDetails={setFormDetails}
+                                className="form-control"
+                            />
+                        </div>
+
+                        <div className="mb-3">
+                            <FormInput
+                                icon="edit"
+                                type="text"
+                                formName="fullName"
+                                placeholder="Full name"
                                 setFormDetails={setFormDetails}
                                 className="form-control"
                             />
