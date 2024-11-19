@@ -23,8 +23,8 @@ const Crea8CV = () => {
       <nav className="navbar navbar-expand-lg navbar-light">
         <div className="container">
           <a className="navbar-brand fw-bold fs-2 text-blue" href="#">
-          <FaFileInvoice className="me-2 navbar-brand-text" />
-          <span className="navbar-brand-text">Crea8</span> CV
+            <FaFileInvoice className="me-2 navbar-brand-text" />
+            <span className="navbar-brand-text">Crea8</span> CV
             {/* <span>
               <i className="fa-solid fa-file-invoice"></i>
             </span>
