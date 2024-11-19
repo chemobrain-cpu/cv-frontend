@@ -40,7 +40,7 @@ const Crea8CV = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
 
-          <div className="collapse navbar-collapse" id="navbarContent">
+          <div className="collapse navbar-collapse" id="navbarContent" style={{zIndex:1000}}>
             <ul className="navbar-nav ms-auto">
               <li className="nav-item dropdown" data-aos="fade-left">
                 <a
