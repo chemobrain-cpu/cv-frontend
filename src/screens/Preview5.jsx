@@ -62,7 +62,7 @@ const CVPreview = () => {
 
 
 
-    const shareUrl = window.location.origin + `preview/${id}` + `/${cvId}`;
+     const shareUrl = window.location.origin + `/preview/${id}` + `/${cvId?cvId:formData._id}`;
 
     const downloadPDF = () => {
         const element = cvRef.current;

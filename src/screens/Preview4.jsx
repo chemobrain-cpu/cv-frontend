@@ -14,7 +14,7 @@ const Preview4 = () => {
   const navigate = useNavigate();
   const [isError, setIsError] = useState(false);
   const [isErrorInfo, setIsErrorInfo] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [dummyData, setDummyData] = useState({})
   const dispatch = useDispatch();
 
@@ -56,10 +56,10 @@ const Preview4 = () => {
   }, [isCvAvailable, cvId, handleFetchHandler]);
 
 
-  const shareUrl = window.location.origin + `preview/${id}` + `/${cvId}`;
+   const shareUrl = window.location.origin + `/preview/${id}` + `/${cvId?cvId:formData._id}`;
 
-
-  alert(shareUrl)
+  
+  
 
   const downloadPDF = () => {
     const element = cvRef.current;

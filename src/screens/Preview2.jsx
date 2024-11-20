@@ -1,48 +1,79 @@
-import React, { useState, useEffect, useRef } from "react";
+
 import './preview2.css';
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import html2pdf from "html2pdf.js";
 import { Document, Packer, Paragraph, TextRun, Header, Footer, PageBreak } from "docx"; // Import necessary classes from docx
 import Modal from '../components/Modal/Modal';
 import Loader from "../components/loader";
-import { deleteCv } from "../store/action/userAppStorage";
 import { FacebookShareButton, TwitterShareButton, LinkedinShareButton, WhatsappShareButton, FacebookIcon, TwitterIcon, LinkedinIcon, WhatsappIcon } from 'react-share';
 
+import React, { useRef, useState, useEffect, useCallback } from 'react';
+import html2pdf from "html2pdf.js";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { deleteCv, fetchSpecificCv } from "../store/action/userAppStorage";
+
+
+
 const Preview2 = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const { cv: formData, isCvAvailable } = useSelector(state => state.userAuth);
-  const navigate = useNavigate();
+  const { cv: formData, isCvAvailable } = useSelector((state) => state.userAuth);
+  
   const pdfRef = useRef();
-  const { user } = useSelector(state => state.userAuth);
+
+
+  
+  const navigate = useNavigate();
   const [isError, setIsError] = useState(false);
   const [isErrorInfo, setIsErrorInfo] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [dummyData, setDummyData] = useState({})
   const dispatch = useDispatch();
-  let location = useLocation()
-  const shareUrl = window.location.origin + location.pathname;
+
+  const { id, cv: cvId } = useParams();
+
+  const handleFetchHandler = useCallback(
+    async (cvId) => {
+      setIsLoading(true);
+
+      // Dispatch action or handle form submission
+      let response = await dispatch(fetchSpecificCv(cvId));
+      if (!response.bool) {
+        setIsLoading(false);
+        setIsError(true);
+        setIsErrorInfo(response.message);
+        return;
+      }
+      setDummyData(response.message);
+      setIsLoading(false);
+    },
+    [dispatch] // Dependencies to avoid unnecessary re-creation
+  );
+
 
   useEffect(() => {
-    if (!user) {
-      navigate('/login');
+    if (!cvId) {
+      setDummyData(formData)
+
+      if (!isCvAvailable) {
+        return navigate('/template');
+      }
+      setIsLoading(false)
+      return;
     }
-  }, [user, navigate]);
-
-  useEffect(() => {
     if (!isCvAvailable) {
-      navigate('/template');
+      handleFetchHandler(cvId);
     }
-  }, [isCvAvailable, navigate]);
+    // If both `isCvAvailable` and `cvId` are true, do nothing (implicitly handled).
+  }, [isCvAvailable, cvId, handleFetchHandler]);
 
-  if (!isCvAvailable) {
-    return null;
-  }
+
+   const shareUrl = window.location.origin + `/preview/${id}` + `/${cvId?cvId:formData._id}`;
+
 
   const downloadPDF = () => {
     if (!pdfRef.current) return;
     const element = pdfRef.current;
     const options = {
       margin: 1,
-      filename: `${formData?.name || 'CV'}_CV.pdf`,
+      filename: `${dummyData?.name || 'CV'}_CV.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
@@ -67,23 +98,23 @@ const Preview2 = () => {
           },
           children: [
             new Paragraph({
-              text: `${formData?.name || 'Your Name'}'s CV`,
+              text: `${dummyData?.name || 'Your Name'}'s CV`,
               heading: "TITLE",
             }),
             new Paragraph({
-              text: `Phone: ${formData?.phone || 'N/A'}`,
+              text: `Phone: ${dummyData?.phone || 'N/A'}`,
             }),
             new Paragraph({
-              text: `Location: ${formData?.location || 'N/A'}`,
+              text: `Location: ${dummyData?.location || 'N/A'}`,
             }),
             new Paragraph({
-              text: `Email: ${formData?.email || 'N/A'}`,
+              text: `Email: ${dummyData?.email || 'N/A'}`,
             }),
             new Paragraph({
               text: "Education",
               heading: "HEADING_1",
             }),
-            ...formData.education.map(edu =>
+            ...dummyData.education.map(edu =>
               new Paragraph({
                 children: [
                   new TextRun(edu?.year || ''),
@@ -102,15 +133,15 @@ const Preview2 = () => {
               text: "Additional Skills",
               heading: "HEADING_1",
             }),
-            new Paragraph(`R: ${formData?.skills?.R || 'N/A'}`),
-            new Paragraph(`Spanish: ${formData?.skills?.Spanish || 'N/A'}`),
-            new Paragraph(`Mandarin: ${formData?.skills?.Mandarin || 'N/A'}`),
+            new Paragraph(`R: ${dummyData?.skills?.R || 'N/A'}`),
+            new Paragraph(`Spanish: ${dummyData?.skills?.Spanish || 'N/A'}`),
+            new Paragraph(`Mandarin: ${dummyData?.skills?.Mandarin || 'N/A'}`),
             new PageBreak(),
             new Paragraph({
               text: "Publications",
               heading: "HEADING_1",
             }),
-            ...formData.publications.map(pub =>
+            ...dummyData.publications.map(pub =>
               new Paragraph({
                 text: `${pub?.title || 'Title'}. ${pub?.journal || 'Journal'} (${pub?.year || 'Year'}): ${pub?.pages || 'Pages'}.`,
               })
@@ -120,7 +151,7 @@ const Preview2 = () => {
               text: "Research Experience",
               heading: "HEADING_1",
             }),
-            ...formData.researchExperience.map(exp =>
+            ...dummyData.researchExperience.map(exp =>
               new Paragraph({
                 children: [
                   new TextRun(exp?.duration || ''),
@@ -139,7 +170,7 @@ const Preview2 = () => {
               text: "Awards & Honors",
               heading: "HEADING_1",
             }),
-            ...formData.awards.map(award =>
+            ...dummyData.awards.map(award =>
               new Paragraph({
                 text: `${award?.year || ''} - ${award?.title || 'Title'}, ${award?.institution || 'Institution'}`,
               })
@@ -153,7 +184,7 @@ const Preview2 = () => {
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `${formData?.name || 'CV'}.docx`;
+      link.download = `${dummyData?.name || 'CV'}.docx`;
       link.click();
       URL.revokeObjectURL(url);
     }).catch(error => {
@@ -162,13 +193,13 @@ const Preview2 = () => {
   };
 
   const editHandler = () => {
-    navigate(`/editcv/${formData.cvTemplateType}`);
+    navigate(`/editcv/${dummyData.cvTemplateType}`);
   };
 
   const deleteHandler = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    const response = await dispatch(deleteCv(formData));
+    const response = await dispatch(deleteCv(dummyData));
     if (!response.bool) {
       setIsLoading(false);
       setIsError(true);
@@ -179,29 +210,34 @@ const Preview2 = () => {
     }
   };
 
-  const closeModal = () => {
-    setIsError(false);
-  };
+  if (isLoading) {
+    return <Loader />
+  }
+
+
+  if (isError) {
+    return <Modal content={isErrorInfo} closeModal={() => setIsError(false)} />
+  }
+
+
 
   return (
     <div style={{ width: '100vw' }}>
-      {isLoading && <Loader />}
-      {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
-
+     
       <div className="cv-container shadow-lg p-4" ref={pdfRef} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
         <div className="cv-header">
-          <h1 className="cv-title">{formData?.name || 'Your Name'}</h1>
+          <h1 className="cv-title">{dummyData?.name || 'Your Name'}</h1>
           <div className="contact-info">
-            <p><i className="fas fa-phone"></i> {formData?.phone || 'N/A'}</p>
-            <p><i className="fas fa-map-marker-alt"></i> {formData?.location || 'N/A'}</p>
-            <p><i className="fas fa-envelope"></i> {formData?.email || 'N/A'}</p>
+            <p><i className="fas fa-phone"></i> {dummyData?.phone || 'N/A'}</p>
+            <p><i className="fas fa-map-marker-alt"></i> {dummyData?.location || 'N/A'}</p>
+            <p><i className="fas fa-envelope"></i> {dummyData?.email || 'N/A'}</p>
           </div>
         </div>
         <div className="cv-main">
           <div className="cv-left">
             <section className="section education">
               <h3>Education</h3>
-              {formData?.education?.map((edu, index) => (
+              {dummyData?.education?.map((edu, index) => (
                 <div className="education-item" key={index}>
                   <p>{edu?.year || ''}</p>
                   <div>
@@ -215,16 +251,16 @@ const Preview2 = () => {
             <section className="section skills">
               <h3>Additional Skills</h3>
               <ul>
-                <li>R: {formData?.skills?.R || 'N/A'}</li>
-                <li>Spanish: {formData?.skills?.Spanish || 'N/A'}</li>
-                <li>Mandarin: {formData?.skills?.Mandarin || 'N/A'}</li>
+                <li>R: {dummyData?.skills?.R || 'N/A'}</li>
+                <li>Spanish: {dummyData?.skills?.Spanish || 'N/A'}</li>
+                <li>Mandarin: {dummyData?.skills?.Mandarin || 'N/A'}</li>
               </ul>
             </section>
           </div>
           <div className="cv-right">
             <section className="section publications">
               <h3>Publications</h3>
-              {formData?.publications?.map((pub, index) => (
+              {dummyData?.publications?.map((pub, index) => (
                 <p key={index}>
                   {pub?.title || 'Title'}. <i>{pub?.journal || 'Journal'}</i> ({pub?.year || 'Year'}): {pub?.pages || 'Pages'}.
                 </p>
@@ -232,7 +268,7 @@ const Preview2 = () => {
             </section>
             <section className="section research-experience">
               <h3>Research Experience</h3>
-              {formData?.researchExperience?.map((exp, index) => (
+              {dummyData?.researchExperience?.map((exp, index) => (
                 <div key={index}>
                   <p>{exp?.duration || ''}</p>
                   <div>
@@ -245,7 +281,7 @@ const Preview2 = () => {
             </section>
             <section className="section awards">
               <h3>Awards & Honors</h3>
-              {formData?.awards?.map((award, index) => (
+              {dummyData?.awards?.map((award, index) => (
                 <p key={index}>{award?.year || ''} - {award?.title || 'Title'}, {award?.institution || 'Institution'}</p>
               ))}
             </section>
@@ -253,44 +289,35 @@ const Preview2 = () => {
         </div>
       </div>
 
-      <div className="d-flex flex-column flex-md-row justify-content-center gap-3 mt-4">
-        <button className="btn btn-primary" onClick={downloadPDF}>Download as PDF</button>
-        <button className="btn btn-primary" onClick={downloadDOCX}>Download as DOCX</button>
-        <button className="btn btn-primary" onClick={editHandler}>Edit CV</button>
-        <button className="btn btn-primary" onClick={deleteHandler}>Delete CV</button>
-      </div>
-
-
-
-      <div className="social-share-buttons text-center mt-3">
-        <h3>Share your CV</h3>
-        <div className="share-buttons-container">
-          <FacebookShareButton url={shareUrl} quote="Check out my CV!" className="share-button">
-            <FacebookIcon size={32} round />
-          </FacebookShareButton>
-          <TwitterShareButton url={shareUrl} title="Check out my CV!" className="share-button">
-            <TwitterIcon size={32} round />
-          </TwitterShareButton>
-          <LinkedinShareButton url={shareUrl} className="share-button">
-            <LinkedinIcon size={32} round />
-          </LinkedinShareButton>
-          <WhatsappShareButton url={shareUrl} title="Check out my CV!" className="share-button">
-            <WhatsappIcon size={32} round />
-          </WhatsappShareButton>
+      {isCvAvailable ? <>
+        <div className="d-flex flex-column flex-md-row justify-content-center gap-3 mt-4">
+          <button className="btn btn-primary" onClick={downloadPDF}>Download as PDF</button>
+          <button className="btn btn-primary" onClick={downloadDOCX}>Download as DOCX</button>
+          <button className="btn btn-primary" onClick={editHandler}>Edit CV</button>
+          <button className="btn btn-primary" onClick={deleteHandler}>Delete CV</button>
         </div>
-      </div>
+
+
+
+        <div className="social-share-buttons text-center mt-3">
+          <h3>Share your CV</h3>
+          <div className="share-buttons-container">
+            <FacebookShareButton url={shareUrl} quote="Check out my CV!" className="share-button">
+              <FacebookIcon size={32} round />
+            </FacebookShareButton>
+            <TwitterShareButton url={shareUrl} title="Check out my CV!" className="share-button">
+              <TwitterIcon size={32} round />
+            </TwitterShareButton>
+            <LinkedinShareButton url={shareUrl} className="share-button">
+              <LinkedinIcon size={32} round />
+            </LinkedinShareButton>
+            <WhatsappShareButton url={shareUrl} title="Check out my CV!" className="share-button">
+              <WhatsappIcon size={32} round />
+            </WhatsappShareButton>
+          </div>
+        </div></> : <></>}
     </div>
   );
 };
 
 export default Preview2;
-
-
-
-
-
-
-
-
-
-
