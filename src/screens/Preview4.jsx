@@ -1,11 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import html2pdf from "html2pdf.js";
 import { Document, Packer, Paragraph } from "docx";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Modal from '../components/Modal/Modal';
 import Loader from "../components/loader";
-import { deleteCv } from "../store/action/userAppStorage";
+import { deleteCv, fetchSpecificCv } from "../store/action/userAppStorage";
 import { FacebookShareButton, TwitterShareButton, LinkedinShareButton, WhatsappShareButton, FacebookIcon, TwitterIcon, LinkedinIcon, WhatsappIcon } from 'react-share';
 
 const Preview4 = () => {
@@ -15,10 +15,51 @@ const Preview4 = () => {
   const [isError, setIsError] = useState(false);
   const [isErrorInfo, setIsErrorInfo] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [dummyData, setDummyData] = useState({})
   const dispatch = useDispatch();
 
-  let location = useLocation()
-  const shareUrl = window.location.origin + location.pathname;
+  const { id, cv: cvId } = useParams();
+
+  const handleFetchHandler = useCallback(
+    async (cvId) => {
+      setIsLoading(true);
+
+      // Dispatch action or handle form submission
+      let response = await dispatch(fetchSpecificCv(cvId));
+      if (!response.bool) {
+        setIsLoading(false);
+        setIsError(true);
+        setIsErrorInfo(response.message);
+        return;
+      }
+      setDummyData(response.message);
+      setIsLoading(false);
+    },
+    [dispatch] // Dependencies to avoid unnecessary re-creation
+  );
+
+
+  useEffect(() => {
+    if (!cvId) {
+      setDummyData(formData)
+
+      if (!isCvAvailable) {
+        return navigate('/template');
+      }
+      setIsLoading(false)
+      return;
+    }
+    if (!isCvAvailable) {
+      handleFetchHandler(cvId);
+    }
+    // If both `isCvAvailable` and `cvId` are true, do nothing (implicitly handled).
+  }, [isCvAvailable, cvId, handleFetchHandler]);
+
+
+  const shareUrl = window.location.origin + `preview/${id}` + `/${cvId}`;
+
+
+  alert(shareUrl)
 
   const downloadPDF = () => {
     const element = cvRef.current;
@@ -38,16 +79,16 @@ const Preview4 = () => {
         {
           properties: {},
           children: [
-            new Paragraph({ text: formData?.name || "Full Name", heading: "Title" }),
-            new Paragraph({ text: formData?.jobTitle || "Job Title", heading: "Heading2" }),
-            new Paragraph(formData?.phone || "Phone"),
-            new Paragraph(formData?.email || "Email"),
-            new Paragraph(formData?.address || "Address"),
+            new Paragraph({ text: dummyData?.name || "Full Name", heading: "Title" }),
+            new Paragraph({ text: dummyData?.jobTitle || "Job Title", heading: "Heading2" }),
+            new Paragraph(dummyData?.phone || "Phone"),
+            new Paragraph(dummyData?.email || "Email"),
+            new Paragraph(dummyData?.address || "Address"),
             new Paragraph("ABOUT ME"),
-            new Paragraph(formData?.aboutMe || "Description not provided"),
+            new Paragraph(dummyData?.aboutMe || "Description not provided"),
 
             new Paragraph("EXPERIENCE"),
-            ...(formData?.experiences || []).map(
+            ...(dummyData?.experiences || []).map(
               (exp) =>
                 new Paragraph(
                   `${exp.title || "Job Title"} - ${exp.company || "Company"} | ${exp.dateRange || "Date Range"}`
@@ -55,7 +96,7 @@ const Preview4 = () => {
             ),
 
             new Paragraph("EDUCATION"),
-            ...(formData?.education || []).map(
+            ...(dummyData?.education || []).map(
               (edu) =>
                 new Paragraph(
                   `${edu.degree || "Degree"} - ${edu.institution || "Institution"} | ${edu.dateRange || "Date Range"}`
@@ -63,10 +104,10 @@ const Preview4 = () => {
             ),
 
             new Paragraph("SKILLS"),
-            new Paragraph(formData?.skills3 ? formData.skills3.join(", ") : "Skills not provided"),
+            new Paragraph(dummyData?.skills4 ? dummyData.skills4.join(", ") : "Skills not provided"),
 
             new Paragraph("LANGUAGES"),
-            ...(formData?.languages || []).map(
+            ...(dummyData?.languages || []).map(
               (lang) => new Paragraph(`${lang.language} - ${lang.proficiency}`)
             ),
           ],
@@ -88,19 +129,17 @@ const Preview4 = () => {
     }
   };
 
-  if (!isCvAvailable) {
-    return <div>No CV available</div>;
-  }
+
 
   const editHandler = () => {
-    navigate(`/editcv/${formData.cvTemplateType}`);
+    navigate(`/editcv/${dummyData.cvTemplateType}`);
   };
 
   const deleteHandler = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    const response = await dispatch(deleteCv(formData));
+    const response = await dispatch(deleteCv(dummyData));
     if (!response.bool) {
       setIsLoading(false);
       setIsError(true);
@@ -111,14 +150,20 @@ const Preview4 = () => {
     }
   };
 
-  const closeModal = () => {
-    setIsError(false);
-  };
+
+  if (isLoading) {
+    return <Loader />
+  }
+
+
+  if (isError) {
+    return <Modal content={isErrorInfo} closeModal={() => setIsError(false)} />
+  }
+
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', width: '100vw' }}>
-      {isLoading && <Loader />}
-      {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
+
       <div
         ref={cvRef}
         style={{
@@ -132,13 +177,13 @@ const Preview4 = () => {
         }}
       >
         <header style={{ textAlign: "center", marginBottom: "30px" }}>
-          <h1 style={{ fontSize: "36px", margin: "0" }}>{formData?.name || "Name Not Provided"}</h1>
+          <h1 style={{ fontSize: "36px", margin: "0" }}>{dummyData?.name || "Name Not Provided"}</h1>
           <p style={{ fontSize: "20px", fontStyle: "italic", margin: "0" }}>
-            {formData?.jobTitle || "Job Title Not Provided"}
+            {dummyData?.jobTitle || "Job Title Not Provided"}
           </p>
           <div style={{ fontSize: "16px", marginTop: "10px" }}>
-            <p>{formData?.address || "Address Not Provided"}</p>
-            <p>Tel: {formData?.phone || "Phone Not Provided"} | {formData?.email || "Email Not Provided"}</p>
+            <p>{dummyData?.address || "Address Not Provided"}</p>
+            <p>Tel: {dummyData?.phone || "Phone Not Provided"} | {dummyData?.email || "Email Not Provided"}</p>
           </div>
         </header>
 
@@ -147,7 +192,7 @@ const Preview4 = () => {
 
         <section style={{ marginBottom: "20px" }}>
           <h2 style={sectionHeaderStyle}>Experience</h2>
-          {formData?.experiences?.map((exp, index) => (
+          {dummyData?.experiences?.map((exp, index) => (
             <div key={index} style={{ marginBottom: "10px" }}>
               <h3 style={jobTitleStyle}>{exp?.title || "Job Title Not Provided"}</h3>
               <p style={{ fontWeight: "bold", margin: "5px 0" }}>
@@ -164,7 +209,7 @@ const Preview4 = () => {
 
         <section style={{ marginBottom: "20px" }}>
           <h2 style={sectionHeaderStyle}>Education</h2>
-          {formData?.education?.map((edu, index) => (
+          {dummyData?.education?.map((edu, index) => (
             <div key={index}>
               <p style={{ fontWeight: "bold", fontSize: "18px", margin: "5px 0" }}>{edu?.degree || "Degree Not Provided"}</p>
               <p>{edu?.institution || "Institution Not Provided"} | {edu?.dateRange || "Date Range Not Provided"}</p>
@@ -175,7 +220,7 @@ const Preview4 = () => {
         <section style={{ marginBottom: "20px" }}>
           <h2 style={sectionHeaderStyle}>Skills</h2>
           <div style={{ display: "flex", flexWrap: "wrap" }}>
-            {formData?.skills3?.map((skill, index) => (
+            {dummyData?.skills4?.map((skill, index) => (
               <span key={index} style={skillTagStyle}>{skill}</span>
             ))}
           </div>
@@ -184,13 +229,15 @@ const Preview4 = () => {
         <section style={{ marginBottom: "20px" }}>
           <h2 style={sectionHeaderStyle}>Languages</h2>
           <ul style={responsibilitiesListStyle}>
-            {formData?.languages?.map((lang, index) => (
+            {dummyData?.languages?.map((lang, index) => (
               <li key={index}>{lang.language} - {lang.proficiency}</li>
             ))}
           </ul>
         </section>
 
-        <div className="d-flex flex-column flex-sm-row justify-content-between mt-4">
+       
+
+        {isCvAvailable ? <> <div className="d-flex flex-column flex-sm-row justify-content-between mt-4">
           <button onClick={downloadPDF} className="btn btn-primary shadow-sm mb-2 mb-sm-0">
             Download PDF
           </button>
@@ -206,22 +253,22 @@ const Preview4 = () => {
         </div>
 
         <div className="social-share-buttons text-center mt-3">
-        <h3>Share your CV</h3>
-        <div className="share-buttons-container">
-          <FacebookShareButton url={shareUrl} quote="Check out my CV!" className="share-button">
-            <FacebookIcon size={32} round />
-          </FacebookShareButton>
-          <TwitterShareButton url={shareUrl} title="Check out my CV!" className="share-button">
-            <TwitterIcon size={32} round />
-          </TwitterShareButton>
-          <LinkedinShareButton url={shareUrl} className="share-button">
-            <LinkedinIcon size={32} round />
-          </LinkedinShareButton>
-          <WhatsappShareButton url={shareUrl} title="Check out my CV!" className="share-button">
-            <WhatsappIcon size={32} round />
-          </WhatsappShareButton>
-        </div>
-      </div>
+          <h3>Share your CV</h3>
+          <div className="share-buttons-container">
+            <FacebookShareButton url={shareUrl} quote="Check out my CV!" className="share-button">
+              <FacebookIcon size={32} round />
+            </FacebookShareButton>
+            <TwitterShareButton url={shareUrl} title="Check out my CV!" className="share-button">
+              <TwitterIcon size={32} round />
+            </TwitterShareButton>
+            <LinkedinShareButton url={shareUrl} className="share-button">
+              <LinkedinIcon size={32} round />
+            </LinkedinShareButton>
+            <WhatsappShareButton url={shareUrl} title="Check out my CV!" className="share-button">
+              <WhatsappIcon size={32} round />
+            </WhatsappShareButton>
+          </div>
+        </div></> : <></>}
 
 
 

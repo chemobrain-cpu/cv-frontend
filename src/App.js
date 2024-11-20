@@ -59,6 +59,7 @@ function App() {
               <Route path='/template' element={user?<Template />:<Login />} />
               <Route path='/form/:id' element={user?<Form />:<Login />} />
               <Route path='/preview/:id' element={user?<Preview />:<Login />} />
+              <Route path='/preview/:id/:cv' element={<Preview />} />
               <Route path='/profilesetting' element={user?<ProfileSettings />:<Login />} />
               <Route path='/cvs' element={user?<Cvs />:<Login />} />
               <Route path='/pricing' element={user?<PricingPlan />:<Login />} />

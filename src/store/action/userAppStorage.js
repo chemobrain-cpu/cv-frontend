@@ -417,6 +417,44 @@ export const fetchCv = (id) => {
   }
 }
 
+export const fetchSpecificCv = (id) => {
+  return async (dispatch, getState) => {
+    //do some check on the server if its actually login before proceding to dispatch
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/cv/${id}`)
+      if (response.status === 404) {
+        let data = await response.json()
+        return {
+          bool: false,
+          message: data.response,
+        }
+      }
+      if (response.status === 300) {
+        let data = await response.json()
+        return {
+          bool: false,
+          message: data.response,
+        }
+      }
+      if (response.status === 200) {
+        let data = await response.json()
+
+        return {
+          bool: true,
+          message: data.cv,
+        }
+      }
+
+    } catch (err) {
+      return {
+        bool: false,
+        message: "network error"
+      }
+    }
+  }
+}
+
+
 export const openCv = (data) => {
   return async (dispatch, getState) => {
     dispatch({ type: OPEN_CV, payload: data })
@@ -471,7 +509,6 @@ export const updateUser = (data) => {
   }
 
 }
-
 
 export const logout = () => {
   return async (dispatch, getState) => {
