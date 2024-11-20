@@ -36,7 +36,7 @@ const CVForm = () => {
         experiences: [
             { title: '', company: '', location: '', dateRange: '', responsibilities: [''] },
         ],
-        education: { degree: '', institution: '', dateRange: '' },
+        education: [{ degree: '', institution: '', dateRange: '' }],
         skills3: [''],
         languages: [{ language: '', proficiency: '' }],
         cvTemplateType: 'template4'
@@ -72,10 +72,11 @@ const CVForm = () => {
         updatedExperiences[index].responsibilities.push('');
         setFormData({ ...formData, experiences: updatedExperiences });
     };
-
-    const handleEducationChange = (e) => {
+    const handleEducationChange = (index, e) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({ ...prevData, education: { ...prevData.education, [name]: value } }));
+        const updatedEducation = [...formData.education];
+        updatedEducation[index][name] = value;
+        setFormData({ ...formData, education: updatedEducation });
     };
 
     const handleSkillChange = (index, value) => {
@@ -121,6 +122,14 @@ const CVForm = () => {
     }
 
 
+    const handleAddEducation = () => {
+        setFormData((prevData) => ({
+            ...prevData,
+            education: [...prevData.education, { degree: '', institution: '', dateRange: '' }],
+        }));
+    };
+
+
     return (
 
         <>
@@ -161,9 +170,35 @@ const CVForm = () => {
                         <button type="button" onClick={handleAddExperience}>Add Experience</button>
 
                         <h2>Education</h2>
-                        <input type="text" name="degree" placeholder="Degree" onChange={handleEducationChange} required />
-                        <input type="text" name="institution" placeholder="Institution" onChange={handleEducationChange} required />
-                        <input type="text" name="dateRange" placeholder="Date Range" onChange={handleEducationChange} />
+                        {formData.education.map((edu, index) => (
+                            <div key={index}>
+                                <input
+                                    type="text"
+                                    name="degree"
+                                    placeholder="Degree"
+                                    value={edu.degree}
+                                    onChange={(e) => handleEducationChange(index, e)}
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    name="institution"
+                                    placeholder="Institution"
+                                    value={edu.institution}
+                                    onChange={(e) => handleEducationChange(index, e)}
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    name="dateRange"
+                                    placeholder="Date Range"
+                                    value={edu.dateRange}
+                                    onChange={(e) => handleEducationChange(index, e)}
+                                />
+                            </div>
+                        ))}
+                        <button type="button" onClick={handleAddEducation}>Add Education</button>
+
 
                         <h2>Skills</h2>
                         {formData.skills3.map((skill, index) => (
