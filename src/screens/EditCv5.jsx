@@ -132,10 +132,10 @@ const EditCVForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-        
+
         // Dispatch the form data to the Redux action for updating the CV
         let response = await dispatch(updateCv(formData)); // updateCv is assumed to be a Redux action
-        
+
         if (!response.bool) {
             setIsLoading(false);
             setIsError(true);
@@ -155,59 +155,68 @@ const EditCVForm = () => {
         <>
             {isLoading && <Loader />}
             {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
-            <div className="form-container">
-            <div className="cv-form-containers">
-                <form onSubmit={handleSubmit}>
-                    <h2>Personal Information</h2>
-                    <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} required />
-                    <input type="text" name="address" placeholder="Address" value={formData.contact.address} onChange={handleContactChange} />
-                    <input type="tel" name="phone" placeholder="Phone" value={formData.contact.phone} onChange={handleContactChange} />
-                    <input type="email" name="email" placeholder="Email" value={formData.contact.email} onChange={handleContactChange} required />
-                    <textarea name="profile" placeholder="Profile Description" value={formData.profile} onChange={handleChange} />
+            <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+                    <form className='space-y-6' onSubmit={handleSubmit}>
+                        <h2>Personal Information</h2>
+                        
+                        <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} required className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
-                    <h2>Employment History</h2>
-                    {formData.employmentHistory.map((exp, index) => (
-                        <div key={index}>
-                            <input type="text" name="title" placeholder="Job Title" value={exp.title} onChange={(e) => handleExperienceChange(index, e)} />
-                            <input type="text" name="location" placeholder="Location" value={exp.location} onChange={(e) => handleExperienceChange(index, e)} />
-                            <input type="text" name="date" placeholder="Date Range" value={exp.date} onChange={(e) => handleExperienceChange(index, e)} />
-                            {exp.responsibilities.map((res, resIndex) => (
-                                <input key={resIndex} type="text" placeholder="Responsibility" value={res} onChange={(e) => handleResponsibilityChange(index, resIndex, e.target.value)} />
-                            ))}
-                            <button type="button" onClick={() => handleAddResponsibility(index)}>Add Responsibility</button>
-                        </div>
-                    ))}
-                    <button type="button" onClick={handleAddExperience}>Add Experience</button>
+                        <input type="text" name="address" placeholder="Address" value={formData.contact.address} onChange={handleContactChange} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
-                    <h2>Education</h2>
-                    {formData.education.map((edu, index) => (
-                        <div key={index}>
-                            <input type="text" name="degree" placeholder="Degree" value={edu.degree} onChange={handleEducationChange} />
-                            <input type="text" name="institution" placeholder="Institution" value={edu.location} onChange={handleEducationChange} />
-                            <input type="text" name="dateRange" placeholder="Date Range" value={edu.date} onChange={handleEducationChange} />
-                            <input type="text" name="honors" placeholder="Honors" value={edu.honors} onChange={handleEducationChange} />
-                        </div>
-                    ))}
+                        <input type="tel" name="phone" placeholder="Phone" value={formData.contact.phone} onChange={handleContactChange} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
-                    <h2>skillset</h2>
-                    {formData.skillset.map((skill, index) => (
-                        <div key={index}>
-                            <input type="text" value={skill.skill} onChange={(e) => handleSkillChange(index, e)} placeholder="Skill" />
-                        </div>
-                    ))}
-                    <button type="button" onClick={handleAddSkill}>Add Skill</button>
+                        <input type="email" name="email" placeholder="Email" value={formData.contact.email} onChange={handleContactChange} required className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
+                        <textarea name="profile" placeholder="Profile Description" value={formData.profile} onChange={handleChange} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
-                    <h2>References</h2>
-                    {formData.references.map((ref, index) => (
-                        <div key={index}>
-                            <input type="text" value={ref.name} onChange={(e) => handleReferenceChange(index, 'name', e)} placeholder="Name" />
-                            <input type="email" value={ref.email} onChange={(e) => handleReferenceChange(index, 'email', e)} placeholder="Email" />
-                            <input type="tel" value={ref.phone} onChange={(e) => handleReferenceChange(index, 'phone', e)} placeholder="Phone" />
-                        </div>
-                    ))}
+                        <h2>Employment History</h2>
+                        {formData.employmentHistory.map((exp, index) => (
+                            <div key={index}>
+                                <input type="text" name="title" placeholder="Job Title" value={exp.title} onChange={(e) => handleExperienceChange(index, e)} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
+                                <input type="text" name="location" placeholder="Location" value={exp.location} onChange={(e) => handleExperienceChange(index, e)} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
+                                <input type="text" name="date" placeholder="Date Range" value={exp.date} onChange={(e) => handleExperienceChange(index, e)} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
+                                {exp.responsibilities.map((res, resIndex) => (
+                                    <input key={resIndex} type="text" placeholder="Responsibility" value={res} onChange={(e) => handleResponsibilityChange(index, resIndex, e.target.value)} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
+                                ))}
+                                <button type="button" className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600" onClick={() => handleAddResponsibility(index)}>Add Responsibility</button>
+                            </div>
+                        ))}
+                        <button type="button" className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600" onClick={handleAddExperience}>Add Experience</button>
 
-                    <button type="submit">Update CV</button>
-                </form>
+                        <h2>Education</h2>
+                        {formData.education.map((edu, index) => (
+                            <div key={index}>
+                                <input type="text" name="degree" placeholder="Degree" value={edu.degree} onChange={handleEducationChange} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
+
+                                <input type="text" name="institution" placeholder="Institution" value={edu.location} onChange={handleEducationChange} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
+
+                                <input type="text" name="dateRange" placeholder="Date Range" value={edu.date} onChange={handleEducationChange} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
+
+                                <input type="text" name="honors" placeholder="Honors" value={edu.honors} onChange={handleEducationChange} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
+                            </div>
+                        ))}
+
+                        <h2>skillset</h2>
+                        {formData.skillset.map((skill, index) => (
+                            <div key={index}>
+                                <input type="text" value={skill.skill} onChange={(e) => handleSkillChange(index, e)} placeholder="Skill" className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
+                            </div>
+                        ))}
+                        <button type="button" onClick={handleAddSkill} className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">Add Skill</button>
+
+                        <h2>References</h2>
+                        {formData.references.map((ref, index) => (
+                            <div key={index}>
+                                <input type="text" value={ref.name} onChange={(e) => handleReferenceChange(index, 'name', e)} placeholder="Name" className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
+
+                                <input type="email" value={ref.email} onChange={(e) => handleReferenceChange(index, 'email', e)} placeholder="Email" className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
+
+                                <input type="tel" value={ref.phone} onChange={(e) => handleReferenceChange(index, 'phone', e)} placeholder="Phone" className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
+                            </div>
+                        ))}
+
+                        <button type="submit" className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">Update CV</button>
+                    </form>
                 </div>
             </div>
         </>

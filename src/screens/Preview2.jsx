@@ -15,11 +15,11 @@ import { deleteCv, fetchSpecificCv } from "../store/action/userAppStorage";
 
 const Preview2 = () => {
   const { cv: formData, isCvAvailable } = useSelector((state) => state.userAuth);
-  
+
   const pdfRef = useRef();
 
 
-  
+
   const navigate = useNavigate();
   const [isError, setIsError] = useState(false);
   const [isErrorInfo, setIsErrorInfo] = useState('');
@@ -65,7 +65,7 @@ const Preview2 = () => {
   }, [isCvAvailable, cvId, handleFetchHandler]);
 
 
-   const shareUrl = window.location.origin + `/preview/${id}` + `/${cvId?cvId:formData._id}`;
+  const shareUrl = window.location.origin + `/preview/${id}` + `/${cvId ? cvId : formData._id}`;
 
 
   const downloadPDF = () => {
@@ -223,7 +223,7 @@ const Preview2 = () => {
 
   return (
     <div style={{ width: '100vw' }}>
-     
+
       <div className="cv-container shadow-lg p-4" ref={pdfRef} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
         <div className="cv-header">
           <h1 className="cv-title">{dummyData?.name || 'Your Name'}</h1>
@@ -289,34 +289,62 @@ const Preview2 = () => {
         </div>
       </div>
 
-      {isCvAvailable ? <>
-        <div className="d-flex flex-column flex-md-row justify-content-center gap-3 mt-4">
-          <button className="btn btn-primary" onClick={downloadPDF}>Download as PDF</button>
-          <button className="btn btn-primary" onClick={downloadDOCX}>Download as DOCX</button>
-          <button className="btn btn-primary" onClick={editHandler}>Edit CV</button>
-          <button className="btn btn-primary" onClick={deleteHandler}>Delete CV</button>
-        </div>
 
 
-
-        <div className="social-share-buttons text-center mt-3">
-          <h3>Share your CV</h3>
-          <div className="share-buttons-container">
-            <FacebookShareButton url={shareUrl} quote="Check out my CV!" className="share-button">
-              <FacebookIcon size={32} round />
-            </FacebookShareButton>
-            <TwitterShareButton url={shareUrl} title="Check out my CV!" className="share-button">
-              <TwitterIcon size={32} round />
-            </TwitterShareButton>
-            <LinkedinShareButton url={shareUrl} className="share-button">
-              <LinkedinIcon size={32} round />
-            </LinkedinShareButton>
-            <WhatsappShareButton url={shareUrl} title="Check out my CV!" className="share-button">
-              <WhatsappIcon size={32} round />
-            </WhatsappShareButton>
+      {isCvAvailable ? (
+        <>
+      
+          <div className="flex flex-col sm:flex-row justify-center mt-4 space-y-[5px] sm:space-y-0 sm:space-x-[5px]">
+            <button
+              onClick={downloadPDF}
+              className="bg-blue-500 text-white px-4 py-2 rounded shadow-sm hover:bg-blue-600"
+            >
+              Download PDF
+            </button>
+            <button
+              onClick={downloadDOCX}
+              className="bg-blue-500 text-white px-4 py-2 rounded shadow-sm hover:bg-blue-600"
+            >
+              Download DOCX
+            </button>
+            <button
+              onClick={editHandler}
+              className="bg-blue-500 text-white px-4 py-2 rounded shadow-sm hover:bg-blue-600"
+            >
+              Edit CV
+            </button>
+            <button
+              onClick={deleteHandler}
+              className="bg-blue-500 text-white px-4 py-2 rounded shadow-sm hover:bg-blue-600"
+            >
+              Delete CV
+            </button>
           </div>
-        </div></> : <></>}
+
+          <div className="text-center mt-3">
+            <h3 className="text-lg font-semibold">Share your CV</h3>
+            <div className="flex justify-center space-x-2">
+              <FacebookShareButton url={shareUrl} quote="Check out my CV!" className="hover:opacity-80">
+                <FacebookIcon size={32} round />
+              </FacebookShareButton>
+              <TwitterShareButton url={shareUrl} title="Check out my CV!" className="hover:opacity-80">
+                <TwitterIcon size={32} round />
+              </TwitterShareButton>
+              <LinkedinShareButton url={shareUrl} className="hover:opacity-80">
+                <LinkedinIcon size={32} round />
+              </LinkedinShareButton>
+              <WhatsappShareButton url={shareUrl} title="Check out my CV!" className="hover:opacity-80">
+                <WhatsappIcon size={32} round />
+              </WhatsappShareButton>
+            </div>
+          </div>
+        </>
+      ) : null}
+
+
     </div>
+
+
   );
 };
 

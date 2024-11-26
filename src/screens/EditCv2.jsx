@@ -90,9 +90,9 @@ const CvForm = () => {
       {isLoading && <Loader />}
       {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
 
-      <div className='form-container'>
-        <div className="cv-form-containers">
-          <form onSubmit={handleSubmitHandler}>
+      <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+          <form clasName='space-y-6' onSubmit={handleSubmitHandler}>
             <h2>CV Information</h2>
 
             <div>
@@ -103,6 +103,8 @@ const CvForm = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
+
+                className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
               />
             </div>
 
@@ -114,6 +116,7 @@ const CvForm = () => {
                 value={formData.phone}
                 onChange={handleChange}
                 required
+                className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
               />
             </div>
 
@@ -125,6 +128,7 @@ const CvForm = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
               />
             </div>
 
@@ -136,6 +140,7 @@ const CvForm = () => {
                 value={formData.location}
                 onChange={handleChange}
                 required
+                className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
               />
             </div>
 
@@ -152,6 +157,7 @@ const CvForm = () => {
                     setFormData({ ...formData, education });
                   }}
                   required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <input
                   type="text"
@@ -163,6 +169,7 @@ const CvForm = () => {
                     setFormData({ ...formData, education });
                   }}
                   required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <input
                   type="text"
@@ -174,6 +181,7 @@ const CvForm = () => {
                     setFormData({ ...formData, education });
                   }}
                   required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <textarea
                   placeholder="Details"
@@ -184,6 +192,7 @@ const CvForm = () => {
                     setFormData({ ...formData, education });
                   }}
                   required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
               </div>
             ))}
@@ -201,6 +210,7 @@ const CvForm = () => {
                     setFormData({ ...formData, publications });
                   }}
                   required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <input
                   type="text"
@@ -212,6 +222,7 @@ const CvForm = () => {
                     setFormData({ ...formData, publications });
                   }}
                   required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <input
                   type="text"
@@ -223,6 +234,7 @@ const CvForm = () => {
                     setFormData({ ...formData, publications });
                   }}
                   required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <input
                   type="text"
@@ -234,6 +246,7 @@ const CvForm = () => {
                     setFormData({ ...formData, publications });
                   }}
                   required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
               </div>
             ))}
@@ -251,6 +264,7 @@ const CvForm = () => {
                     setFormData({ ...formData, researchExperience });
                   }}
                   required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <input
                   type="text"
@@ -262,6 +276,7 @@ const CvForm = () => {
                     setFormData({ ...formData, researchExperience });
                   }}
                   required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <input
                   type="text"
@@ -273,6 +288,7 @@ const CvForm = () => {
                     setFormData({ ...formData, researchExperience });
                   }}
                   required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <textarea
                   placeholder="Description"
@@ -283,6 +299,7 @@ const CvForm = () => {
                     setFormData({ ...formData, researchExperience });
                   }}
                   required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
               </div>
             ))}
@@ -300,6 +317,7 @@ const CvForm = () => {
                     setFormData({ ...formData, awards });
                   }}
                   required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <input
                   type="text"
@@ -311,6 +329,7 @@ const CvForm = () => {
                     setFormData({ ...formData, awards });
                   }}
                   required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <input
                   type="text"
@@ -322,6 +341,7 @@ const CvForm = () => {
                     setFormData({ ...formData, awards });
                   }}
                   required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
               </div>
             ))}
@@ -340,6 +360,7 @@ const CvForm = () => {
                   });
                 }}
                 required
+                className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
               />
             </div>
             <div>
@@ -355,6 +376,7 @@ const CvForm = () => {
                   });
                 }}
                 required
+                className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
               />
             </div>
             <div>
@@ -370,10 +392,11 @@ const CvForm = () => {
                   });
                 }}
                 required
+                className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
               />
             </div>
 
-            <button type="submit">Update CV</button>
+            <button className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"  type="submit">Update CV</button>
           </form>
         </div>
       </div>

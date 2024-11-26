@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import './form.css'; // Assuming you have form-specific styles here
 import { makeCv } from '../store/action/userAppStorage';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Modal/Modal';
 import Loader from "../components/loader";
-
 
 
 
@@ -103,77 +101,84 @@ const CVForm = () => {
       {isLoading && <Loader />}
       {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
 
-      <div className='form-container'>
-        <div className="cv-form-containers">
-          <form onSubmit={handleSubmitHandler}>
-            <h2>CV Information</h2>
+      <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+          <form className="space-y-6" onSubmit={handleSubmitHandler}>
+            <h2 className="text-2xl font-semibold text-gray-700 mb-6 ">CV Information</h2>
             <div>
-              <label>Name:</label>
+              <label className=" text-gray-600 mb-1">Name:</label>
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
                 required // Make this field required
+                className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
               />
             </div>
             <div>
-              <label>Job Title:</label>
+              <label className=" text-gray-600 mb-1">Job Title:</label>
               <input
                 type="text"
                 name="jobTitle"
                 value={formData.jobTitle}
                 onChange={handleChange}
                 required // Make this field required
+                className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
               />
             </div>
             <div>
-              <label>Phone:</label>
+              <label className=" text-gray-600 mb-1">Phone:</label>
               <input
                 type="text"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
                 required // Make this field required
+                className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
               />
             </div>
             <div>
-              <label>Email:</label>
+              <label className=" text-gray-600 mb-1">Email:</label>
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
                 required // Make this field required
+                className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
               />
             </div>
             <div>
-              <label>Location:</label>
+              <label className="text-gray-600 mb-1">Location:</label>
               <input
                 type="text"
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
                 required // Make this field required
+                className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
               />
             </div>
             <div>
-              <label>Social Media/Website:</label>
+              <label className="text-gray-600 mb-1">Social Media/Website:</label>
               <input
                 type="text"
                 name="socialMedia"
                 value={formData.socialMedia}
                 onChange={handleChange}
                 required // Make this field required
+                className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
               />
             </div>
             <div>
-              <label>Summary:</label>
+              <label className="text-gray-600 mb-1">Summary:</label>
               <textarea
                 name="summary"
                 value={formData.summary}
                 onChange={handleChange}
                 required // Make this field required
+                className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
               />
             </div>
 
@@ -190,6 +195,7 @@ const CVForm = () => {
                     setFormData({ ...formData, awards });
                   }}
                   required // Make this field required
+                  className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
                 />
                 <input
                   type="text"
@@ -201,6 +207,7 @@ const CVForm = () => {
                     setFormData({ ...formData, awards });
                   }}
                   required // Make this field required
+                  className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
                 />
                 <input
                   type="text"
@@ -212,6 +219,7 @@ const CVForm = () => {
                     setFormData({ ...formData, awards });
                   }}
                   required // Make this field required
+                  className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
                 />
                 <input
                   type="text"
@@ -223,10 +231,11 @@ const CVForm = () => {
                     setFormData({ ...formData, awards });
                   }}
                   required // Make this field required
+                  className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
                 />
               </div>
             ))}
-            <button type="button" onClick={handleAddAward}>Add Another Award</button>
+            <button className=" mt-6 py-3 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" type="button" onClick={handleAddAward}>Add Another Award</button>
 
             <h3>Achievements</h3>
             {formData.achievements.map((achievement, index) => (
@@ -240,10 +249,11 @@ const CVForm = () => {
                     setFormData({ ...formData, achievements });
                   }}
                   required // Make this field required
+                  className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
                 />
               </div>
             ))}
-            <button type="button" onClick={handleAddAchievement}>Add Another Achievement</button>
+            <button className=" mt-6 py-3 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" type="button" onClick={handleAddAchievement}>Add Another Achievement</button>
 
             <h3>Education</h3>
             {formData.education.map((edu, index) => (
@@ -258,6 +268,7 @@ const CVForm = () => {
                     setFormData({ ...formData, education });
                   }}
                   required // Make this field required
+                  className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
                 />
                 <input
                   type="text"
@@ -269,6 +280,7 @@ const CVForm = () => {
                     setFormData({ ...formData, education });
                   }}
                   required // Make this field required
+                  className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
                 />
                 <input
                   type="text"
@@ -289,10 +301,12 @@ const CVForm = () => {
                     education[index].details = e.target.value;
                     setFormData({ ...formData, education });
                   }}
+                  className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
+                  required
                 />
               </div>
             ))}
-            <button type="button" onClick={handleAddEducation}>Add Another Education</button>
+            <button className=" mt-6 py-3 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" type="button" onClick={handleAddEducation}>Add Another Education</button>
 
             <h3>Work Experience</h3>
             {formData.workExperience.map((work, index) => (
@@ -307,6 +321,7 @@ const CVForm = () => {
                     setFormData({ ...formData, workExperience });
                   }}
                   required // Make this field required
+                  className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
                 />
                 <input
                   type="text"
@@ -318,6 +333,7 @@ const CVForm = () => {
                     setFormData({ ...formData, workExperience });
                   }}
                   required // Make this field required
+                  className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
                 />
                 <input
                   type="text"
@@ -329,6 +345,7 @@ const CVForm = () => {
                     setFormData({ ...formData, workExperience });
                   }}
                   required // Make this field required
+                  className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
                 />
                 <textarea
                   placeholder="Responsibilities"
@@ -340,12 +357,13 @@ const CVForm = () => {
                     setFormData({ ...formData, workExperience });
                   }}
                   required // Make this field required
+                  className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-indigo-300"
                 />
               </div>
             ))}
-            <button type="button" onClick={handleAddWorkExperience}>Add Another Work Experience</button>
+            <button className=" mt-6 py-3 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" type="button" onClick={handleAddWorkExperience}>Add Another Work Experience</button>
 
-            <button type="submit">Generate CV</button>
+            <button className=" mt-6 py-3 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" type="submit">Generate CV</button>
           </form>
 
         </div>

@@ -7,8 +7,8 @@ import Modal from '../components/Modal/Modal';
 import Loader from "../components/loader";
 
 const CVForm3 = () => {
-    const { cv,user } = useSelector(state => state.userAuth);
- 
+    const { cv, user } = useSelector(state => state.userAuth);
+
     const [formData, setFormData] = useState({
         name: '',
         profile: '',
@@ -31,7 +31,7 @@ const CVForm3 = () => {
 
     let dispatch = useDispatch();
 
-// Fetch user from Redux store
+    // Fetch user from Redux store
 
     // Protect the dashboard - if no user is present, redirect to login
     useEffect(() => {
@@ -43,8 +43,8 @@ const CVForm3 = () => {
 
     useEffect(() => {
         setFormData(cv)
-      }, [])
-    
+    }, [])
+
 
 
     const handleChange = (e) => {
@@ -77,22 +77,22 @@ const CVForm3 = () => {
         setFormData((prevData) => ({ ...prevData, skills3: e.target.value }));
     };
 
-    
+
     const handleSubmitHandler = async (e) => {
         e.preventDefault();
         setIsLoading(true)
         // Dispatch action or handle form submission
         let response = await dispatch(updateCv(formData))
         if (!response.bool) {
-          setIsLoading(false)
-          setIsError(true)
-          setIsErrorInfo(response.message)
+            setIsLoading(false)
+            setIsError(true)
+            setIsErrorInfo(response.message)
         }
         setIsLoading(false)
         console.log(formData)
         navigate(`/preview/${formData.cvTemplateType}`)
-      }
-    
+    }
+
 
     let closeModal = () => {
         setIsError(false)
@@ -103,44 +103,44 @@ const CVForm3 = () => {
         <>
             {isLoading && <Loader />}
             {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
-            <div className='form-container'>
-                <div className="cv-form-containers">
-                    <form className="cv-form" onSubmit={handleSubmitHandler}>
+            <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+                    <form clasName='space-y-6' onSubmit={handleSubmitHandler}>
                         <h2>CV Information</h2>
                         <div>
                             <label>
                                 Name: </label>
-                            <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+                            <input type="text" name="name" value={formData.name} onChange={handleChange} required  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
                         </div>
                         <div>
                             <label>
                                 Profile: </label>
-                            <textarea name="profile" value={formData.profile} onChange={handleChange} required />
+                            <textarea name="profile" value={formData.profile} onChange={handleChange} required className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
                         </div>
                         <div>
                             <label>
                                 Phone: </label>
-                            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
+                            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
                         </div>
                         <div>
                             <label>
                                 Email: </label>
-                            <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+                            <input type="email" name="email" value={formData.email} onChange={handleChange} required className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
                         </div>
                         <div>
                             <label>
                                 LinkedIn: </label>
-                            <input type="url" name="linkedin" value={formData.linkedin} onChange={handleChange} />
+                            <input type="url" name="linkedin" value={formData.linkedin} onChange={handleChange} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
                         </div>
                         <div>
                             <label>
                                 Location: </label>
-                            <input type="text" name="location" value={formData.location} onChange={handleChange} required />
+                            <input type="text" name="location" value={formData.location} onChange={handleChange} required className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
                         </div>
 
@@ -150,30 +150,30 @@ const CVForm3 = () => {
                                 <div>
                                     <label>
                                         Job Title: </label>
-                                    <input type="text" name="title" value={experience.title} onChange={(e) => handleExperienceChange(index, e)} />
+                                    <input type="text" name="title" value={experience.title} onChange={(e) => handleExperienceChange(index, e)} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
                                 </div>
                                 <div>
                                     <label>
                                         Company: </label>
-                                    <input type="text" name="company" value={experience.company} onChange={(e) => handleExperienceChange(index, e)} />
+                                    <input type="text" name="company" value={experience.company} onChange={(e) => handleExperienceChange(index, e)} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
                                 </div>
                                 <div>
                                     <label>
                                         Duration:</label>
-                                    <input type="text" name="duration" value={experience.duration} onChange={(e) => handleExperienceChange(index, e)} />
+                                    <input type="text" name="duration" value={experience.duration} onChange={(e) => handleExperienceChange(index, e)} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
                                 </div>
                                 <div>
                                     <label>
                                         Location:</label>
-                                    <input type="text" name="location" value={experience.location} onChange={(e) => handleExperienceChange(index, e)} />
+                                    <input type="text" name="location" value={experience.location} onChange={(e) => handleExperienceChange(index, e)} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
                                 </div>
                                 <div>
                                     <label>
                                         Responsibilities:</label>
-                                    <textarea name="responsibility" onChange={(e) => handleExperienceChange(index, e)} />
+                                    <textarea name="responsibility" onChange={(e) => handleExperienceChange(index, e)} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
                                 </div>
                             </div>
@@ -183,19 +183,19 @@ const CVForm3 = () => {
                         <div>
                             <label>
                                 Degree:</label>
-                            <input type="text" name="degree" value={formData.education.degree} onChange={handleEducationChange} required />
+                            <input type="text" name="degree" value={formData.education.degree} onChange={handleEducationChange} required className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
                         </div>
                         <div>
                             <label>
                                 Institution:</label>
-                            <input type="text" name="institution" value={formData.education.institution} onChange={handleEducationChange} required />
+                            <input type="text" name="institution" value={formData.education.institution} onChange={handleEducationChange} required className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
                         </div>
                         <div>
                             <label>
                                 Duration:</label>
-                            <input type="text" name="duration" value={formData.education.duration} onChange={handleEducationChange} required />
+                            <input type="text" name="duration" value={formData.education.duration} onChange={handleEducationChange} required  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
                         </div>
 
@@ -203,7 +203,7 @@ const CVForm3 = () => {
                         <div>
                             <label>
                                 Certifications (comma-separated):</label>
-                            <input type="text" name="certifications" onChange={handleCertificationsChange} />
+                            <input type="text" name="certifications" onChange={handleCertificationsChange} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
                         </div>
 
@@ -211,11 +211,11 @@ const CVForm3 = () => {
                         <div>
                             <label>
                                 Skills (comma-separated):</label>
-                            <input type="text" name="skills" value={formData.skills3} onChange={handleSkillsChange} />
+                            <input type="text" name="skills" value={formData.skills3} onChange={handleSkillsChange} className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"/>
 
                         </div>
 
-                        <button type="submit" className="submit-button">Generate CV</button>
+                        <button className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600" type="submit"> Generate CV</button>
                     </form>
                 </div>
             </div>

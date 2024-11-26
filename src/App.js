@@ -3,9 +3,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
 import FallBackComponent from './components/Fallback';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { autoLogin } from './store/action/userAppStorage'; // Adjust import based on your file structure
-import { userAuthReducer } from "./store/reducer/userAppStorage";
+import { autoLogin } from './store/action/userAppStorage'; 
 
 
 // Lazy loading components

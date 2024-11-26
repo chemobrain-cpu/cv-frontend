@@ -58,7 +58,7 @@ const Preview3 = () => {
   }, [isCvAvailable, cvId, handleFetchHandler]);
 
 
-   const shareUrl = window.location.origin + `/preview/${id}` + `/${cvId?cvId:formData._id}`;
+  const shareUrl = window.location.origin + `/preview/${id}` + `/${cvId ? cvId : formData._id}`;
 
 
 
@@ -169,9 +169,11 @@ const Preview3 = () => {
     return <Modal content={isErrorInfo} closeModal={() => setIsError(false)} />
   }
 
+  
+
+
   return (
-    <div className="container-fluid d-flex justify-content-center" style={{ width: '100vw' }}>
-    
+    <div className="w-full flex justify-center items-center h-screen px-40 p-100 " style={{ width: '100vw',paddingTop:'500px' }}>
       <div
         ref={cvRef}
         className="shadow-lg p-4 mb-4 bg-white rounded"
@@ -182,14 +184,14 @@ const Preview3 = () => {
         }}
       >
         <header className="mb-4">
-          <h1 className="fs-2">{dummyData?.name || "Full Name"}</h1>
-          <p className="fs-5 text-muted">{dummyData?.profile || "Profile Title"}</p>
-          <div className="fs-6 mt-2">
+          <h1 className="text-2xl font-bold">{dummyData?.name || "Full Name"}</h1>
+          <p className="text-lg text-gray-500">{dummyData?.profile || "Profile Title"}</p>
+          <div className="text-base mt-2">
             <p>
               <span>📞 {dummyData?.phone || "+1-000-000"} </span> |
               <span> ✉️ {dummyData?.email || "email@example.com"} </span> |
               <span>
-                🔗 <a href={dummyData?.linkedin || "#"}>{dummyData?.linkedin || "linkedin.com"}</a>
+                🔗 <a href={dummyData?.linkedin || "#"} className="text-blue-500 underline">{dummyData?.linkedin || "linkedin.com"}</a>
               </span>
             </p>
             <p>📍 {dummyData?.location || "New York City, NY"}</p>
@@ -197,19 +199,19 @@ const Preview3 = () => {
         </header>
 
         <section>
-          <h2 className="border-bottom pb-2">PROFILE</h2>
+          <h2 className="border-b pb-2 text-lg font-semibold">PROFILE</h2>
           <p>{dummyData?.profile || "Result-oriented project team leader with experience covering project and product management."}</p>
         </section>
 
         <section>
-          <h2 className="border-bottom pb-2">PROFESSIONAL EXPERIENCE</h2>
+          <h2 className="border-b pb-2 text-lg font-semibold">PROFESSIONAL EXPERIENCE</h2>
           {(dummyData?.experiences || []).map((job, index) => (
             <div key={index} className="mb-4">
-              <h3>{job.role}</h3>
+              <h3 className="text-lg font-bold">{job.role}</h3>
               <p>
                 <strong>{job.company}</strong> | {job.startDate} - {job.endDate} | {job.location}
               </p>
-              <ul>
+              <ul className="list-disc list-inside">
                 {job.responsibilities.map((responsibility, resIndex) => (
                   <li key={resIndex}>{responsibility}</li>
                 ))}
@@ -219,7 +221,7 @@ const Preview3 = () => {
         </section>
 
         <section>
-          <h2 className="border-bottom pb-2">EDUCATION</h2>
+          <h2 className="border-b pb-2 text-lg font-semibold">EDUCATION</h2>
           {(dummyData?.education || []).map((edu, index) => (
             <div key={index}>
               <p><strong>{edu.degree || "Degree"}</strong></p>
@@ -230,57 +232,72 @@ const Preview3 = () => {
         </section>
 
         <section>
-          <h2 className="border-bottom pb-2">CERTIFICATION</h2>
+          <h2 className="border-b pb-2 text-lg font-semibold">CERTIFICATION</h2>
           {(dummyData?.certifications || []).map((cert, index) => (
             <p key={index}>{cert.title || "Certification"} | {cert.organization || "Organization"}</p>
           ))}
         </section>
 
         <section>
-          <h2 className="border-bottom pb-2">TECHNICAL SKILLS</h2>
-          <p>{dummyData?.skills3 ? dummyData.skills3.join(", ") : "Technical Skills"}</p>
+          <h2 className="border-b pb-2 text-lg font-semibold">TECHNICAL SKILLS</h2>
+          <p>
+            {dummyData?.skills3
+              ? dummyData.skills3.split(",").join(", ")
+              : "Technical Skills"}
+          </p>
         </section>
 
+        {isCvAvailable ? (
+          <>
+            <div className="flex flex-col sm:flex-row justify-between mt-4 space-y-2 sm:space-y-0">
+              <button
+                onClick={downloadPDF}
+                className="bg-blue-500 text-white px-4 py-2 rounded shadow-sm hover:bg-blue-600"
+              >
+                Download PDF
+              </button>
+              <button
+                onClick={downloadDOCX}
+                className="bg-blue-500 text-white px-4 py-2 rounded shadow-sm hover:bg-blue-600"
+              >
+                Download DOCX
+              </button>
+              <button
+                onClick={editHandler}
+                className="bg-blue-500 text-white px-4 py-2 rounded shadow-sm hover:bg-blue-600"
+              >
+                Edit CV
+              </button>
+              <button
+                onClick={deleteHandler}
+                className="bg-blue-500 text-white px-4 py-2 rounded shadow-sm hover:bg-blue-600"
+              >
+                Delete CV
+              </button>
+            </div>
 
-
-        {isCvAvailable ? <> <div className="d-flex flex-column flex-sm-row justify-content-between mt-4">
-          <button onClick={downloadPDF} className="btn btn-primary shadow-sm mb-2 mb-sm-0">
-            Download PDF
-          </button>
-          <button onClick={downloadDOCX} className="btn btn-primary shadow-sm mb-2 mb-sm-0">
-            Download DOCX
-          </button>
-          <button onClick={editHandler} className="btn btn-primary shadow-sm mb-2 mb-sm-0">
-            Edit CV
-          </button>
-          <button onClick={deleteHandler} className="btn btn-primary shadow-sm mb-2 mb-sm-0">
-            Delete CV
-          </button>
-        </div>
-
-
-        <div className="social-share-buttons text-center mt-3">
-        <h3>Share your CV</h3>
-        <div className="share-buttons-container">
-          <FacebookShareButton url={shareUrl} quote="Check out my CV!" className="share-button">
-            <FacebookIcon size={32} round />
-          </FacebookShareButton>
-          <TwitterShareButton url={shareUrl} title="Check out my CV!" className="share-button">
-            <TwitterIcon size={32} round />
-          </TwitterShareButton>
-          <LinkedinShareButton url={shareUrl} className="share-button">
-            <LinkedinIcon size={32} round />
-          </LinkedinShareButton>
-          <WhatsappShareButton url={shareUrl} title="Check out my CV!" className="share-button">
-            <WhatsappIcon size={32} round />
-          </WhatsappShareButton>
-        </div>
-      </div></> : <></>}
-
-
-        
+            <div className="text-center mt-3">
+              <h3 className="text-lg font-semibold">Share your CV</h3>
+              <div className="flex justify-center space-x-2">
+                <FacebookShareButton url={shareUrl} quote="Check out my CV!" className="hover:opacity-80">
+                  <FacebookIcon size={32} round />
+                </FacebookShareButton>
+                <TwitterShareButton url={shareUrl} title="Check out my CV!" className="hover:opacity-80">
+                  <TwitterIcon size={32} round />
+                </TwitterShareButton>
+                <LinkedinShareButton url={shareUrl} className="hover:opacity-80">
+                  <LinkedinIcon size={32} round />
+                </LinkedinShareButton>
+                <WhatsappShareButton url={shareUrl} title="Check out my CV!" className="hover:opacity-80">
+                  <WhatsappIcon size={32} round />
+                </WhatsappShareButton>
+              </div>
+            </div>
+          </>
+        ) : null}
       </div>
     </div>
+
   );
 };
 

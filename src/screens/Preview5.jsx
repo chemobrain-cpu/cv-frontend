@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import html2pdf from 'html2pdf.js';
 import { Document, Packer, Paragraph } from 'docx';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import { FacebookShareButton, TwitterShareButton, LinkedinShareButton, WhatsappShareButton, FacebookIcon, TwitterIcon, LinkedinIcon, WhatsappIcon } from 'react-share';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteCv, fetchSpecificCv } from "../store/action/userAppStorage";
@@ -130,12 +130,10 @@ const CVPreview = () => {
     }
 
 
-
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', width: '100vw' }}>
-
-            <div className="mt-4">
-                <div className="card shadow p-4 mb-5 bg-white text-dark mx-auto" style={{ maxWidth: '800px' }} ref={cvRef}>
+        <div style={{ display: 'flex', justifyContent: 'center', width: '100vw',  }}>
+            <div className="mt-4" style={{backgroundColor:'white'}}>
+                <div className="shadow p-4 mb-5  text-dark mx-auto" style={{ maxWidth: '800px'}} ref={cvRef}>
                     <header className="text-center">
                         <h1 className="h3 mb-2 mb-sm-3">
                             {dummyData.name}

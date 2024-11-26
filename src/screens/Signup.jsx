@@ -3,10 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import FormInput from '../components/Input';
 import SubmitBtn from '../components/Submit';
-import {signup } from '../store/action/userAppStorage';
+import { signup } from '../store/action/userAppStorage';
 import Modal from '../components/Modal/Modal';
 import Loader from "../components/loader";
-
 
 function SignupPage() {
     let [userEmail, setUserEmail] = useState("")
@@ -31,7 +30,6 @@ function SignupPage() {
     let { color } = useSelector(state => state.userAuth)
     //initialise router
     let navigate = useNavigate()
-    //loaders state
 
     const toSignup = () => {
         navigate('/signup')
@@ -40,7 +38,6 @@ function SignupPage() {
     const toForget = () => {
         navigate('/forgetpassword')
     }
-
 
     let isFormValid = userEmail && !userEmailError && userPassword && userConfirmPassword && !userPasswordError && !userConfirmPasswordError && username && !usernameError && fullName && !fullNameError 
 
@@ -54,41 +51,30 @@ function SignupPage() {
 
     }, [])
 
-
-
     let setFormDetails = useCallback(e => {
         setIsError(false)
         if (e.formName === "userEmail") {
-
             let formValue = e.value
             setUserEmail(formValue)
             setUserEmailError(e.error)
-
         } else if (e.formName === "userPassword") {
-
             let formValue = e.value
             setUserPassword(formValue)
             setUserPasswordError(e.error)
         }else if (e.formName === "userConfirmPassword") {
-
             let formValue = e.value
             setUserConfirmPassword(formValue)
             setUserConfirmPasswordError(e.error)
         }if (e.formName === "username") {
-
             let formValue = e.value
             setusername(formValue)
             setusernameError(e.error)
-
         }if (e.formName === "fullName") {
-
             let formValue = e.value
             setFullName(formValue)
             setFullNameError(e.error)
-
         }
     }, [])
-
 
     const submitHandler = async (e) => {
         e.preventDefault()
@@ -116,8 +102,6 @@ function SignupPage() {
         setIsUrl(response.url)
     }
 
-
-
     let closeModal = () => {
         setIsError(false)
         if (isUrl) {
@@ -130,95 +114,84 @@ function SignupPage() {
     }
 
     return (
-        <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh',width:'100vw'}}>
+        <div className="flex items-center justify-center h-screen w-screen">
             {isLoading && <Loader />}
             {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
-            
-                <div className="col-md-6 col-sm-12 col-lg-4 " style={{marginTop:'250px'}}>
-                    <form onSubmit={submitHandler} className="border p-4 shadow rounded bg-light">
+            <div className="w-full max-w-md mt-24 p-6 bg-white rounded-lg shadow-md">
+                <form onSubmit={submitHandler}>
+                    <div className="flex items-center mb-6">
+                        <span className="material-icons mr-2 cursor-pointer" onClick={navigateBackward}>arrow_back</span>
+                        <h2 className="text-2xl font-semibold">Register</h2>
+                    </div>
 
-                        <div className="d-flex align-items-center mb-4">
-                            <span className="material-icons me-2" onClick={navigateBackward}>arrow_back</span>
-                            <h2 className="mb-0">Register</h2>
-                        </div>
+                    <div className="mb-4">
+                        <FormInput
+                            icon="edit"
+                            type="email"
+                            formName="userEmail"
+                            placeholder="Email"
+                            setFormDetails={setFormDetails}
+                            className="form-input p-2 border rounded w-full"
+                        />
+                    </div>
 
-                        <div className="mb-3">
-                            <FormInput
-                                icon="edit"
-                                type="email"
-                                formName="userEmail"
-                                placeholder="Email"
-                                setFormDetails={setFormDetails}
-                                className="form-control"
-                            />
-                        </div>
+                    <div className="mb-4">
+                        <FormInput
+                            icon="edit"
+                            type="text"
+                            formName="username"
+                            placeholder="Username"
+                            setFormDetails={setFormDetails}
+                            className="form-input p-2 border rounded w-full"
+                        />
+                    </div>
 
-                        <div className="mb-3">
-                            <FormInput
-                                icon="edit"
-                                type="text"
-                                formName="username"
-                                placeholder="username"
-                                setFormDetails={setFormDetails}
-                                className="form-control"
-                            />
-                        </div>
+                    <div className="mb-4">
+                        <FormInput
+                            icon="edit"
+                            type="text"
+                            formName="fullName"
+                            placeholder="Full name"
+                            setFormDetails={setFormDetails}
+                            className="form-input p-2 border rounded w-full"
+                        />
+                    </div>
 
-                        <div className="mb-3">
-                            <FormInput
-                                icon="edit"
-                                type="text"
-                                formName="fullName"
-                                placeholder="Full name"
-                                setFormDetails={setFormDetails}
-                                className="form-control"
-                            />
-                        </div>
+                    <div className="mb-4">
+                        <FormInput
+                            icon="edit"
+                            type="password"
+                            formName="userPassword"
+                            placeholder="Password"
+                            setFormDetails={setFormDetails}
+                            className="form-input p-2 border rounded w-full"
+                        />
+                    </div>
 
-                        <div className="mb-3">
-                            <FormInput
-                                icon="edit"
-                                type="password"
-                                formName="userPassword"
-                                placeholder="Password"
-                                setFormDetails={setFormDetails}
-                                className="form-control"
-                            />
-                        </div>
+                    <div className="mb-4">
+                        <FormInput
+                            icon="edit"
+                            type="password"
+                            formName="userConfirmPassword"
+                            placeholder="Confirm password"
+                            setFormDetails={setFormDetails}
+                            className="form-input p-2 border rounded w-full"
+                        />
+                    </div>
 
-                        <div className="mb-3">
-                            <FormInput
-                                icon="edit"
-                                type="password"
-                                formName="userConfirmPassword"
-                                placeholder="Confirm password"
-                                setFormDetails={setFormDetails}
-                                className="form-control"
-                            />
-                        </div>
+                    <p className="text-red-500 text-sm">{userConfirmPassword.length > 0 ? formError : ''}</p>
 
-                        <p>{userConfirmPassword.length> 0? formError:''}</p>
+                    <div className="w-full mt-4">
+                        <SubmitBtn className="btn-primary p-3 w-full rounded-lg bg-blue-600 text-white" text="Register" />
+                    </div>
 
-
-                        <div className="d-grid">
-                            <SubmitBtn className="btn btn-primary" style={{ borderRadius: '20px' }} text="Login" />
-                        </div>
-
-
-                        <p className="mt-3 text-center">
-                            have an account? <span className="text-primary" onClick={toSignup} style={{ cursor: 'pointer' }}>Signin</span><br />
-
-                        </p>
-                    </form>
-                </div>
-
-           
+                    <p className="mt-4 text-center">
+                        Already have an account? <span className="text-blue-600 cursor-pointer" onClick={toSignup}>Signin</span>
+                    </p>
+                </form>
+            </div>
         </div>
-
-
     );
-
 }
 
-
-export default SignupPage
+export default SignupPage;

@@ -2,7 +2,7 @@ import React, {  useState } from "react"
 import styles from './Input.module.css'
 
 //import validationfunctions from validation file
-import { validatePhoneNumber, validateEmail, validateText,validatePassword } from '../utils/validation'
+import { validatePhoneNumber, validateEmail, validateText,validatePassword } from '../utils/validation';
 
 const FormInput = React.memo((props) => {
     let [error, setError] = useState('')
@@ -118,8 +118,6 @@ const FormInput = React.memo((props) => {
                     formName: props.formName,
                     error:false
                 })
-               
-    
             }
         }
         

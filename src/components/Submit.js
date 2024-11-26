@@ -3,7 +3,7 @@ import styles from './Submit.module.css'
 
 const SubmitBtn = (props) => {
     return <button className={styles.btn_container} style={props.style} onClick={props.onClick ? props.onClick : () => { }}>
-        <p lassName={styles.text} style={{
+        <p className={styles.text} style={{
             color: props.buttonTextColor ? props.buttonTextColor : '#fff',
             margin: 'auto',
             display: 'inline',

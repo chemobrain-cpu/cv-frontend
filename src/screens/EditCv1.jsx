@@ -103,9 +103,9 @@ const CVForm = () => {
     <>
       {isLoading && <Loader />}
       {isError && <Modal content={isErrorInfo} closeModal={closeModal} />}
-      <div className='form-container'>
-        <div className="cv-form-containers">
-          <form onSubmit={handleSubmitHandler}>
+      <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+          <form clasName='space-y-6' onSubmit={handleSubmitHandler}>
             <h2>CV Information</h2>
             <div>
               <label>Name:</label>
@@ -115,6 +115,7 @@ const CVForm = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required // Make this field required
+                className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
               />
             </div>
             <div>
@@ -125,6 +126,7 @@ const CVForm = () => {
                 value={formData.jobTitle}
                 onChange={handleChange}
                 required // Make this field required
+                className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
               />
             </div>
             <div>
@@ -135,6 +137,7 @@ const CVForm = () => {
                 value={formData.phone}
                 onChange={handleChange}
                 required // Make this field required
+                className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
               />
             </div>
             <div>
@@ -145,6 +148,7 @@ const CVForm = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required // Make this field required
+                className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
               />
             </div>
             <div>
@@ -155,6 +159,7 @@ const CVForm = () => {
                 value={formData.location}
                 onChange={handleChange}
                 required // Make this field required
+                className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
               />
             </div>
             <div>
@@ -165,6 +170,7 @@ const CVForm = () => {
                 value={formData.socialMedia}
                 onChange={handleChange}
                 required // Make this field required
+                className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
               />
             </div>
             <div>
@@ -174,6 +180,7 @@ const CVForm = () => {
                 value={formData.summary}
                 onChange={handleChange}
                 required // Make this field required
+                className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
               />
             </div>
 
@@ -190,6 +197,7 @@ const CVForm = () => {
                     setFormData({ ...formData, awards });
                   }}
                   required // Make this field required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <input
                   type="text"
@@ -201,6 +209,7 @@ const CVForm = () => {
                     setFormData({ ...formData, awards });
                   }}
                   required // Make this field required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <input
                   type="text"
@@ -212,6 +221,7 @@ const CVForm = () => {
                     setFormData({ ...formData, awards });
                   }}
                   required // Make this field required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <input
                   type="text"
@@ -223,10 +233,11 @@ const CVForm = () => {
                     setFormData({ ...formData, awards });
                   }}
                   required // Make this field required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
               </div>
             ))}
-            <button type="button" onClick={handleAddAward}>Add Another Award</button>
+            <button type="button" className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600" onClick={handleAddAward}>Add Another Award</button>
 
             <h3>Achievements</h3>
             {formData.achievements.map((achievement, index) => (
@@ -240,10 +251,11 @@ const CVForm = () => {
                     setFormData({ ...formData, achievements });
                   }}
                   required // Make this field required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
               </div>
             ))}
-            <button type="button" onClick={handleAddAchievement}>Add Another Achievement</button>
+            <button type="button" className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600" onClick={handleAddAchievement}>Add Another Achievement</button>
 
             <h3>Education</h3>
             {formData.education.map((edu, index) => (
@@ -258,6 +270,7 @@ const CVForm = () => {
                     setFormData({ ...formData, education });
                   }}
                   required // Make this field required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <input
                   type="text"
@@ -269,6 +282,7 @@ const CVForm = () => {
                     setFormData({ ...formData, education });
                   }}
                   required // Make this field required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <input
                   type="text"
@@ -280,6 +294,7 @@ const CVForm = () => {
                     setFormData({ ...formData, education });
                   }}
                   required // Make this field required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <textarea
                   placeholder="Details (optional)"
@@ -289,10 +304,11 @@ const CVForm = () => {
                     education[index].details = e.target.value;
                     setFormData({ ...formData, education });
                   }}
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
               </div>
             ))}
-            <button type="button" onClick={handleAddEducation}>Add Another Education</button>
+            <button type="button" className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600" onClick={handleAddEducation}>Add Another Education</button>
 
             <h3>Work Experience</h3>
             {formData.workExperience.map((work, index) => (
@@ -307,6 +323,7 @@ const CVForm = () => {
                     setFormData({ ...formData, workExperience });
                   }}
                   required // Make this field required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <input
                   type="text"
@@ -318,6 +335,7 @@ const CVForm = () => {
                     setFormData({ ...formData, workExperience });
                   }}
                   required // Make this field required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <input
                   type="text"
@@ -329,6 +347,7 @@ const CVForm = () => {
                     setFormData({ ...formData, workExperience });
                   }}
                   required // Make this field required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
                 <textarea
                   placeholder="Responsibilities"
@@ -340,13 +359,14 @@ const CVForm = () => {
                     setFormData({ ...formData, workExperience });
                   }}
                   required // Make this field required
+                  className="w-full p-3 border rounded-md focus:ring focus:ring-blue-300"
                 />
 
               </div>
             ))}
-            <button type="button" onClick={handleAddWorkExperience}>Add Another Work Experience</button>
+            <button type="button" className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600" onClick={handleAddWorkExperience}>Add Another Work Experience</button>
 
-            <button type="submit">Update CV</button>
+            <button type="submit" className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">Update CV</button>
           </form>
         </div>
       </div>

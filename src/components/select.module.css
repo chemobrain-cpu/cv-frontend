@@ -8,15 +8,11 @@
     margin-bottom: 15px;
 }
 
-
 .form_selectcontainer .categoryhead{
     display:flex;
     gap:5rem;
     margin-bottom: 20px;
 }
-
-
-
 
 
 .form_selectcontainer .categorybody select{
